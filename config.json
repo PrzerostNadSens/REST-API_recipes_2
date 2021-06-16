@@ -1,0 +1,4 @@
+{
+    "connectionString": "mongodb+srv://Admin:trudne_haslo.123@cluster0.edli7.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
+    "secret": "Obsługa przepisów kuchennych Rafał Chmielewski"
+}
