@@ -1,6 +1,6 @@
-// recipeModel.js
+
 var mongoose = require('mongoose');
-// Setup schema
+
 var recipeSchema = mongoose.Schema({
     name: {
         type: String,
@@ -15,6 +15,10 @@ var recipeSchema = mongoose.Schema({
     recipe: {
         type: String,
         required: true
+    },
+    added_by: {
+        type: String,
+        required: true
     }
 });
 
@@ -22,7 +26,7 @@ recipeSchema.set('toJSON', {
     virtuals: true,
     versionKey: false,
     transform: function (doc, ret) {
-
+        delete ret.added_by;
         delete ret._id;
     }
 });
