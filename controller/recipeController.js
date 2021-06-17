@@ -74,9 +74,9 @@ exports.update = function (req, res) {
             if (err)
             res.send(err);
             recipe.name = req.body.name ? req.body.name : recipe.name;
-            recipe.gender = req.body.gender;
-            recipe.email = req.body.email;
-            recipe.phone = req.body.phone;
+            recipe.type = req.body.type,
+            recipe.photo = req.body.photo,
+            recipe.recipe = req.body.recipe,
             recipe.save(function (err) {
                 if (err)
                     res.json(err);
