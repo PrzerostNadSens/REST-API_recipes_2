@@ -2,12 +2,8 @@ const express = require('express');
 const router = express.Router();
 const Joi = require('@hapi/joi');
 const userService = require('service/userService');
-const { secret } = require('config.json');
-const db = require('mongodb/db');
-
 // routes
-router.post('/authenticate', authenticateSchema, authenticate);
-
+router.post('/Login', authenticateSchema, authenticate);
 
 module.exports = router;
 
@@ -39,18 +35,8 @@ function authenticate(req, res, next) {
     const { login, password } = req.body;
     const ipAddress = req.ip;
     userService.authenticate({ login, password, ipAddress })
-        .then(({ refreshToken, ...user }) => {
-            setTokenCookie(res, refreshToken);
+        .then(({...user }) => {
             res.json(user);
         })
         .catch(next);
-}
-
-function setTokenCookie(res, token)
-{
-    const cookieOptions = {
-        httpOnly: true,
-        expires: new Date(Date.now() + 7*24*60*60*1000)
-    };
-    res.cookie('refreshToken', token, cookieOptions);
 }

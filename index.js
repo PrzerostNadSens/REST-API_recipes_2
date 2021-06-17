@@ -15,9 +15,11 @@ app.use(cookieParser());
 app.use(cors({ origin: (origin, callback) => callback(null, true), credentials: true }));
 
 // api routes
-app.use('/users', require('controller/userController'));
+app.use('/User', require('controller/userController'));
 
 
+let apiRoutes = require("./api-routes");
+app.use('/Recipe', apiRoutes);
 app.use(error);
 
 app.get('/', (req, res) => res.send('Obsługa przepisów kuchennych Rafał Chmielewski'));

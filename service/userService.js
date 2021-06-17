@@ -4,7 +4,10 @@ const bcrypt = require('bcryptjs');
 const db = require('mongodb/db');
 
 
-module.exports = {authenticate};
+module.exports = {
+    authenticate,
+    getById
+};
 
 async function authenticate({ login, password, ipAddress }) {
     const user = await db.User.findOne({ login });
@@ -18,7 +21,7 @@ async function authenticate({ login, password, ipAddress }) {
 
     const jwtToken = Token(user);
     return { 
-        ...informations(user),
+        //...informations(user),
         jwtToken,
     };
 }
@@ -28,7 +31,12 @@ function Token(user) {
     return jwt.sign({ sub: user.id, id: user.id }, config.secret, { expiresIn: '15m' });
 }
 
+async function getById(id) {
+    const user = await getUser(id);
+    return informations(user);
+}
+
 function informations(user) {
-    const { id, firstName, lastName, username, role } = user;
-    return { id, firstName, lastName, username, role };
+    const { id, first_name, subname, login, role } = user;
+    return { id, first_name, subname, login, role };
 }

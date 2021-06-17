@@ -7,6 +7,7 @@ mongoose.Promise = global.Promise;
 
 module.exports = {
     User: require('model/userModel'),
+    Recipe: require('model/recipeModel'),
     isValidId
 };
 
