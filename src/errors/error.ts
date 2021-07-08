@@ -1,11 +1,11 @@
-import { NextFunction } from "express";
+/*import { NextFunction } from "express";
 
 export default error;
 
 export function error(
   err: Error,
   req: Request,
-  res: Request,
+  res: Response,
   next: NextFunction
 ) {
   switch (true) {
@@ -21,3 +21,4 @@ export function error(
       return res.status(500).json({ message: err.message });
   }
 }
+*/

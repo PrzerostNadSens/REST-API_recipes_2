@@ -7,7 +7,7 @@ router.post("/Login", authenticateSchema, authenticate);
 
 export default router;
 
-function validateRequest(req: Request, next: NextFunction, schema) {
+export function validateRequest(req: Request, next: NextFunction, schema: any) {
   const options = {
     abortEarly: false,
     allowUnknown: true,
@@ -15,14 +15,20 @@ function validateRequest(req: Request, next: NextFunction, schema) {
   };
   const { error, value } = schema.validate(req.body, options);
   if (error) {
-    next(`Validation error: ${error.details.map((x) => x.message).join(", ")}`);
+    next(
+      `Validation error: ${error.details.map((x: any) => x.message).join(", ")}`
+    );
   } else {
     req.body = value;
     next();
   }
 }
 
-function authenticateSchema(req, res, next) {
+export function authenticateSchema(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
   const schema = Joi.object({
     login: Joi.string().required(),
     password: Joi.string().required(),
@@ -30,11 +36,11 @@ function authenticateSchema(req, res, next) {
   validateRequest(req, next, schema);
 }
 
-function authenticate(req, res, next) {
+export function authenticate(req: Request, res: Response, next: NextFunction) {
   const { login, password } = req.body;
   const ipAddress = req.ip;
   userService
-    .authenticate({ login, password, ipAddress })
+    .authenticate(login, password, ipAddress) //tutaj były klamry
     .then(({ ...user }) => {
       res.json(user);
     })

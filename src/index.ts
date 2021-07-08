@@ -3,7 +3,7 @@ import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 //const error = require("/errors/error");
-import { error } from "../src/errors/error";
+//import { error } from "../src/errors/error";
 
 const app = express();
 

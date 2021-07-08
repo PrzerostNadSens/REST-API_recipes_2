@@ -1,7 +1,6 @@
-var mongoose = require("mongoose");
-
+import mongoose, { Document } from "mongoose";
+const Schema = mongoose.Schema;
 export interface Recipe {
-  _id?: string;
   name: string;
   type: string;
   photo: string;
@@ -9,7 +8,9 @@ export interface Recipe {
   added_by?: string;
 }
 
-var recipeSchema = mongoose.Schema({
+export interface RecipeDocument extends Recipe, Document {}
+
+const recipeSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
@@ -33,10 +34,10 @@ var recipeSchema = mongoose.Schema({
 recipeSchema.set("toJSON", {
   virtuals: true,
   versionKey: false,
-  transform: function (doc: unknown, ret: Recipe) {
-    delete ret.added_by;
+  transform: function (doc: unknown, ret: RecipeDocument) {
     delete ret._id;
+    delete ret.added_by;
   },
 });
 
-export default mongoose.model("Recipe", recipeSchema);
+export const Recipes = mongoose.model<RecipeDocument>("Recipe", recipeSchema);

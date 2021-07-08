@@ -8,7 +8,9 @@ router
   .route("/")
   .get(authorize(), recipeController.index)
   .post(authorize(), recipeController.new);
-//router.route("/all").get(authorize(Role.Admin), recipeController.index_all);
+router
+  .route("/all")
+  .get(authorize(Role.Admin as any), recipeController.index_all);
 router
   .route("/:recipe_id")
   .get(authorize(), recipeController.view)

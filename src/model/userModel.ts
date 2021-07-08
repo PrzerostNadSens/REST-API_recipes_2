@@ -1,14 +1,15 @@
-import mongoose from "mongoose";
+import mongoose, { Document } from "mongoose";
 const Schema = mongoose.Schema;
 
 export interface User {
-  _id?: string;
   first_name: string;
   subname: string;
   login: string;
   password?: string;
   role: string;
 }
+
+export interface UserDocument extends User, Document {}
 
 const schema = new Schema({
   first_name: { type: String, required: true },
@@ -21,10 +22,10 @@ const schema = new Schema({
 schema.set("toJSON", {
   virtuals: true,
   versionKey: false,
-  transform: function (doc: unknown, ret: User) {
+  transform: function (doc: unknown, ret: UserDocument) {
     delete ret._id;
     delete ret.password;
   },
 });
 
-export const User = mongoose.model("User", schema);
+export const User = mongoose.model<UserDocument>("User", schema);

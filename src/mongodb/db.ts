@@ -1,5 +1,7 @@
 import config from "../../config.json";
 import mongoose from "mongoose";
+import { Recipe } from "../model/recipeModel"; //ta zmiana mogła wywołać błedy w recipeController
+import { User } from "../model/userModel";
 
 const connectionOptions = {
   useCreateIndex: true,
@@ -14,9 +16,8 @@ mongoose.connect(
 mongoose.Promise = global.Promise;
 
 export default {
-  User: require("../model/userModel"),
-  Recipe: require("../model/recipeModel"),
-  isValidId,
+  User: User,
+  Recipe: Recipe,
 };
 
 export function isValidId(id: string) {

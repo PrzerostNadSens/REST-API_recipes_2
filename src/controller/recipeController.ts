@@ -3,14 +3,18 @@ const jwt = require("express-jwt");
 import { secret } from "../../config.json";
 import express, { NextFunction, Request, Response } from "express";
 
-function return_id(req: Request) {
-  jwt({ secret, algorithms: ["HS256"] });
-  return (req.user as any).id; //do zmiany
+interface AuthorizedRequest extends Request {
+  user?: any;
 }
 
-exports.index = function (req: Request, res: Response) {
+function return_id(req: AuthorizedRequest) {
+  jwt({ secret, algorithms: ["HS256"] });
+  return req.user.id; //do zmiany
+}
+
+export const index = function (req: AuthorizedRequest, res: Response) {
   db.Recipe.find({}, function (err: Error, recipes: any) {
-    var recipeMap: string[] = [];
+    const recipeMap: string[] = [];
 
     recipes.forEach(function (recipe: any) {
       if (recipe.added_by == return_id(req)) {
@@ -21,9 +25,9 @@ exports.index = function (req: Request, res: Response) {
     res.send(recipeMap);
   });
 };
-exports.index_all = function (req: Request, res: Response) {
+export const index_all = function (req: Request, res: Response) {
   db.Recipe.find({}, function (err: Error, recipes: any) {
-    var recipeMap: string[] = [];
+    const recipeMap: string[] = [];
 
     recipes.forEach(function (recipe: any) {
       recipeMap[recipe._id!] = recipe;
@@ -33,8 +37,8 @@ exports.index_all = function (req: Request, res: Response) {
   });
 };
 
-exports.new = function (req: Request, res: Response) {
-  var recipe = new db.Recipe();
+export const create = function (req: Request, res: Response) {
+  const recipe = new db.Recipe();
   recipe.name = req.body.name ? req.body.name : recipe.name;
   (recipe.type = req.body.type),
     (recipe.photo = req.body.photo),
@@ -49,7 +53,7 @@ exports.new = function (req: Request, res: Response) {
     });
 };
 
-exports.view = function (req: Request, res: Response) {
+export const view = function (req: Request, res: Response) {
   db.Recipe.findById(req.params.recipe_id, function (err: Error, recipe: any) {
     if (recipe.added_by == return_id(req)) {
       if (err) res.send(err);
@@ -61,10 +65,12 @@ exports.view = function (req: Request, res: Response) {
   });
 };
 //const user = await db.User.findById((req.user as any).id);
-exports.update = function (req: Request, res: Response) {
+export const update = function (req: Request, res: Response) {
   db.Recipe.findById(req.params.recipe_id, function (err: Error, recipe: any) {
     if (recipe.added_by == return_id(req)) {
-      if (err) res.send(err);
+      if (err) {
+        res.send(err);
+      }
       recipe.name = req.body.name ? req.body.name : recipe.name;
       (recipe.type = req.body.type),
         (recipe.photo = req.body.photo),
@@ -75,11 +81,13 @@ exports.update = function (req: Request, res: Response) {
             data: recipe,
           });
         });
-    } else return res.status(401).json({ message: "Nieautoryzowany" });
+    } else {
+      return res.status(401).json({ message: "Nieautoryzowany" });
+    }
   });
 };
 
-exports.delete = function (req: Request, res: Response) {
+export const remove = function (req: Request, res: Response) {
   db.Recipe.findById(req.params.recipe_id, function (err: Error, recipe: any) {
     if (recipe.added_by == return_id(req)) {
       db.Recipe.remove(
@@ -87,13 +95,20 @@ exports.delete = function (req: Request, res: Response) {
           _id: req.params.recipe_id,
         },
         function (err: Error, recipe: string) {
-          if (err) res.send(err);
+          if (err) {
+            res.send(err);
+          }
           res.json({
             status: "success",
             message: "Recipe deleted",
           });
         }
       );
-    } else return res.status(401).json({ message: "Nieautoryzowany" });
+    } else {
+      return;
+      {
+        res.status(401).json({ message: "Nieautoryzowany" });
+      }
+    }
   });
 };
