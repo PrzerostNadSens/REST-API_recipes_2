@@ -3,6 +3,7 @@ import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import User from "../src/controller/userController";
+import apiRoutes from "../src/api-routes";
 //const error = require("/errors/error");
 //import { error } from "../src/errors/error";
 
@@ -25,8 +26,8 @@ app.use(
 // api routes
 app.use("/User", User);
 
-let apiRoutes = require("./api-routes");
-//app.use("/Recipe", apiRoutes);
+//const apiRoutes = require("./api-routes");
+app.use("/Recipe", apiRoutes);
 //app.use(error);
 
 app.get("/", (req, res) =>

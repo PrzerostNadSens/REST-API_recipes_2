@@ -1,5 +1,4 @@
-//import db from "../mongodb/db";
-import { Recipe } from "../model/recipeModel";
+import { Recipe, RecipeDocument } from "../model/recipeModel";
 const jwt = require("express-jwt");
 import { secret } from "../../config.json";
 import express, { NextFunction, Request, Response } from "express";
@@ -13,18 +12,16 @@ function return_id(req: AuthorizedRequest) {
   return req.user.id;
 }
 
-export const index = function (req: AuthorizedRequest, res: Response) {
-  Recipe.find({}, function (err: Error, recipes: any) {
-    const recipeMap: string[] = [];
+export const index = async function (req: AuthorizedRequest, res: Response) {
+  const recipes = await Recipe.find({});
 
-    recipes.forEach(function (recipe: any) {
-      if (recipe.added_by == return_id(req)) {
-        recipeMap[recipe._id!] = recipe;
-      }
-    });
+  const id: String = return_id(req);
 
-    res.send(recipeMap);
-  });
+  const recipeMap: RecipeDocument[] = recipes.filter(
+    (recipe) => recipe.added_by == id
+  );
+
+  return res.send(recipeMap);
 };
 export const index_all = function (req: Request, res: Response) {
   Recipe.find({}, function (err: Error, recipes: any) {
@@ -33,13 +30,12 @@ export const index_all = function (req: Request, res: Response) {
     recipes.forEach(function (recipe: any) {
       recipeMap[recipe._id!] = recipe;
     });
-
     res.send(recipeMap);
   });
 };
 
 export const create = function (req: Request, res: Response) {
-  const recipe = new Recipe();
+  let recipe = new Recipe();
   recipe.name = req.body.name ? req.body.name : recipe.name;
   (recipe.type = req.body.type),
     (recipe.photo = req.body.photo),
