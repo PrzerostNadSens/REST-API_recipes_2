@@ -1,10 +1,11 @@
-const router = express.Router();
+//const router = express.Router();
+const router = require("express").Router();
 import Joi from "@hapi/joi";
 import userService from "../service/userService";
 import express, { NextFunction, Request, Response } from "express";
 // routes
-router.post("/Login", authenticateSchema, authenticate);
-
+//router.Router.post("/Login", authenticateSchema, authenticate);
+router.route("/Login").post(authenticateSchema, authenticate);
 export default router;
 
 export function validateRequest(req: Request, next: NextFunction, schema: any) {

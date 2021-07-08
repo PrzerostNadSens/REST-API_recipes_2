@@ -2,6 +2,7 @@ import express from "express";
 import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 import cors from "cors";
+import User from "../src/controller/userController";
 //const error = require("/errors/error");
 //import { error } from "../src/errors/error";
 
@@ -20,7 +21,7 @@ app.use(
 );
 
 // api routes
-//app.use("/User", require("src/controller/userController"));
+app.use("/User", User);
 
 let apiRoutes = require("./api-routes");
 //app.use("/Recipe", apiRoutes);
@@ -31,7 +32,7 @@ app.get("/", (req, res) =>
 );
 
 // Setup server port
-var port = process.env.PORT || 8080;
+const port = process.env.PORT || 8080;
 
 app.listen(port, function () {
   console.log("Running REST_RECIPES on port " + port);

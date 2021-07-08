@@ -1,7 +1,7 @@
 import config from "../../config.json";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
-import db from "../mongodb/db";
+import { User } from "../model/userModel";
 import { object } from "@hapi/joi";
 
 export default {
@@ -9,18 +9,18 @@ export default {
   //getById,
 };
 
-async function authenticate(
+export async function authenticate(
   login: string,
   password: string,
   ipAddress: string
 ) {
   //tutaj były klamry
-  const user = await db.User.findOne({ login });
+  const user = await User.findOne({ login });
 
   if (!user) {
     throw "Nieprawidłowy login";
   }
-  if (!bcrypt.compareSync(password, user.password)) {
+  if (!bcrypt.compareSync(password, user.password as any)) {
     throw "Nieprawidłowe hasło";
   }
 

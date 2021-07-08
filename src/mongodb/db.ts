@@ -15,11 +15,6 @@ mongoose.connect(
 );
 mongoose.Promise = global.Promise;
 
-export default {
-  User: User,
-  Recipe: Recipe,
-};
-
 export function isValidId(id: string) {
   return mongoose.Types.ObjectId.isValid(id);
 }

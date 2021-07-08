@@ -40,4 +40,4 @@ recipeSchema.set("toJSON", {
   },
 });
 
-export const Recipes = mongoose.model<RecipeDocument>("Recipe", recipeSchema);
+export const Recipe = mongoose.model<RecipeDocument>("Recipe", recipeSchema);

@@ -1,5 +1,5 @@
 import bcrypt from "bcryptjs";
-import db from "../src/mongodb/db";
+import { User } from "../src/model/userModel";
 import Role from "../src/mongodb/role";
 
 export default createTestUser;
@@ -7,7 +7,7 @@ export default createTestUser;
 async function createTestUser() {
   // create test user if the db is empty
 
-  const user = new db.User({
+  const user = new User({
     first_name: "Dawid",
     subname: "Szklanka",
     login: "DDDAwid123",
@@ -18,7 +18,7 @@ async function createTestUser() {
 }
 
 /*
-    const user = new db.User({
+    const user = new User({
         first_name: 'Administrator_1',
         subname: 'Nazwisko',
         login: 'login_1',
@@ -31,7 +31,7 @@ async function createTestUser() {
 
 
 
-        const user = new db.User({
+        const user = new User({
         first_name: 'Administrator_2',
         subname: 'Kowalski',
         login: 'login_Administratora',
@@ -41,7 +41,7 @@ async function createTestUser() {
     await user.save();
 
 
-    const user = new db.User({
+    const user = new User({
         first_name: 'Użytkownik',
         subname: 'Nazwisko',
         login: 'Dobry login',
@@ -50,7 +50,7 @@ async function createTestUser() {
     });
     await user.save();
 
-    const user = new db.User({
+    const user = new User({
         first_name: 'Magda',
         subname: 'Woda',
         login: 'Magddda',
@@ -60,7 +60,7 @@ async function createTestUser() {
     await user.save();
 
 
-    const user = new db.User({
+    const user = new User({
         first_name: 'Dawid',
         subname: 'Szklanka',
         login: 'DDDAwid123',
