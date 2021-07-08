@@ -1,8 +1,9 @@
 //const router = express.Router();
 const router = require("express").Router();
 import Joi from "@hapi/joi";
-import userService from "../service/userService";
 import express, { NextFunction, Request, Response } from "express";
+import { authenticate_function } from "../service/userService";
+
 // routes
 //router.Router.post("/Login", authenticateSchema, authenticate);
 router.route("/Login").post(authenticateSchema, authenticate);
@@ -40,9 +41,8 @@ export function authenticateSchema(
 export function authenticate(req: Request, res: Response, next: NextFunction) {
   const { login, password } = req.body;
   const ipAddress = req.ip;
-  userService
-    .authenticate(login, password, ipAddress) //tutaj były klamry
-    .then(({ ...user }) => {
+  authenticate_function(login, password, ipAddress)
+    .then((...user) => {
       res.json(user);
     })
     .catch(next);

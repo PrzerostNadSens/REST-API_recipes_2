@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "ts-node src/index.ts"
+    "start": "ts-node src/index.ts",
+    "start:debug": "node --nolazy --inspect=8089 -r ts-node/register ./src/index.ts"
   },
   "repository": {
     "type": "git",

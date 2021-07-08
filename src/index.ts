@@ -6,6 +6,8 @@ import User from "../src/controller/userController";
 //const error = require("/errors/error");
 //import { error } from "../src/errors/error";
 
+import * as db from "./mongodb/db";
+
 const app = express();
 
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -30,6 +32,8 @@ let apiRoutes = require("./api-routes");
 app.get("/", (req, res) =>
   res.send("Obsługa przepisów kuchennych Rafał Chmielewski")
 );
+
+db.init();
 
 // Setup server port
 const port = process.env.PORT || 8080;

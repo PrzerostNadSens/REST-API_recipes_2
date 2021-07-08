@@ -4,17 +4,15 @@ import bcrypt from "bcryptjs";
 import { User } from "../model/userModel";
 import { object } from "@hapi/joi";
 
-export default {
-  authenticate,
-  //getById,
-};
-
-export async function authenticate(
+export async function authenticate_function(
   login: string,
   password: string,
   ipAddress: string
 ) {
+  //const userData: CreateUserDto = request.body;
+  //if (await user.findOne({ login: login }))
   //tutaj były klamry
+  //const user: User = await User.findOne({ login: login });
   const user = await User.findOne({ login });
 
   if (!user) {
