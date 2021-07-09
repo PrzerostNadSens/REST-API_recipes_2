@@ -39,17 +39,12 @@ export const create = function (req: Request, res: Response) {
     (recipe.recipe = req.body.recipe),
     (recipe.added_by = return_id(req)),
     recipe.save();
-  /*
-    recipe.save(function (err: Error) {
-      {
-        res.json(err);
-      }
-      res.json({
-        //data: recipe
-        id: recipe._id,
-      });
-    });
-    */
+
+  res.json({
+    //data: recipe
+    id: recipe._id,
+  });
+  //dodać obsługę błędów
 };
 
 export const view = function (req: Request, res: Response) {
