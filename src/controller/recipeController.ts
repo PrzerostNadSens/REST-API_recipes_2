@@ -89,22 +89,15 @@ export const update = function (req: Request, res: Response) {
 export const remove = function (req: Request, res: Response) {
   Recipe.findById(req.params.recipe_id, function (err: Error, recipe: any) {
     if (recipe.added_by == return_id(req)) {
-      Recipe.remove(
-        {
-          _id: req.params.recipe_id,
+      recipe.remove(function (err: Error) {
+        if (err) {
+          res.json(err);
         }
-        /*
-        function (err: Error, recipe: string) {
-          if (err) {
-            res.send(err);
-          }
-          res.json({
-            status: "success",
-            message: "Recipe deleted",
-          });
-        }
-        */
-      );
+        res.json({
+          status: "success",
+          message: "Recipe deleted",
+        });
+      });
     } else {
       return;
       {
