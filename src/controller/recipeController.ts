@@ -99,23 +99,32 @@ export const update = function (
   });
 };
 
-export const remove = function (req: Request, res: Response) {
-  Recipe.findById(req.params.recipe_id, function (err: Error, recipe: any) {
-    if (recipe.added_by == return_id(req)) {
-      recipe.remove(function (err: Error) {
-        if (err) {
-          res.json(err);
-        }
-        res.json({
-          status: "success",
-          message: "Recipe deleted",
+export const remove = function (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  const id = req.params.recipe_id;
+  Recipe.findById(id, function (err: Error, recipe: any) {
+    if (recipe) {
+      if (recipe.added_by == return_id(req)) {
+        recipe.remove(function (err: Error) {
+          if (err) {
+            res.json(err);
+          }
+          res.json({
+            status: "success",
+            message: "Recipe deleted",
+          });
         });
-      });
-    } else {
-      return;
-      {
-        res.status(401).json({ message: "Nieautoryzowany" });
+      } else {
+        return;
+        {
+          res.status(401).json({ message: "Nieautoryzowany" });
+        }
       }
+    } else {
+      next(new PostNotFoundException(id));
     }
   });
 };
