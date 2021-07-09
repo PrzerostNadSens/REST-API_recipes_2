@@ -2,6 +2,7 @@ import { Recipe, RecipeDocument } from "../model/recipeModel";
 const jwt = require("express-jwt");
 import { secret } from "../../config.json";
 import express, { NextFunction, Request, Response } from "express";
+import PostNotFoundException from "../exceptions/PostNotFoundException";
 
 interface AuthorizedRequest extends Request {
   user?: any;
@@ -47,17 +48,33 @@ export const create = function (req: Request, res: Response) {
   //dodać obsługę błędów
 };
 
-export const view = function (req: Request, res: Response) {
-  Recipe.findById(req.params.recipe_id, function (err: Error, recipe: any) {
-    if (recipe.added_by == return_id(req)) {
-      if (err) res.send(err);
+export const view = function (req: Request, res: Response, next: NextFunction) {
+  const id = req.params.recipe_id;
+  Recipe.findById(id, function (err: Error, recipe: Recipe) {
+    if (recipe) {
+      if (recipe.added_by == return_id(req)) {
+        if (err) res.send(err);
 
-      res.json({
-        data: recipe,
-      });
-    } else return res.status(401).json({ message: "Nieautoryzowany" });
+        res.json({
+          data: recipe,
+        });
+      } else return res.status(401).json({ message: "Nieautoryzowany" });
+    } else {
+      next(new PostNotFoundException(id));
+    }
   });
 };
+
+// export const view = function (req: Request, res: Response, next: NextFunction) {
+//   const id = req.params.id;
+//   Recipe.findById(id).then((Recipe) => {
+//     if (Recipe) {
+//       res.send(Recipe);
+//     } else {
+//       next(new PostNotFoundException(id));
+//     }
+//   });
+// };
 export const update = function (req: Request, res: Response) {
   Recipe.findById(req.params.recipe_id, function (err: Error, recipe: any) {
     if (recipe.added_by == return_id(req)) {
