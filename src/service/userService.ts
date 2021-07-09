@@ -9,17 +9,13 @@ export async function authenticate_function(
   password: string,
   ipAddress: string
 ) {
-  //const userData: CreateUserDto = request.body;
-  //if (await user.findOne({ login: login }))
-  //tutaj były klamry
-  //const user: User = await User.findOne({ login: login });
   const user = await User.findOne({ login });
 
   if (!user) {
-    throw "Nieprawidłowy login";
+    return "Nieprawidłowy login";
   }
   if (!bcrypt.compareSync(password, user.password as any)) {
-    throw "Nieprawidłowe hasło";
+    return "Nieprawidłowe hasło";
   }
 
   const jwtToken = Token(user);
