@@ -53,8 +53,9 @@ export const view = function (req: Request, res: Response, next: NextFunction) {
   Recipe.findById(id, function (err: Error, recipe: Recipe) {
     if (recipe) {
       if (recipe.added_by == return_id(req)) {
-        if (err) res.send(err);
-
+        if (err) {
+          res.send(err);
+        }
         res.json({
           data: recipe,
         });
@@ -65,34 +66,35 @@ export const view = function (req: Request, res: Response, next: NextFunction) {
   });
 };
 
-// export const view = function (req: Request, res: Response, next: NextFunction) {
-//   const id = req.params.id;
-//   Recipe.findById(id).then((Recipe) => {
-//     if (Recipe) {
-//       res.send(Recipe);
-//     } else {
-//       next(new PostNotFoundException(id));
-//     }
-//   });
-// };
-export const update = function (req: Request, res: Response) {
-  Recipe.findById(req.params.recipe_id, function (err: Error, recipe: any) {
-    if (recipe.added_by == return_id(req)) {
-      if (err) {
-        res.send(err);
-      }
-      recipe.name = req.body.name ? req.body.name : recipe.name;
-      (recipe.type = req.body.type),
-        (recipe.photo = req.body.photo),
-        (recipe.recipe = req.body.recipe),
-        recipe.save(function (err: Error) {
-          if (err) res.json(err);
-          res.json({
-            data: recipe,
+export const update = function (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  const id = req.params.recipe_id;
+  Recipe.findById(id, function (err: Error, recipe: any) {
+    if (recipe) {
+      if (recipe.added_by == return_id(req)) {
+        if (err) {
+          res.send(err);
+        }
+        recipe.name = req.body.name ? req.body.name : recipe.name;
+        (recipe.type = req.body.type),
+          (recipe.photo = req.body.photo),
+          (recipe.recipe = req.body.recipe),
+          recipe.save(function (err: Error) {
+            if (err) {
+              res.json(err);
+            }
+            res.json({
+              data: recipe,
+            });
           });
-        });
+      } else {
+        return res.status(401).json({ message: "Nieautoryzowany" });
+      }
     } else {
-      return res.status(401).json({ message: "Nieautoryzowany" });
+      next(new PostNotFoundException(id));
     }
   });
 };
