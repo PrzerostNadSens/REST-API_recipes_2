@@ -23,15 +23,12 @@ export const index = async function (req: AuthorizedRequest, res: Response) {
 
   return res.send(recipeMap);
 };
-export const index_all = function (req: Request, res: Response) {
-  Recipe.find({}, function (err: Error, recipes: any) {
-    const recipeMap: string[] = [];
-
-    recipes.forEach(function (recipe: any) {
-      recipeMap[recipe._id!] = recipe;
-    });
-    res.send(recipeMap);
-  });
+export const index_all = async function (
+  req: AuthorizedRequest,
+  res: Response
+) {
+  const recipes = await Recipe.find({});
+  return res.send(recipes);
 };
 
 export const create = function (req: Request, res: Response) {
