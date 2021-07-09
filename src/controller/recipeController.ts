@@ -58,7 +58,6 @@ export const view = function (req: Request, res: Response) {
     } else return res.status(401).json({ message: "Nieautoryzowany" });
   });
 };
-//const user = await User.findById((req.user as any).id);
 export const update = function (req: Request, res: Response) {
   Recipe.findById(req.params.recipe_id, function (err: Error, recipe: any) {
     if (recipe.added_by == return_id(req)) {
