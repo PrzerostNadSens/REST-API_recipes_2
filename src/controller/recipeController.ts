@@ -32,7 +32,7 @@ export const index_all = async function (
   return res.send(recipes);
 };
 
-export const create = function (req: Request, res: Response) {
+export const create = async function (req: Request, res: Response) {
   let recipe = new Recipe();
   recipe.name = req.body.name ? req.body.name : recipe.name;
   (recipe.type = req.body.type),
@@ -48,81 +48,67 @@ export const create = function (req: Request, res: Response) {
   //dodać obsługę błędów
 };
 
-export const view = function (req: Request, res: Response, next: NextFunction) {
-  const id = req.params.recipe_id;
-  Recipe.findById(id, function (err: Error, recipe: Recipe) {
-    if (!recipe) {
-      next(new PostNotFoundException(id));
-    } else {
-      if (recipe.added_by != return_id(req)) {
-        return res.status(401).json({ message: "Nieautoryzowany" });
-      } else {
-        if (err) {
-          res.send(err);
-        }
-        res.json({
-          data: recipe,
-        });
-      }
-    }
-  });
-};
-
-export const update = function (
+export const view = async function (
   req: Request,
   res: Response,
   next: NextFunction
 ) {
   const id = req.params.recipe_id;
-  Recipe.findById(id, function (err: Error, recipe: any) {
-    if (!recipe) {
-      next(new PostNotFoundException(id));
+  const recipe = await Recipe.findById(id);
+  if (!recipe) {
+    next(new PostNotFoundException(id));
+  } else {
+    if (recipe.added_by != return_id(req)) {
+      return res.status(401).json({ message: "Nieautoryzowany" });
     } else {
-      if (recipe.added_by !== return_id(req)) {
-        return res.status(401).json({ message: "Nieautoryzowany" });
-      }
-      if (err) {
-        res.send(err);
-      }
-      recipe.name = req.body.name ? req.body.name : recipe.name;
-      (recipe.type = req.body.type),
-        (recipe.photo = req.body.photo),
-        (recipe.recipe = req.body.recipe),
-        recipe.save(function (err: Error) {
-          if (err) {
-            res.json(err);
-          }
-          res.json({
-            data: recipe,
-          });
-        });
+      res.json({
+        data: recipe,
+      });
     }
-  });
+  }
 };
 
-export const remove = function (
+export const update = async function (
   req: Request,
   res: Response,
   next: NextFunction
 ) {
   const id = req.params.recipe_id;
-  Recipe.findById(id, function (err: Error, recipe: any) {
-    if (!recipe) {
-      next(new PostNotFoundException(id));
-    } else {
-      if (recipe.added_by !== return_id(req)) {
-        return res.status(401).json({ message: "Nieautoryzowany" });
-      } else {
-        recipe.remove(function (err: Error) {
-          if (err) {
-            res.json(err);
-          }
-          res.json({
-            //status: "success",
-            message: "Recipe deleted",
-          });
-        });
-      }
+  const recipe = await Recipe.findById(id);
+  if (!recipe) {
+    next(new PostNotFoundException(id));
+  } else {
+    if (recipe.added_by !== return_id(req)) {
+      return res.status(401).json({ message: "Nieautoryzowany" });
     }
-  });
+    recipe.name = req.body.name ? req.body.name : recipe.name;
+    (recipe.type = req.body.type),
+      (recipe.photo = req.body.photo),
+      (recipe.recipe = req.body.recipe),
+      recipe.save();
+    res.json({
+      data: recipe,
+    });
+  }
+};
+
+export const remove = async function (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  const id = req.params.recipe_id;
+  const recipe = await Recipe.findById(id);
+  if (!recipe) {
+    next(new PostNotFoundException(id));
+  } else {
+    if (recipe.added_by !== return_id(req)) {
+      return res.status(401).json({ message: "Nieautoryzowany" });
+    }
+    recipe.remove();
+    res.json({
+      //status: "success",
+      message: "Recipe deleted",
+    });
+  }
 };
