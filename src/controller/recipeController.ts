@@ -33,19 +33,20 @@ export const index_all = async function (
 };
 
 export const create = async function (req: Request, res: Response) {
-  let recipe = new Recipe();
-  recipe.name = req.body.name ? req.body.name : recipe.name;
-  (recipe.type = req.body.type),
-    (recipe.photo = req.body.photo),
-    (recipe.recipe = req.body.recipe),
-    (recipe.added_by = return_id(req)),
-    recipe.save();
+  try {
+    const newItem: Recipe = req.body;
+    newItem.added_by = return_id(req);
 
-  res.json({
-    //data: recipe
-    id: recipe._id,
-  });
-  //dodać obsługę błędów
+    const recipe = await Recipe.create(newItem);
+
+    res.status(201).json(recipe);
+  } catch (e) {
+    res.status(500).send(e.message); //zmienić obsługe błędów
+  }
+  // res.json({
+  //   //data: recipe
+  //   id: recipe._id,
+  // });
 };
 
 export const view = async function (
