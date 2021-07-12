@@ -51,17 +51,19 @@ export const create = function (req: Request, res: Response) {
 export const view = function (req: Request, res: Response, next: NextFunction) {
   const id = req.params.recipe_id;
   Recipe.findById(id, function (err: Error, recipe: Recipe) {
-    if (recipe) {
-      if (recipe.added_by == return_id(req)) {
+    if (!recipe) {
+      next(new PostNotFoundException(id));
+    } else {
+      if (recipe.added_by != return_id(req)) {
+        return res.status(401).json({ message: "Nieautoryzowany" });
+      } else {
         if (err) {
           res.send(err);
         }
         res.json({
           data: recipe,
         });
-      } else return res.status(401).json({ message: "Nieautoryzowany" });
-    } else {
-      next(new PostNotFoundException(id));
+      }
     }
   });
 };
