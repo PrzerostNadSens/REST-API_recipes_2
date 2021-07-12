@@ -75,28 +75,27 @@ export const update = function (
 ) {
   const id = req.params.recipe_id;
   Recipe.findById(id, function (err: Error, recipe: any) {
-    if (recipe) {
-      if (recipe.added_by == return_id(req)) {
-        if (err) {
-          res.send(err);
-        }
-        recipe.name = req.body.name ? req.body.name : recipe.name;
-        (recipe.type = req.body.type),
-          (recipe.photo = req.body.photo),
-          (recipe.recipe = req.body.recipe),
-          recipe.save(function (err: Error) {
-            if (err) {
-              res.json(err);
-            }
-            res.json({
-              data: recipe,
-            });
-          });
-      } else {
+    if (!recipe) {
+      next(new PostNotFoundException(id));
+    } else {
+      if (recipe.added_by !== return_id(req)) {
         return res.status(401).json({ message: "Nieautoryzowany" });
       }
-    } else {
-      next(new PostNotFoundException(id));
+      if (err) {
+        res.send(err);
+      }
+      recipe.name = req.body.name ? req.body.name : recipe.name;
+      (recipe.type = req.body.type),
+        (recipe.photo = req.body.photo),
+        (recipe.recipe = req.body.recipe),
+        recipe.save(function (err: Error) {
+          if (err) {
+            res.json(err);
+          }
+          res.json({
+            data: recipe,
+          });
+        });
     }
   });
 };
@@ -108,25 +107,22 @@ export const remove = function (
 ) {
   const id = req.params.recipe_id;
   Recipe.findById(id, function (err: Error, recipe: any) {
-    if (recipe) {
-      if (recipe.added_by == return_id(req)) {
+    if (!recipe) {
+      next(new PostNotFoundException(id));
+    } else {
+      if (recipe.added_by !== return_id(req)) {
+        return res.status(401).json({ message: "Nieautoryzowany" });
+      } else {
         recipe.remove(function (err: Error) {
           if (err) {
             res.json(err);
           }
           res.json({
-            status: "success",
+            //status: "success",
             message: "Recipe deleted",
           });
         });
-      } else {
-        return;
-        {
-          res.status(401).json({ message: "Nieautoryzowany" });
-        }
       }
-    } else {
-      next(new PostNotFoundException(id));
     }
   });
 };
