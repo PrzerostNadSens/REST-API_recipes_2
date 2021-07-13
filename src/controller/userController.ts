@@ -2,8 +2,8 @@
 const router = require("express").Router();
 import Joi from "@hapi/joi";
 import express, { NextFunction, Request, Response } from "express";
-import { authenticate_function } from "../service/userService";
 
+import UsersService from "../service/users.service";
 router.route("/Login").post(authenticateSchema, authenticate);
 export default router;
 
@@ -39,7 +39,7 @@ export function authenticateSchema(
 export function authenticate(req: Request, res: Response, next: NextFunction) {
   const { login, password } = req.body;
   const ipAddress = req.ip;
-  authenticate_function(login, password, ipAddress)
+  UsersService.authenticate_function(login, password, ipAddress)
     .then((...user) => {
       res.json(user);
     })
