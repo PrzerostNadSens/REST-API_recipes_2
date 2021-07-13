@@ -2,7 +2,7 @@ import express, { NextFunction, Request, Response } from "express";
 import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 import cors from "cors";
-import recipe_routes from "../src/routes/api-routes";
+import recipe_routes from "./routes/recipe.routes.config";
 import user_routes from "../src/routes/users.routes.config";
 import errorMiddleware from "./middleware/error.middleware";
 import * as db from "./mongodb/db";

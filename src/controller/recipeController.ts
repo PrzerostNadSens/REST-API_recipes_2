@@ -3,6 +3,25 @@ const jwt = require("express-jwt");
 import { secret } from "../../config.json";
 import express, { NextFunction, Request, Response } from "express";
 import PostNotFoundException from "../exceptions/PostNotFoundException";
+import RecipesService from "../service/recipes.service";
+
+class RecipesController {
+  // async getUserById(req: Request, res: Response) {
+  //   const user = await RecipesService.readById(req.body.id);
+  //   res.status(200).send(user);
+  // }
+
+  async createRecipe(req: Request, res: Response) {
+    try {
+      req.body.added_by = return_id(req);
+      const recipeId = await RecipesService.create(req.body);
+      res.status(201).send({ id: recipeId });
+    } catch (e) {
+      res.status(500).send(e.message);
+    }
+  }
+}
+export default new RecipesController();
 
 interface AuthorizedRequest extends Request {
   user?: any;
@@ -30,19 +49,6 @@ export const index_all = async function (
 ) {
   const recipes = await Recipe.find({});
   return res.send(recipes);
-};
-
-export const create = async function (req: Request, res: Response) {
-  try {
-    const newItem: Recipe = req.body;
-    newItem.added_by = return_id(req);
-
-    const recipe = await Recipe.create(newItem);
-
-    res.status(201).json(recipe);
-  } catch (e) {
-    res.status(500).send(e.message);
-  }
 };
 
 export const view = async function (req: Request, res: Response) {

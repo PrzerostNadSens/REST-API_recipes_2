@@ -1,5 +1,5 @@
 import UsersDao from "../daos/users.dao";
-import { CRUD } from "../interfaces/crud.interface";
+import { USER } from "../interfaces/user.interface";
 import { CreateUserDto } from "../dto/create.user.dto";
 import { PutUserDto } from "../dto/put.user.dto";
 import config from "../../config.json";
@@ -7,7 +7,7 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import { User } from "../model/userModel";
 
-class UsersService implements CRUD {
+class UsersService implements USER {
   async create(resource: CreateUserDto) {
     return UsersDao.addUser(resource);
   }
