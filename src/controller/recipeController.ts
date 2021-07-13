@@ -1,7 +1,7 @@
 import { Recipe, RecipeDocument } from "../model/recipeModel";
 const jwt = require("express-jwt");
 import { secret } from "../../config.json";
-import express, { NextFunction, Request, Response } from "express";
+import express, { Request, Response } from "express";
 import PostNotFoundException from "../exceptions/PostNotFoundException";
 
 interface AuthorizedRequest extends Request {
@@ -45,41 +45,33 @@ export const create = async function (req: Request, res: Response) {
   }
 };
 
-export const view = async function (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) {
+export const view = async function (req: Request, res: Response) {
   const id = req.params.recipe_id;
 
   const recipe = await Recipe.findById(id);
   if (!recipe) {
     return res
       .status(401)
-      .json({ message: `Przepis o podanym id: ${id} nie istnieje` });
+      .json({ message: `The recipe with the given id: ${id} does not exist` });
   }
   if (recipe.added_by != return_id(req)) {
-    return res.status(401).json({ message: "Nieautoryzowany" });
+    return res.status(401).json({ message: "Unauthorized" });
   }
   res.json({
     data: recipe,
   });
 };
 
-export const update = async function (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) {
+export const update = async function (req: Request, res: Response) {
   const id = req.params.recipe_id;
   const recipe = await Recipe.findById(id);
   if (!recipe) {
     return res
       .status(401)
-      .json({ message: `Przepis o podanym id: ${id} nie istnieje` });
+      .json({ message: `The recipe with the given id: ${id} does not exist` });
   }
   if (recipe.added_by !== return_id(req)) {
-    return res.status(401).json({ message: "Nieautoryzowany" });
+    return res.status(401).json({ message: "Unauthorized" });
   }
   recipe.name = req.body.name ? req.body.name : recipe.name;
   (recipe.type = req.body.type),
@@ -91,20 +83,16 @@ export const update = async function (
   });
 };
 
-export const remove = async function (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) {
+export const remove = async function (req: Request, res: Response) {
   const id = req.params.recipe_id;
   const recipe = await Recipe.findById(id);
   if (!recipe) {
     return res
       .status(401)
-      .json({ message: `Przepis o podanym id: ${id} nie istnieje` });
+      .json({ message: `The recipe with the given id: ${id} does not exist` });
   }
   if (recipe.added_by !== return_id(req)) {
-    return res.status(401).json({ message: "Nieautoryzowany" });
+    return res.status(401).json({ message: "Unauthorized" });
   }
   recipe.remove();
   res.json({
