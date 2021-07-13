@@ -23,6 +23,15 @@ class RecipesDao {
     await r.save();
     return r.id;
   }
+
+  async removeRecipe(id: string) {
+    const recipe = await Recipe.findById(id);
+    if (!recipe) {
+      return { message: `Przepis o podanym id: ${id} nie istnieje` };
+    }
+    recipe.remove();
+    return "removed";
+  }
 }
 
 export default new RecipesDao();

@@ -11,21 +11,9 @@ class RecipesService implements RECIPE {
     return RecipesDao.addRecipe(resource);
   }
 
-  //   async deleteById(id: string) {
-  //     return RecipesDao.removeRecipeById(id);
-  //   }
-
-  //   async list(limit: number, page: number) {
-  //     return RecipesDao.getRecipes();
-  //   }
-
-  //   async readById(id: string) {
-  //     return RecipesDao.getRecipeById(id);
-  //   }
-
-  //   async putById(id: string, resource: PutRecipeDto) {
-  //     return RecipesDao.putRecipeById(id, resource);
-  //   }
+  async remove(id: string) {
+    return RecipesDao.removeRecipe(id);
+  }
 }
 
 export default new RecipesService();

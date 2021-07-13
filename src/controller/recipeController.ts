@@ -87,10 +87,7 @@ class RecipesController {
     if (recipe.added_by !== return_id(req)) {
       return res.status(401).json({ message: "Nieautoryzowany" });
     }
-    recipe.remove();
-    res.json({
-      message: "Recipe deleted",
-    });
+    return res.status(200).json(RecipesService.remove(id));
   }
 }
 export default new RecipesController();
