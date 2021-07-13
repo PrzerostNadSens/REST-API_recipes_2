@@ -11,7 +11,7 @@ async function createTestUser() {
     first_name: "Dawid",
     subname: "Szklanka",
     login: "DDDAwid123",
-    password: bcrypt.hashSync("trudne.haslo123", 10),
+    password: bcrypt.hashSync("trudne.haslo123", 10), //zmienic na asynchć
     role: Role.User,
   });
   await user.save();

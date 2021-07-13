@@ -3,7 +3,8 @@ import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import User from "../src/controller/userController";
-import apiRoutes from "../src/routes/api-routes";
+import recipe_routes from "../src/routes/api-routes";
+import user_routes from "../src/routes/users.routes.config";
 import errorMiddleware from "./middleware/error.middleware";
 import * as db from "./mongodb/db";
 
@@ -24,7 +25,8 @@ app.use(
 // api routes
 app.use("/User", User);
 
-app.use("/Recipe", apiRoutes);
+app.use("/Recipe", recipe_routes);
+app.use("/Users", user_routes);
 app.use(errorMiddleware);
 
 app.get("/", (req: Request, res: Response) =>

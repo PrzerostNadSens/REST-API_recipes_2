@@ -45,11 +45,7 @@ export const create = async function (req: Request, res: Response) {
   }
 };
 
-export const view = async function (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) {
+export const view = async function (req: Request, res: Response) {
   const id = req.params.recipe_id;
 
   const recipe = await Recipe.findById(id);
@@ -66,11 +62,7 @@ export const view = async function (
   });
 };
 
-export const update = async function (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) {
+export const update = async function (req: Request, res: Response) {
   const id = req.params.recipe_id;
   const recipe = await Recipe.findById(id);
   if (!recipe) {
@@ -91,11 +83,7 @@ export const update = async function (
   });
 };
 
-export const remove = async function (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) {
+export const remove = async function (req: Request, res: Response) {
   const id = req.params.recipe_id;
   const recipe = await Recipe.findById(id);
   if (!recipe) {
