@@ -1,6 +1,11 @@
-import UsersController from "../controller/users.controller";
+import UsersController, {
+  authenticate,
+  authenticateSchema,
+} from "../controller/users.controller";
 import UsersMiddleware from "../middleware/users.middleware";
 const router = require("express").Router();
+
+router.route("/Login").post(authenticateSchema, authenticate);
 
 router
   .route(`/`)

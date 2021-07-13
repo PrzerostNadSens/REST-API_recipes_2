@@ -2,7 +2,6 @@ import express, { NextFunction, Request, Response } from "express";
 import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 import cors from "cors";
-import User from "../src/controller/userController";
 import recipe_routes from "../src/routes/api-routes";
 import user_routes from "../src/routes/users.routes.config";
 import errorMiddleware from "./middleware/error.middleware";
@@ -21,9 +20,6 @@ app.use(
     credentials: true,
   })
 );
-
-// api routes
-app.use("/User", User);
 
 app.use("/Recipe", recipe_routes);
 app.use("/Users", user_routes);

@@ -1,13 +1,13 @@
-import express from "express";
+import express, { NextFunction, Request, Response } from "express";
 import userService from "../service/users.service";
 import debug from "debug";
 
 const log: debug.IDebugger = debug("app:users-controller");
 class UsersMiddleware {
   async validateRequiredUserBodyFields(
-    req: express.Request,
-    res: express.Response,
-    next: express.NextFunction
+    req: Request,
+    res: Response,
+    next: NextFunction
   ) {
     if (req.body && req.body.email && req.body.password) {
       next();
@@ -19,9 +19,9 @@ class UsersMiddleware {
   }
 
   async validateSameEmailDoesntExist(
-    req: express.Request,
-    res: express.Response,
-    next: express.NextFunction
+    req: Request,
+    res: Response,
+    next: NextFunction
   ) {
     const user = await userService.getUserByEmail(req.body.email);
     if (user) {
@@ -32,9 +32,9 @@ class UsersMiddleware {
   }
 
   async validateSameEmailBelongToSameUser(
-    req: express.Request,
-    res: express.Response,
-    next: express.NextFunction
+    req: Request,
+    res: Response,
+    next: NextFunction
   ) {
     const user = await userService.getUserByEmail(req.body.email);
     if (user && user.id === req.params.userId) {
@@ -46,9 +46,9 @@ class UsersMiddleware {
 
   // Here we need to use an arrow function to bind `this` correctly
   validatePatchEmail = async (
-    req: express.Request,
-    res: express.Response,
-    next: express.NextFunction
+    req: Request,
+    res: Response,
+    next: NextFunction
   ) => {
     if (req.body.email) {
       log("Validating email", req.body.email);
@@ -59,11 +59,7 @@ class UsersMiddleware {
     }
   };
 
-  async validateUserExists(
-    req: express.Request,
-    res: express.Response,
-    next: express.NextFunction
-  ) {
+  async validateUserExists(req: Request, res: Response, next: NextFunction) {
     const user = await userService.readById(req.params.userId);
     if (user) {
       next();
@@ -74,11 +70,7 @@ class UsersMiddleware {
     }
   }
 
-  async extractUserId(
-    req: express.Request,
-    res: express.Response,
-    next: express.NextFunction
-  ) {
+  async extractUserId(req: Request, res: Response, next: NextFunction) {
     req.body.id = req.params.userId;
     next();
   }
