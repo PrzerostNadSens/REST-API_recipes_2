@@ -5,15 +5,15 @@ import * as recipeController from "../controller/recipeController";
 import RecipesController from "../controller/recipeController";
 router
   .route("/")
-  .get(authorize(), recipeController.index)
+  .get(authorize(), RecipesController.indexRecipe)
   .post(authorize(), RecipesController.createRecipe);
 router
   .route("/all")
-  .get(authorize(Role.Admin as any), recipeController.index_all);
+  .get(authorize(Role.Admin as any), RecipesController.index_allRecipe);
 router
   .route("/:recipe_id")
-  .get(authorize(), recipeController.view)
-  .put(authorize(), recipeController.update)
-  .delete(authorize(), recipeController.remove);
+  .get(authorize(), RecipesController.viewRecipe)
+  .put(authorize(), RecipesController.updateRecipe)
+  .delete(authorize(), RecipesController.removeRecipe);
 
 export default router;
