@@ -1,12 +1,10 @@
-import express from "express";
+import express, { NextFunction, Request, Response } from "express";
 import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import User from "../src/controller/userController";
 import apiRoutes from "../src/routes/api-routes";
-//const error = require("/errors/error");
-//import { error } from "../src/errors/error";
-
+import errorMiddleware from "./middleware/error.middleware";
 import * as db from "./mongodb/db";
 
 const app = express();
@@ -27,9 +25,9 @@ app.use(
 app.use("/User", User);
 
 app.use("/Recipe", apiRoutes);
-//app.use(error);
+app.use(errorMiddleware);
 
-app.get("/", (req, res) =>
+app.get("/", (req: Request, res: Response) =>
   res.send("Obsługa przepisów kuchennych Rafał Chmielewski")
 );
 

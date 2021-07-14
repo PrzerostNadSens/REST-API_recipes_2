@@ -4,8 +4,6 @@ import Joi from "@hapi/joi";
 import express, { NextFunction, Request, Response } from "express";
 import { authenticate_function } from "../service/userService";
 
-// routes
-//router.Router.post("/Login", authenticateSchema, authenticate);
 router.route("/Login").post(authenticateSchema, authenticate);
 export default router;
 

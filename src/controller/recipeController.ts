@@ -1,7 +1,8 @@
 import { Recipe, RecipeDocument } from "../model/recipeModel";
 const jwt = require("express-jwt");
 import { secret } from "../../config.json";
-import express, { NextFunction, Request, Response } from "express";
+import express, { Request, Response } from "express";
+import PostNotFoundException from "../exceptions/PostNotFoundException";
 
 interface AuthorizedRequest extends Request {
   user?: any;
@@ -31,72 +32,70 @@ export const index_all = async function (
   return res.send(recipes);
 };
 
-export const create = function (req: Request, res: Response) {
-  let recipe = new Recipe();
+export const create = async function (req: Request, res: Response) {
+  try {
+    const newItem: Recipe = req.body;
+    newItem.added_by = return_id(req);
+
+    const recipe = await Recipe.create(newItem);
+
+    res.status(201).json(recipe);
+  } catch (e) {
+    res.status(500).send(e.message);
+  }
+};
+
+export const findById = async function (req: Request, res: Response) {
+  const id = req.params.recipe_id;
+
+  const recipe = await Recipe.findById(id);
+  if (!recipe) {
+    return res
+      .status(404)
+      .json({ message: `The recipe with the given id: ${id} does not exist` });
+  }
+  if (recipe.added_by != return_id(req)) {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
+  res.json({
+    data: recipe,
+  });
+};
+
+export const update = async function (req: Request, res: Response) {
+  const id = req.params.recipe_id;
+  const recipe = await Recipe.findById(id);
+  if (!recipe) {
+    return res
+      .status(404)
+      .json({ message: `The recipe with the given id: ${id} does not exist` });
+  }
+  if (recipe.added_by !== return_id(req)) {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
   recipe.name = req.body.name ? req.body.name : recipe.name;
   (recipe.type = req.body.type),
     (recipe.photo = req.body.photo),
     (recipe.recipe = req.body.recipe),
-    (recipe.added_by = return_id(req)),
     recipe.save();
-
   res.json({
-    //data: recipe
-    id: recipe._id,
-  });
-  //dodać obsługę błędów
-};
-
-export const view = function (req: Request, res: Response) {
-  Recipe.findById(req.params.recipe_id, function (err: Error, recipe: any) {
-    if (recipe.added_by == return_id(req)) {
-      if (err) res.send(err);
-
-      res.json({
-        data: recipe,
-      });
-    } else return res.status(401).json({ message: "Nieautoryzowany" });
-  });
-};
-export const update = function (req: Request, res: Response) {
-  Recipe.findById(req.params.recipe_id, function (err: Error, recipe: any) {
-    if (recipe.added_by == return_id(req)) {
-      if (err) {
-        res.send(err);
-      }
-      recipe.name = req.body.name ? req.body.name : recipe.name;
-      (recipe.type = req.body.type),
-        (recipe.photo = req.body.photo),
-        (recipe.recipe = req.body.recipe),
-        recipe.save(function (err: Error) {
-          if (err) res.json(err);
-          res.json({
-            data: recipe,
-          });
-        });
-    } else {
-      return res.status(401).json({ message: "Nieautoryzowany" });
-    }
+    data: recipe,
   });
 };
 
-export const remove = function (req: Request, res: Response) {
-  Recipe.findById(req.params.recipe_id, function (err: Error, recipe: any) {
-    if (recipe.added_by == return_id(req)) {
-      recipe.remove(function (err: Error) {
-        if (err) {
-          res.json(err);
-        }
-        res.json({
-          status: "success",
-          message: "Recipe deleted",
-        });
-      });
-    } else {
-      return;
-      {
-        res.status(401).json({ message: "Nieautoryzowany" });
-      }
-    }
+export const remove = async function (req: Request, res: Response) {
+  const id = req.params.recipe_id;
+  const recipe = await Recipe.findById(id);
+  if (!recipe) {
+    return res
+      .status(404)
+      .json({ message: `The recipe with the given id: ${id} does not exist` });
+  }
+  if (recipe.added_by !== return_id(req)) {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
+  recipe.remove();
+  res.json({
+    message: "Recipe deleted",
   });
 };

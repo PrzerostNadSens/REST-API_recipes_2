@@ -12,7 +12,7 @@ router
   .get(authorize(Role.Admin as any), recipeController.index_all);
 router
   .route("/:recipe_id")
-  .get(authorize(), recipeController.view)
+  .get(authorize(), recipeController.findById)
   .put(authorize(), recipeController.update)
   .delete(authorize(), recipeController.remove);
 
