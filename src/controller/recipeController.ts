@@ -1,7 +1,7 @@
 import { Recipe, RecipeDocument } from "../model/recipeModel";
 const jwt = require("express-jwt");
 import { secret } from "../../config.json";
-import express, { NextFunction, Request, Response } from "express";
+import express, { Request, Response } from "express";
 import PostNotFoundException from "../exceptions/PostNotFoundException";
 import RecipesService from "../service/recipes.service";
 
@@ -44,11 +44,13 @@ class RecipesController {
     const recipe = await Recipe.findById(id);
     if (!recipe) {
       return res
-        .status(401)
-        .json({ message: `Przepis o podanym id: ${id} nie istnieje` });
+        .status(404)
+        .json({
+          message: `The recipe with the given id: ${id} does not exist`,
+        });
     }
     if (recipe.added_by != return_id(req)) {
-      return res.status(401).json({ message: "Nieautoryzowany" });
+      return res.status(401).json({ message: "Unauthorized" });
     }
     res.json({
       data: recipe,
@@ -60,11 +62,13 @@ class RecipesController {
     const recipe = await Recipe.findById(id);
     if (!recipe) {
       return res
-        .status(401)
-        .json({ message: `Przepis o podanym id: ${id} nie istnieje` });
+        .status(404)
+        .json({
+          message: `The recipe with the given id: ${id} does not exist`,
+        });
     }
     if (recipe.added_by !== return_id(req)) {
-      return res.status(401).json({ message: "Nieautoryzowany" });
+      return res.status(401).json({ message: "Unauthorized" });
     }
     const new_recipe = await RecipesService.update(id, req.body);
     res.status(201).send(new_recipe);
@@ -75,11 +79,13 @@ class RecipesController {
     const recipe = await Recipe.findById(id);
     if (!recipe) {
       return res
-        .status(401)
-        .json({ message: `Przepis o podanym id: ${id} nie istnieje` });
+        .status(404)
+        .json({
+          message: `The recipe with the given id: ${id} does not exist`,
+        });
     }
     if (recipe.added_by !== return_id(req)) {
-      return res.status(401).json({ message: "Nieautoryzowany" });
+      return res.status(401).json({ message: "Unauthorized" });
     }
 
     const messages = await RecipesService.remove(id);
