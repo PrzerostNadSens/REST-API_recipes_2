@@ -66,14 +66,8 @@ class RecipesController {
     if (recipe.added_by !== return_id(req)) {
       return res.status(401).json({ message: "Nieautoryzowany" });
     }
-    recipe.name = req.body.name ? req.body.name : recipe.name;
-    (recipe.type = req.body.type),
-      (recipe.photo = req.body.photo),
-      (recipe.recipe = req.body.recipe),
-      recipe.save();
-    res.json({
-      data: recipe,
-    });
+    const new_recipe = await RecipesService.update(id, req.body);
+    res.status(201).send(new_recipe);
   }
 
   async removeRecipe(req: Request, res: Response) {
@@ -87,7 +81,9 @@ class RecipesController {
     if (recipe.added_by !== return_id(req)) {
       return res.status(401).json({ message: "Nieautoryzowany" });
     }
-    return res.status(200).json(RecipesService.remove(id));
+
+    const messages = await RecipesService.remove(id);
+    res.status(201).send({ messages });
   }
 }
 export default new RecipesController();

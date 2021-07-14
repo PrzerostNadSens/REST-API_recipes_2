@@ -24,10 +24,24 @@ class RecipesDao {
     return r.id;
   }
 
+  async updateRecipe(id: string, req: CreateRecipesDto) {
+    const recipe = await Recipe.findById(id);
+    if (recipe) {
+      recipe.name = req.name ? req.name : recipe.name;
+      recipe.type = req.type;
+      recipe.photo = req.photo;
+      recipe.recipe = req.recipe;
+      recipe.save();
+      return recipe;
+    }
+    //`${id} update`
+  }
+
   async removeRecipe(id: string) {
     const recipe = await Recipe.findById(id);
     if (recipe) {
       recipe.remove();
+      return `${id} removed`;
     }
   }
 }
