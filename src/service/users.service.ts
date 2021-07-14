@@ -32,24 +32,26 @@ class UsersService implements USER {
     return UsersDao.getUserByEmail(email);
   }
 
-  async authenticate_function(
-    login: string,
-    password: string,
-    ipAddress: string
-  ) {
+  async authenticate_function(login: string, password: string) {
     const user = await User.findOne({ login });
 
     if (!user) {
-      return "Nieprawidłowy login";
+      return { message: "Unauthorized" };
     }
     if (!bcrypt.compare(password, user.password as any)) {
-      return "Nieprawidłowe hasło";
+      return { message: "Unauthorized" };
     }
 
-    return jwt.sign({ sub: user.id, id: user.id }, config.secret, {
-      expiresIn: "15m",
-    });
+    const jwtToken = Token(user);
+    return {
+      jwtToken,
+    };
   }
+}
+export function Token(user: any) {
+  return jwt.sign({ sub: user.id, id: user.id }, config.secret, {
+    expiresIn: "15m",
+  });
 }
 
 export default new UsersService();

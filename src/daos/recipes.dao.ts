@@ -1,5 +1,4 @@
 import { CreateRecipesDto } from "../dto/create.recipe.dto";
-import shortid from "shortid";
 import debug from "debug";
 import { Recipe } from "../model/recipeModel";
 
@@ -34,7 +33,6 @@ class RecipesDao {
       recipe.save();
       return recipe;
     }
-    //`${id} update`
   }
 
   async removeRecipe(id: string) {

@@ -13,7 +13,6 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cookieParser());
 
-// allow cors requests from any origin and with credentials
 app.use(
   cors({
     origin: (origin, callback) => callback(null, true),
@@ -31,7 +30,6 @@ app.get("/", (req: Request, res: Response) =>
 
 db.init();
 
-// Setup server port
 const port = process.env.PORT || 8080;
 
 app.listen(port, function () {

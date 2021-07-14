@@ -1,7 +1,5 @@
 import config from "../../config.json";
 import mongoose from "mongoose";
-//import { Recipe } from "../model/recipeModel"; //ta zmiana mogła wywołać błedy w recipeController
-//import { User } from "../model/userModel";
 
 const connectionOptions = {
   useCreateIndex: true,

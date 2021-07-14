@@ -1,7 +1,6 @@
 const router = require("express").Router();
 import Role from "../mongodb/role";
 import { authorize } from "../mongodb/authorize";
-import * as recipeController from "../controller/recipeController";
 import RecipesController from "../controller/recipeController";
 router
   .route("/")
@@ -12,7 +11,7 @@ router
   .get(authorize(Role.Admin as any), RecipesController.index_allRecipe);
 router
   .route("/:recipe_id")
-  .get(authorize(), RecipesController.viewRecipe)
+  .get(authorize(), RecipesController.findById_Recipe)
   .put(authorize(), RecipesController.updateRecipe)
   .delete(authorize(), RecipesController.removeRecipe);
 

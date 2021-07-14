@@ -77,8 +77,7 @@ export async function authenticate(
   next: NextFunction
 ) {
   const { login, password } = req.body;
-  const ipAddress = req.ip;
-  UsersService.authenticate_function(login, password, ipAddress)
+  UsersService.authenticate_function(login, password)
     .then((...user) => {
       res.json(user);
     })
