@@ -26,11 +26,9 @@ class RecipesDao {
 
   async removeRecipe(id: string) {
     const recipe = await Recipe.findById(id);
-    if (!recipe) {
-      return { message: `Przepis o podanym id: ${id} nie istnieje` };
+    if (recipe) {
+      recipe.remove();
     }
-    recipe.remove();
-    return "removed";
   }
 }
 
