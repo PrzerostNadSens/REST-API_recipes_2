@@ -1,13 +1,12 @@
 import RecipesDao from "../daos/recipes.dao";
-import { RECIPE } from "../interfaces/recipe.interface";
-import { CreateRecipesDto } from "../dto/create.recipe.dto";
+import { IRecipe } from "../model/recipeModel";
 
-class RecipesService implements RECIPE {
-  async create(resource: CreateRecipesDto) {
-    return RecipesDao.addRecipe(resource);
+class RecipesService {
+  async create(resource: IRecipe) {
+    return RecipesDao.createRecipe(resource);
   }
 
-  async update(id: string, resource: CreateRecipesDto) {
+  async update(id: string, resource: IRecipe) {
     return RecipesDao.updateRecipe(id, resource);
   }
 

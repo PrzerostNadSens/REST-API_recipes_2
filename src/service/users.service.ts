@@ -6,7 +6,7 @@ import { IUser, User } from "../model/userModel";
 
 class UsersService {
   async create(resource: IUser) {
-    return UsersDao.addUser(resource);
+    return UsersDao.createUser(resource);
   }
 
   async authenticate_function(login: string, password: string) {
