@@ -1,35 +1,12 @@
 import UsersDao from "../daos/users.dao";
-import { USER } from "../interfaces/user.interface";
-import { CreateUserDto } from "../dto/create.user.dto";
-import { PutUserDto } from "../dto/put.user.dto";
 import config from "../../config.json";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
-import { User } from "../model/userModel";
+import { IUser, User } from "../model/userModel";
 
-class UsersService implements USER {
-  async create(resource: CreateUserDto) {
+class UsersService {
+  async create(resource: IUser) {
     return UsersDao.addUser(resource);
-  }
-
-  async deleteById(id: string) {
-    return UsersDao.removeUserById(id);
-  }
-
-  async list(limit: number, page: number) {
-    return UsersDao.getUsers();
-  }
-
-  async readById(id: string) {
-    return UsersDao.getUserById(id);
-  }
-
-  async putById(id: string, resource: PutUserDto) {
-    return UsersDao.putUserById(id, resource);
-  }
-
-  async getUserByEmail(email: string) {
-    return UsersDao.getUserByEmail(email);
   }
 
   async authenticate_function(login: string, password: string) {
