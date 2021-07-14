@@ -45,13 +45,13 @@ export const create = async function (req: Request, res: Response) {
   }
 };
 
-export const view = async function (req: Request, res: Response) {
+export const findById = async function (req: Request, res: Response) {
   const id = req.params.recipe_id;
 
   const recipe = await Recipe.findById(id);
   if (!recipe) {
     return res
-      .status(401)
+      .status(404)
       .json({ message: `The recipe with the given id: ${id} does not exist` });
   }
   if (recipe.added_by != return_id(req)) {
@@ -67,7 +67,7 @@ export const update = async function (req: Request, res: Response) {
   const recipe = await Recipe.findById(id);
   if (!recipe) {
     return res
-      .status(401)
+      .status(404)
       .json({ message: `The recipe with the given id: ${id} does not exist` });
   }
   if (recipe.added_by !== return_id(req)) {
@@ -88,7 +88,7 @@ export const remove = async function (req: Request, res: Response) {
   const recipe = await Recipe.findById(id);
   if (!recipe) {
     return res
-      .status(401)
+      .status(404)
       .json({ message: `The recipe with the given id: ${id} does not exist` });
   }
   if (recipe.added_by !== return_id(req)) {
