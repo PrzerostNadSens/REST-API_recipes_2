@@ -8,10 +8,10 @@ router
   .post(authorize(), RecipesController.createRecipe);
 router
   .route("/all")
-  .get(authorize(Role.Admin as any), RecipesController.index_allRecipe);
+  .get(authorize(Role.Admin as any), RecipesController.indexAllRecipe);
 router
   .route("/:recipe_id")
-  .get(authorize(), RecipesController.findById_Recipe)
+  .get(authorize(), RecipesController.findByIdRecipe)
   .put(authorize(), RecipesController.updateRecipe)
   .delete(authorize(), RecipesController.removeRecipe);
 
