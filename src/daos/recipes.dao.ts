@@ -16,13 +16,14 @@ class RecipesDao {
   async updateRecipe(id: string, updateRecipeBody: IRecipe) {
     const recipeToUpdate = await Recipe.findById(id);
     if (recipeToUpdate) {
+      const { type, photo, recipe } = updateRecipeBody;
       recipeToUpdate.name = updateRecipeBody.name
         ? updateRecipeBody.name
         : recipeToUpdate.name;
-      recipeToUpdate.type = updateRecipeBody.type;
-      recipeToUpdate.photo = updateRecipeBody.photo;
-      recipeToUpdate.recipe = updateRecipeBody.recipe;
-      recipeToUpdate.save();
+      recipeToUpdate.type = type;
+      recipeToUpdate.photo = photo;
+      recipeToUpdate.recipe = recipe;
+      recipeToUpdate.update();
       return recipeToUpdate;
     }
   }
