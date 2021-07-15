@@ -5,6 +5,13 @@ class RecipesService {
   async create(resource: IRecipe) {
     return RecipesDao.createRecipe(resource);
   }
+  async view(userId: string) {
+    return RecipesDao.indexRecipe(userId);
+  }
+
+  async viewById(id: string, userId: string) {
+    return RecipesDao.findByIdRecipe(id, userId);
+  }
 
   async update(id: string, resource: IRecipe, userId: string) {
     return RecipesDao.updateRecipe(id, resource, userId);

@@ -15,46 +15,43 @@ class RecipesController {
     }
   }
 
-  async indexRecipe(req: AuthorizedRequest, res: Response): Promise<Response> {
-    const recipes = await Recipe.find({});
-
-    const id: String = returnId(req);
-
-    const recipeMap: RecipeDocument[] = recipes.filter(
-      (recipe) => recipe.added_by == id
-    );
-
-    return res.send(recipeMap);
+  async indexRecipe(req: AuthorizedRequest, res: Response, next: NextFunction) {
+    try {
+      const userId = returnId(req);
+      const recipe = await RecipesService.view(userId);
+      return res.status(201).send(recipe);
+    } catch (e) {
+      next(e);
+    }
   }
 
   async indexAllRecipe(
     req: AuthorizedRequest,
     res: Response
   ): Promise<Response> {
-    const recipes = await Recipe.find({});
-    return res.send(recipes);
+    try {
+      const recipes = await Recipe.find({});
+      return res.send(recipes);
+    } catch (e) {
+      return res.status(500).send(e.message);
+    }
   }
 
-  async findByIdRecipe(req: Request, res: Response): Promise<Response> {
-    const id = req.params.recipe_id;
-
-    const recipe = await Recipe.findById(id);
-    if (!recipe) {
-      return res.status(404).json({
-        message: `The recipe with the given id: ${id} does not exist`,
-      });
+  async findByIdRecipe(req: Request, res: Response, next: NextFunction) {
+    try {
+      const id = req.params.recipe_id;
+      const userId = returnId(req);
+      const recipe = await RecipesService.viewById(id, userId);
+      return res.status(201).send(recipe);
+    } catch (e) {
+      next(e);
     }
-    if (recipe.added_by != returnId(req)) {
-      return res.status(401).json({ message: "Unauthorized" });
-    }
-    return res.status(201).send(recipe);
   }
 
   async updateRecipe(req: Request, res: Response, next: NextFunction) {
     try {
       const id = req.params.recipe_id;
       const userId = returnId(req);
-
       const new_recipe = await RecipesService.update(id, req.body, userId);
       return res.status(201).send(new_recipe);
     } catch (e) {
@@ -67,7 +64,7 @@ class RecipesController {
       const id = req.params.recipe_id;
       const userId = returnId(req);
       const message = await RecipesService.remove(id, userId);
-      next(message);
+      return res.status(200).send({ message });
     } catch (e) {
       next(e);
     }

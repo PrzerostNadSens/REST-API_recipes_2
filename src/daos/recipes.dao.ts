@@ -1,5 +1,5 @@
 import debug from "debug";
-import { Recipe, IRecipe } from "../model/recipeModel";
+import { Recipe, IRecipe, RecipeDocument } from "../model/recipeModel";
 import PostNotFoundException from "../exceptions/PostNotFoundException";
 import HttpException from "../exceptions/HttpException";
 const log: debug.IDebugger = debug("app:in-memory-dao");
@@ -12,6 +12,24 @@ class RecipesDao {
     const recipeToSave = new Recipe(createRecipeBody);
     await recipeToSave.save();
     return recipeToSave.id;
+  }
+  async indexRecipe(userId: string) {
+    const recipes = await Recipe.find({});
+    const recipeMap: RecipeDocument[] = recipes.filter(
+      (recipe) => recipe.added_by == userId
+    );
+    return recipeMap;
+  }
+
+  async findByIdRecipe(id: string, userId: string) {
+    const recipe = await Recipe.findById(id);
+    if (!recipe) {
+      throw new PostNotFoundException(id);
+    }
+    if (recipe.added_by != userId) {
+      throw new HttpException(404, "Unauthorized");
+    }
+    return recipe;
   }
 
   async updateRecipe(id: string, updateRecipeBody: IRecipe, userId: string) {
@@ -45,7 +63,7 @@ class RecipesDao {
       throw new HttpException(404, "Unauthorized");
     }
     recipeToRemove.remove();
-    return new HttpException(200, `${id} Removed`);
+    return `${id} Removed`;
   }
 }
 
