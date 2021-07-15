@@ -6,8 +6,8 @@ class RecipesService {
     return RecipesDao.createRecipe(resource);
   }
 
-  async update(id: string, resource: IRecipe) {
-    return RecipesDao.updateRecipe(id, resource);
+  async update(id: string, resource: IRecipe, userId: string) {
+    return RecipesDao.updateRecipe(id, resource, userId);
   }
 
   async remove(id: string, userId: string) {

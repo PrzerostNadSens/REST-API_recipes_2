@@ -14,7 +14,7 @@ class RecipesDao {
     return recipeToSave.id;
   }
 
-  async updateRecipe(id: string, updateRecipeBody: IRecipe) {
+  async updateRecipe(id: string, updateRecipeBody: IRecipe, userId: string) {
     const name = updateRecipeBody.name;
     let { type, photo, recipe } = updateRecipeBody;
     const recipeToUpdate = await Recipe.findByIdAndUpdate(
@@ -27,16 +27,22 @@ class RecipesDao {
       },
       { omitUndefined: true, new: true }
     );
+    if (!recipeToUpdate) {
+      throw new PostNotFoundException(id);
+    }
+    if (recipeToUpdate.added_by != userId) {
+      throw new HttpException(404, "Unauthorized");
+    }
     return recipeToUpdate;
   }
 
   async removeRecipe(id: string, userId: string) {
     const recipeToRemove = await Recipe.findById(id);
     if (!recipeToRemove) {
-      return new PostNotFoundException(id);
+      throw new PostNotFoundException(id);
     }
     if (recipeToRemove.added_by != userId) {
-      return new HttpException(404, "Unauthorized");
+      throw new HttpException(404, "Unauthorized");
     }
     recipeToRemove.remove();
     return new HttpException(200, `${id} Removed`);
