@@ -1,7 +1,7 @@
 import { Recipe, RecipeDocument } from "../model/recipeModel";
 import jwt from "express-jwt";
 import { secret } from "../../config.json";
-import express, { Request, Response } from "express";
+import express, { Request, Response, NextFunction } from "express";
 import RecipesService from "../service/recipes.service";
 
 class RecipesController {
@@ -67,20 +67,11 @@ class RecipesController {
     return res.status(200).send(new_recipe);
   }
 
-  async removeRecipe(req: Request, res: Response): Promise<Response> {
+  async removeRecipe(req: Request, res: Response, next: NextFunction) {
     const id = req.params.recipe_id;
-    const recipe = await Recipe.findById(id);
-    if (!recipe) {
-      return res.status(404).json({
-        message: `The recipe with the given id: ${id} does not exist`,
-      });
-    }
-    if (recipe.added_by !== returnId(req)) {
-      return res.status(401).json({ message: "Unauthorized" });
-    }
-
-    const messages = await RecipesService.remove(id);
-    return res.status(200).send({ messages });
+    const userId = returnId(req);
+    const message = await RecipesService.remove(id, userId);
+    next(message);
   }
 }
 export default new RecipesController();

@@ -10,8 +10,8 @@ class RecipesService {
     return RecipesDao.updateRecipe(id, resource);
   }
 
-  async remove(id: string) {
-    return RecipesDao.removeRecipe(id);
+  async remove(id: string, userId: string) {
+    return RecipesDao.removeRecipe(id, userId);
   }
 }
 
