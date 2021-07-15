@@ -14,18 +14,19 @@ class RecipesDao {
   }
 
   async updateRecipe(id: string, updateRecipeBody: IRecipe) {
-    const recipeToUpdate = await Recipe.findById(id);
-    if (recipeToUpdate) {
-      const { type, photo, recipe } = updateRecipeBody;
-      recipeToUpdate.name = updateRecipeBody.name
-        ? updateRecipeBody.name
-        : recipeToUpdate.name;
-      recipeToUpdate.type = type;
-      recipeToUpdate.photo = photo;
-      recipeToUpdate.recipe = recipe;
-      recipeToUpdate.update();
-      return recipeToUpdate;
-    }
+    const name = updateRecipeBody.name;
+    let { type, photo, recipe } = updateRecipeBody;
+    const recipeToUpdate = await Recipe.findByIdAndUpdate(
+      id,
+      {
+        name,
+        type,
+        photo,
+        recipe,
+      },
+      { omitUndefined: true, new: true }
+    );
+    return recipeToUpdate;
   }
 
   async removeRecipe(id: string) {
