@@ -1,7 +1,6 @@
-import { Recipe, RecipeDocument } from "../model/recipeModel";
-import jwt from "express-jwt";
-import { secret } from "../../config.json";
+import { Recipe } from "../model/recipeModel";
 import { Request, Response, NextFunction } from "express";
+import { returnId, AuthorizedRequest } from "../mongodb/authorize";
 import RecipesService from "../service/recipes.service";
 
 class RecipesController {
@@ -71,12 +70,3 @@ class RecipesController {
   }
 }
 export default new RecipesController();
-
-interface AuthorizedRequest extends Request {
-  user?: any;
-}
-
-function returnId(req: AuthorizedRequest) {
-  jwt({ secret, algorithms: ["HS256"] });
-  return req.user.id;
-}

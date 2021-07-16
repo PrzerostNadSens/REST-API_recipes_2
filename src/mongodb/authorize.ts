@@ -3,11 +3,11 @@ import { secret } from "../../config.json";
 import { User } from "../model/userModel";
 import { Request, Response, NextFunction } from "express";
 
-interface AuthorizedRequest extends Request {
+export interface AuthorizedRequest extends Request {
   user?: any;
 }
 
-function returnId(req: AuthorizedRequest) {
+export function returnId(req: AuthorizedRequest) {
   jwt({ secret, algorithms: ["HS256"] });
   return req.user.id;
 }
