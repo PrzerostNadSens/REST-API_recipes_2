@@ -1,7 +1,5 @@
 import debug from "debug";
 import { Recipe, IRecipe, RecipeDocument } from "../model/recipeModel";
-import PostNotFoundException from "../exceptions/PostNotFoundException";
-import HttpException from "../exceptions/HttpException";
 const log: debug.IDebugger = debug("app:in-memory-dao");
 
 class RecipesDao {
@@ -21,18 +19,12 @@ class RecipesDao {
     return recipeMap;
   }
 
-  async findByIdRecipe(id: string, userId: string) {
+  async findByIdRecipe(id: string) {
     const recipe = await Recipe.findById(id);
-    if (!recipe) {
-      throw new PostNotFoundException(id);
-    }
-    if (recipe.added_by != userId) {
-      throw new HttpException(404, "Unauthorized");
-    }
     return recipe;
   }
 
-  async updateRecipe(id: string, updateRecipeBody: IRecipe, userId: string) {
+  async updateRecipe(id: string, updateRecipeBody: IRecipe) {
     const name = updateRecipeBody.name;
     let { type, photo, recipe } = updateRecipeBody;
     const recipeToUpdate = await Recipe.findByIdAndUpdate(
@@ -45,24 +37,12 @@ class RecipesDao {
       },
       { omitUndefined: true, new: true }
     );
-    if (!recipeToUpdate) {
-      throw new PostNotFoundException(id);
-    }
-    if (recipeToUpdate.added_by != userId) {
-      throw new HttpException(404, "Unauthorized");
-    }
     return recipeToUpdate;
   }
 
-  async removeByIdRecipe(id: string, userId: string) {
-    const recipeToRemove = await Recipe.findById(id);
-    if (!recipeToRemove) {
-      throw new PostNotFoundException(id);
-    }
-    if (recipeToRemove.added_by != userId) {
-      throw new HttpException(404, "Unauthorized");
-    }
-    recipeToRemove.remove();
+  async removeByIdRecipe(id: string) {
+    const tak = await Recipe.findByIdAndRemove(id);
+
     return `${id} Removed`;
   }
 }

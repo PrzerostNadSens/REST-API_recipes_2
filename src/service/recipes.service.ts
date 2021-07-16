@@ -9,16 +9,16 @@ class RecipesService {
     return RecipesDao.getUserRecipes(userId);
   }
 
-  async findById(id: string, userId: string) {
-    return RecipesDao.findByIdRecipe(id, userId);
+  async findById(id: string) {
+    return RecipesDao.findByIdRecipe(id);
   }
 
-  async update(id: string, resource: IRecipe, userId: string) {
-    return RecipesDao.updateRecipe(id, resource, userId);
+  async update(id: string, resource: IRecipe) {
+    return RecipesDao.updateRecipe(id, resource);
   }
 
-  async remove(id: string, userId: string) {
-    return RecipesDao.removeByIdRecipe(id, userId);
+  async remove(id: string) {
+    return RecipesDao.removeByIdRecipe(id);
   }
 }
 

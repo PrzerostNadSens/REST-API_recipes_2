@@ -1,7 +1,7 @@
 const router = require("express").Router();
 import Role from "../mongodb/role";
 import { authorize } from "../mongodb/authorize";
-import RecipesController from "../controller/recipeController";
+import RecipesController from "../controller/recipe.controller";
 router
   .route("/")
   .get(authorize(), RecipesController.getUserRecipes)
