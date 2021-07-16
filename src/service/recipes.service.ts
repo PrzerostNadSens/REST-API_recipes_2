@@ -5,11 +5,11 @@ class RecipesService {
   async create(resource: IRecipe) {
     return RecipesDao.createRecipe(resource);
   }
-  async view(userId: string) {
-    return RecipesDao.indexRecipe(userId);
+  async get(userId: string) {
+    return RecipesDao.getUserRecipes(userId);
   }
 
-  async viewById(id: string, userId: string) {
+  async findById(id: string, userId: string) {
     return RecipesDao.findByIdRecipe(id, userId);
   }
 
@@ -18,7 +18,7 @@ class RecipesService {
   }
 
   async remove(id: string, userId: string) {
-    return RecipesDao.removeRecipe(id, userId);
+    return RecipesDao.removeByIdRecipe(id, userId);
   }
 }
 

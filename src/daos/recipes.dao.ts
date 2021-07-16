@@ -13,7 +13,7 @@ class RecipesDao {
     await recipeToSave.save();
     return recipeToSave.id;
   }
-  async indexRecipe(userId: string) {
+  async getUserRecipes(userId: string) {
     const recipes = await Recipe.find({});
     const recipeMap: RecipeDocument[] = recipes.filter(
       (recipe) => recipe.added_by == userId
@@ -54,7 +54,7 @@ class RecipesDao {
     return recipeToUpdate;
   }
 
-  async removeRecipe(id: string, userId: string) {
+  async removeByIdRecipe(id: string, userId: string) {
     const recipeToRemove = await Recipe.findById(id);
     if (!recipeToRemove) {
       throw new PostNotFoundException(id);

@@ -4,15 +4,15 @@ import { authorize } from "../mongodb/authorize";
 import RecipesController from "../controller/recipeController";
 router
   .route("/")
-  .get(authorize(), RecipesController.indexRecipe)
+  .get(authorize(), RecipesController.getUserRecipes)
   .post(authorize(), RecipesController.createRecipe);
 router
   .route("/all")
-  .get(authorize(Role.Admin as any), RecipesController.indexAllRecipe);
+  .get(authorize(Role.Admin as any), RecipesController.getAllRecipe);
 router
   .route("/:recipe_id")
   .get(authorize(), RecipesController.findByIdRecipe)
   .put(authorize(), RecipesController.updateRecipe)
-  .delete(authorize(), RecipesController.removeRecipe);
+  .delete(authorize(), RecipesController.removeByIdRecipe);
 
 export default router;

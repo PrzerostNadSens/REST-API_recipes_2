@@ -14,20 +14,21 @@ class RecipesController {
     }
   }
 
-  async indexRecipe(req: AuthorizedRequest, res: Response, next: NextFunction) {
+  async getUserRecipes(
+    req: AuthorizedRequest,
+    res: Response,
+    next: NextFunction
+  ) {
     try {
       const userId = returnId(req);
-      const recipe = await RecipesService.view(userId);
-      return res.status(201).send(recipe);
+      const recipe = await RecipesService.get(userId);
+      return res.status(200).send(recipe);
     } catch (e) {
       next(e);
     }
   }
 
-  async indexAllRecipe(
-    req: AuthorizedRequest,
-    res: Response
-  ): Promise<Response> {
+  async getAllRecipe(req: AuthorizedRequest, res: Response): Promise<Response> {
     try {
       const recipes = await Recipe.find({});
       return res.send(recipes);
@@ -40,8 +41,8 @@ class RecipesController {
     try {
       const id = req.params.recipe_id;
       const userId = returnId(req);
-      const recipe = await RecipesService.viewById(id, userId);
-      return res.status(201).send(recipe);
+      const recipe = await RecipesService.findById(id, userId);
+      return res.status(200).send(recipe);
     } catch (e) {
       next(e);
     }
@@ -58,7 +59,7 @@ class RecipesController {
     }
   }
 
-  async removeRecipe(req: Request, res: Response, next: NextFunction) {
+  async removeByIdRecipe(req: Request, res: Response, next: NextFunction) {
     try {
       const id = req.params.recipe_id;
       const userId = returnId(req);
