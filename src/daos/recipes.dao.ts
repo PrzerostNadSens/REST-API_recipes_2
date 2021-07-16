@@ -1,44 +1,38 @@
-import { CreateRecipesDto } from "../dto/create.recipe.dto";
 import debug from "debug";
-import { Recipe } from "../model/recipeModel";
+import { Recipe, IRecipe } from "../model/recipeModel";
 
 const log: debug.IDebugger = debug("app:in-memory-dao");
 
 class RecipesDao {
-  recipes: Array<CreateRecipesDto> = [];
-
   constructor() {
     log("Created new instance of RecipesDao");
   }
-
-  async addRecipe(recipe: CreateRecipesDto) {
-    const r = new Recipe({
-      name: recipe.name,
-      type: recipe.type,
-      photo: recipe.photo,
-      recipe: recipe.recipe,
-      added_by: recipe.added_by,
-    });
-    await r.save();
-    return r.id;
+  async createRecipe(createRecipeBody: IRecipe) {
+    const recipeToSave = new Recipe(createRecipeBody);
+    await recipeToSave.save();
+    return recipeToSave.id;
   }
 
-  async updateRecipe(id: string, req: CreateRecipesDto) {
-    const recipe = await Recipe.findById(id);
-    if (recipe) {
-      recipe.name = req.name ? req.name : recipe.name;
-      recipe.type = req.type;
-      recipe.photo = req.photo;
-      recipe.recipe = req.recipe;
-      recipe.save();
-      return recipe;
-    }
+  async updateRecipe(id: string, updateRecipeBody: IRecipe) {
+    const name = updateRecipeBody.name;
+    let { type, photo, recipe } = updateRecipeBody;
+    const recipeToUpdate = await Recipe.findByIdAndUpdate(
+      id,
+      {
+        name,
+        type,
+        photo,
+        recipe,
+      },
+      { omitUndefined: true, new: true }
+    );
+    return recipeToUpdate;
   }
 
   async removeRecipe(id: string) {
-    const recipe = await Recipe.findById(id);
-    if (recipe) {
-      recipe.remove();
+    const recipeToRemove = await Recipe.findById(id);
+    if (recipeToRemove) {
+      recipeToRemove.remove();
       return `${id} removed`;
     }
   }
