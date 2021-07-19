@@ -24,50 +24,29 @@ const router = require("express").Router();
  */
 /**
  * @swagger
- * /user/:
+ * /users/:
  *   post:
  *     tags:
  *       - user
- *     description: account creation
+ *     description: Account creation
  *     produces:
  *       - application/json
  *     parameters:
- *       - name: first_name
- *         description: name of user
+ *       - name: body
+ *         description: All parameters are required and login, email and password must be unique.
  *         required: true
- *         in: query
+ *         in: body
+ *         definitions:
+ *           CatalogItem:
+ *             type: object
+ *             properties:
+ *               first_name:
+ *                 type: string
+ *                 example: "Rafal"
  *         schema:
- *           type: string
- *       - name: subname
- *         description: subname of user
- *         required: true
- *         in: query
- *         schema:
- *           type: string
- *       - name: login
- *         description: unique user login
- *         required: true
- *         in: query
- *         schema:
- *           type: string
- *       - name: email
- *         description: unique user email
- *         required: true
- *         in: query
- *         schema:
- *           type: string
- *       - name: password
- *         description: unique user password
- *         required: true
- *         in: query
- *         schema:
- *           type: string
- *       - name: role
- *         description: the user can take the role of "User" or "Admin"
- *         required: true
- *         in: query
- *         schema:
- *           type: string
+ *           type: CatalogItem
+ *
+ *
  *     responses:
  *       201:
  *         description: id
@@ -78,7 +57,7 @@ const router = require("express").Router();
 router.route(`/`).post(UsersController.createUser);
 /**
  * @swagger
- * /user/login:
+ * /users/login:
  *   post:
  *     tags:
  *       - user
@@ -86,20 +65,13 @@ router.route(`/`).post(UsersController.createUser);
  *     produces:
  *       - application/json
  *     parameters:
- *       - name: login
- *         description: unique user login
+ *       - name: body
+ *         description:
  *         required: true
- *         in: query
+ *         in: body
  *         schema:
- *           type: string
- *       - name: password
- *         description: unique user password
- *         required: true
- *         in: query
- *         schema:
- *           type: string
- *     security:
- *       - basicAuth: []
+ *           type: "object"
+ *
  *     responses:
  *       200:
  *         description: An access token
