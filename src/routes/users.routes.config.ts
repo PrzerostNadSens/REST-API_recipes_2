@@ -24,43 +24,6 @@ const router = require("express").Router();
  */
 /**
  * @swagger
- * /user/login:
- *   post:
- *     tags:
- *       - user
- *     description: Sign in as customer or admin
- *     produces:
- *       - application/json
- *     parameters:
- *       - name: login
- *         description: unique user login
- *         required: true
- *         in: query
- *         schema:
- *           type: string
- *       - name: password
- *         description: unique user password
- *         required: true
- *         in: query
- *         schema:
- *           type: string
- *     security:
- *       - basicAuth: []
- *     responses:
- *       200:
- *         description: An access token
- *         properties:
- *           token:
- *             type: string
- *           grantType:
- *             type: string
- *           refreshToken:
- *             type: string
- */
-router.route("/login").post(authenticateSchema, authenticate);
-
-/**
- * @swagger
  * /user/:
  *   post:
  *     tags:
@@ -105,15 +68,49 @@ router.route("/login").post(authenticateSchema, authenticate);
  *         in: query
  *         schema:
  *           type: string
- *     security:
- *       - basicAuth: []
  *     responses:
- *       200:
+ *       201:
  *         description: id
  *         properties:
  *           id:
  *             type: string
  */
 router.route(`/`).post(UsersController.createUser);
+/**
+ * @swagger
+ * /user/login:
+ *   post:
+ *     tags:
+ *       - user
+ *     description: Sign in as customer or admin
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: login
+ *         description: unique user login
+ *         required: true
+ *         in: query
+ *         schema:
+ *           type: string
+ *       - name: password
+ *         description: unique user password
+ *         required: true
+ *         in: query
+ *         schema:
+ *           type: string
+ *     security:
+ *       - basicAuth: []
+ *     responses:
+ *       200:
+ *         description: An access token
+ *         properties:
+ *           token:
+ *             type: string
+ *           grantType:
+ *             type: string
+ *           refreshToken:
+ *             type: string
+ */
+router.route("/login").post(authenticateSchema, authenticate);
 
 export default router;
