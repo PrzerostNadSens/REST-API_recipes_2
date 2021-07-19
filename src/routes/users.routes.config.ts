@@ -1,11 +1,10 @@
-import UsersController, {
-  authenticate,
-  authenticateSchema,
-} from "../controller/users.controller";
+import UsersController from "../controller/users.controller";
 
 const router = require("express").Router();
 
-router.route("/Login").post(authenticateSchema, authenticate);
+router
+  .route("/Login")
+  .post(UsersController.authenticateSchema, UsersController.authenticate);
 
 router.route(`/`).post(UsersController.createUser);
 

@@ -1,6 +1,5 @@
 import debug from "debug";
-import { Recipe, IRecipe } from "../model/recipeModel";
-
+import { Recipe, IRecipe, RecipeDocument } from "../model/recipeModel";
 const log: debug.IDebugger = debug("app:in-memory-dao");
 
 class RecipesDao {
@@ -11,6 +10,18 @@ class RecipesDao {
     const recipeToSave = new Recipe(createRecipeBody);
     await recipeToSave.save();
     return recipeToSave.id;
+  }
+  async getUserRecipes(userId: string) {
+    const recipes = await Recipe.find({});
+    const recipeMap: RecipeDocument[] = recipes.filter(
+      (recipe) => recipe.added_by == userId
+    );
+    return recipeMap;
+  }
+
+  async findByIdRecipe(id: string) {
+    const recipe = await Recipe.findById(id);
+    return recipe;
   }
 
   async updateRecipe(id: string, updateRecipeBody: IRecipe) {
@@ -29,12 +40,10 @@ class RecipesDao {
     return recipeToUpdate;
   }
 
-  async removeRecipe(id: string) {
-    const recipeToRemove = await Recipe.findById(id);
-    if (recipeToRemove) {
-      recipeToRemove.remove();
-      return `${id} removed`;
-    }
+  async removeByIdRecipe(id: string) {
+    const tak = await Recipe.findByIdAndRemove(id);
+
+    return `${id} Removed`;
   }
 }
 

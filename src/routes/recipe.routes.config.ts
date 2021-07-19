@@ -1,18 +1,18 @@
 const router = require("express").Router();
 import Role from "../mongodb/role";
 import { authorize } from "../mongodb/authorize";
-import RecipesController from "../controller/recipeController";
+import RecipesController from "../controller/recipe.controller";
 router
   .route("/")
-  .get(authorize(), RecipesController.indexRecipe)
+  .get(authorize(), RecipesController.getUserRecipes)
   .post(authorize(), RecipesController.createRecipe);
 router
   .route("/all")
-  .get(authorize(Role.Admin as any), RecipesController.index_allRecipe);
+  .get(authorize(Role.Admin as any), RecipesController.getAllRecipe);
 router
   .route("/:recipe_id")
-  .get(authorize(), RecipesController.findById_Recipe)
+  .get(authorize(), RecipesController.findByIdRecipe)
   .put(authorize(), RecipesController.updateRecipe)
-  .delete(authorize(), RecipesController.removeRecipe);
+  .delete(authorize(), RecipesController.removeByIdRecipe);
 
 export default router;
