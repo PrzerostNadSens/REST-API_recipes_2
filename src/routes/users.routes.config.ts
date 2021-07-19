@@ -10,17 +10,25 @@ const router = require("express").Router();
  * tags:
  * - name: user
  *   description: "create an account and login"
- * securityDefinitions:
- *   basicAuth:
- *     type: basic
- *   bearerAuth:
- *     name: Authorization
- *     type: apiKey
- *     in: header
- *   innerAuth:
- *     name: Authorization
- *     type: apiKey
- *     in: header
+ * definitions:
+ *   User:
+ *     properties:
+ *       first_name:
+ *         type: string
+ *       subname:
+ *          type: string
+ *       login:
+ *         type: string
+ *       email:
+ *          type: string
+ *       password:
+ *          type: string
+ *       role:
+ *         type: string
+ *     # Both properties are required
+ *     required:
+ *       - id
+ *       - name
  */
 /**
  * @swagger
@@ -32,20 +40,10 @@ const router = require("express").Router();
  *     produces:
  *       - application/json
  *     parameters:
- *       - name: body
- *         description: All parameters are required and login, email and password must be unique.
- *         required: true
- *         in: body
- *         definitions:
- *           CatalogItem:
- *             type: object
- *             properties:
- *               first_name:
- *                 type: string
- *                 example: "Rafal"
+ *       - in: body
+ *         name: user
  *         schema:
- *           type: CatalogItem
- *
+ *           $ref: '#/definitions/User'
  *
  *     responses:
  *       201:
@@ -69,8 +67,11 @@ router.route(`/`).post(UsersController.createUser);
  *         description:
  *         required: true
  *         in: body
- *         schema:
- *           type: "object"
+ *         properties:
+ *           first_name:
+ *             type: string
+ *           subname:
+ *              type: string
  *
  *     responses:
  *       200:
