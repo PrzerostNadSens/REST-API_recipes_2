@@ -6,17 +6,18 @@ class RecipesDao {
   constructor() {
     log("Created new instance of RecipesDao");
   }
+
   async createRecipe(createRecipeBody: IRecipe) {
     const recipeToSave = new Recipe(createRecipeBody);
     await recipeToSave.save();
     return recipeToSave.id;
   }
+
   async getUserRecipes(userId: string) {
-    const recipes = await Recipe.find({});
-    const recipeMap: RecipeDocument[] = recipes.filter(
-      (recipe) => recipe.added_by == userId
-    );
-    return recipeMap;
+    const recipes = await Recipe.find({
+      added_by: userId,
+    });
+    return recipes;
   }
 
   async findByIdRecipe(id: string) {
