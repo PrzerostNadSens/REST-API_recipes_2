@@ -32,8 +32,14 @@ const router = require("express").Router();
  *     produces:
  *       - application/json
  *     parameters:
- *       - name: client_id
- *         description: id of the requesting client
+ *       - name: login
+ *         description: unique user login
+ *         required: true
+ *         in: query
+ *         schema:
+ *           type: string
+ *       - name: password
+ *         description: unique user password
  *         required: true
  *         in: query
  *         schema:
@@ -53,6 +59,61 @@ const router = require("express").Router();
  */
 router.route("/login").post(authenticateSchema, authenticate);
 
+/**
+ * @swagger
+ * /user/:
+ *   post:
+ *     tags:
+ *       - user
+ *     description: account creation
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: first_name
+ *         description: name of user
+ *         required: true
+ *         in: query
+ *         schema:
+ *           type: string
+ *       - name: subname
+ *         description: subname of user
+ *         required: true
+ *         in: query
+ *         schema:
+ *           type: string
+ *       - name: login
+ *         description: unique user login
+ *         required: true
+ *         in: query
+ *         schema:
+ *           type: string
+ *       - name: email
+ *         description: unique user email
+ *         required: true
+ *         in: query
+ *         schema:
+ *           type: string
+ *       - name: password
+ *         description: unique user password
+ *         required: true
+ *         in: query
+ *         schema:
+ *           type: string
+ *       - name: role
+ *         description: the user can take the role of "User" or "Admin"
+ *         required: true
+ *         in: query
+ *         schema:
+ *           type: string
+ *     security:
+ *       - basicAuth: []
+ *     responses:
+ *       200:
+ *         description: id
+ *         properties:
+ *           id:
+ *             type: string
+ */
 router.route(`/`).post(UsersController.createUser);
 
 export default router;
