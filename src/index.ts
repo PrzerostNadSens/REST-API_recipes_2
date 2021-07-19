@@ -28,7 +28,7 @@ app.use(
 );
 
 app.use("/Recipe", recipeRoutes);
-app.use("/Users", userRoutes);
+app.use("/users", userRoutes);
 app.use(errorMiddleware);
 
 app.get("/", (req: Request, res: Response) =>
@@ -37,8 +37,8 @@ app.get("/", (req: Request, res: Response) =>
 
 const swaggerDefinition: SwaggerDefinition = {
   info: {
-    title: "aasd",
-    description: "asd",
+    title: "REST-API_RECIPES",
+    description: "Handling of cooking recipes Rafał Chmielewski",
     version: "1.0.0",
   },
   host: "localhost:8080",
