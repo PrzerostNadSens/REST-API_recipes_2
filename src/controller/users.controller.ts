@@ -1,6 +1,5 @@
 import express, { NextFunction, Request, Response } from "express";
 import bcrypt from "bcryptjs";
-const router = require("express").Router();
 import Joi from "@hapi/joi";
 import UsersService from "../service/users.service";
 
@@ -8,6 +7,7 @@ class UsersController {
   async createUser(req: Request, res: Response): Promise<Response> {
     req.body.password = await bcrypt.hash(req.body.password, 10);
     const userId = await UsersService.create(req.body);
+
     return res.status(201).send({ id: userId });
   }
 
@@ -16,6 +16,7 @@ class UsersController {
       login: Joi.string().required(),
       password: Joi.string().required(),
     });
+
     validateRequest(req, res, next, schema);
   }
 
@@ -25,6 +26,7 @@ class UsersController {
     next: NextFunction
   ): Promise<void> {
     const { login, password } = req.body;
+
     UsersService.authenticate(login, password)
       .then((...user) => {
         res.json(user);
@@ -45,6 +47,7 @@ async function validateRequest(
     stripUnknown: true,
   };
   const { error, value } = schema.validate(req.body, options);
+
   if (error) {
     return res.status(401).json({
       message: `Validation error: ${error.details
