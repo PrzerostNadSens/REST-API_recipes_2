@@ -1,5 +1,5 @@
 import debug from "debug";
-import { Recipe, IRecipe, RecipeDocument } from "../model/recipeModel";
+import { Recipe, IRecipe, OmitIRecipe } from "../model/recipeModel";
 const log: debug.IDebugger = debug("app:in-memory-dao");
 
 class RecipesDao {
@@ -14,10 +14,8 @@ class RecipesDao {
     return recipeToSave.id;
   }
 
-  async getUserRecipes(userId: string) {
-    const recipes = await Recipe.find({
-      added_by: userId,
-    });
+  async getUserRecipes(filter: OmitIRecipe) {
+    const recipes = await Recipe.find(filter);
 
     return recipes;
   }

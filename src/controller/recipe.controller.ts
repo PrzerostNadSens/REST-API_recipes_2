@@ -1,4 +1,4 @@
-import { Recipe } from "../model/recipeModel";
+import { Recipe, OmitIRecipe } from "../model/recipeModel";
 import { Request, Response } from "express";
 import { returnId, AuthorizedRequest } from "../mongodb/authorize";
 import RecipesService from "../service/recipes.service";
@@ -8,6 +8,7 @@ class RecipesController {
     try {
       req.body.added_by = returnId(req);
       const recipeId = await RecipesService.create(req.body);
+
       return res.status(201).send({ id: recipeId });
     } catch (e) {
       return res.status(500).send(e.message);
@@ -20,7 +21,9 @@ class RecipesController {
   ): Promise<Response> {
     try {
       const userId = returnId(req);
-      const recipe = await RecipesService.get(userId);
+      const filter: OmitIRecipe = req.query;
+      const recipe = await RecipesService.get(userId, filter);
+
       return res.status(200).send(recipe);
     } catch (e) {
       return res.status(500).send(e.message);
@@ -30,6 +33,7 @@ class RecipesController {
   async getAllRecipe(req: AuthorizedRequest, res: Response): Promise<Response> {
     try {
       const recipes = await Recipe.find({});
+
       return res.send(recipes);
     } catch (e) {
       return res.status(500).send(e.message);
@@ -41,6 +45,7 @@ class RecipesController {
       const id = req.params.recipe_id;
       const userId = returnId(req);
       const recipe = await RecipesService.findById(id);
+
       if (!recipe) {
         return res.status(404).json({
           message: `The recipe with the given id: ${id} does not exist`,
@@ -49,6 +54,7 @@ class RecipesController {
       if (recipe.added_by != userId) {
         return res.status(401).json({ message: "Unauthorized" });
       }
+
       return res.status(200).send(recipe);
     } catch (e) {
       return res.status(500).send(e.message);
@@ -60,6 +66,7 @@ class RecipesController {
       const id = req.params.recipe_id;
       const userId = returnId(req);
       const recipe = await Recipe.findById(id);
+
       if (!recipe) {
         return res.status(404).json({
           message: `The recipe with the given id: ${id} does not exist`,
@@ -69,6 +76,7 @@ class RecipesController {
         return res.status(401).json({ message: "Unauthorized" });
       }
       const newRecipe = await RecipesService.update(id, req.body);
+
       return res.status(201).send(newRecipe);
     } catch (e) {
       return res.status(500).send(e.message);
@@ -80,6 +88,7 @@ class RecipesController {
       const id = req.params.recipe_id;
       const userId = returnId(req);
       const recipe = await Recipe.findById(id);
+
       if (!recipe) {
         return res.status(404).json({
           message: `The recipe with the given id: ${id} does not exist`,
@@ -89,6 +98,7 @@ class RecipesController {
         return res.status(401).json({ message: "Unauthorized" });
       }
       const message = await RecipesService.remove(id);
+
       return res.status(200).send({ message });
     } catch (e) {
       return res.status(500).send(e.message);
