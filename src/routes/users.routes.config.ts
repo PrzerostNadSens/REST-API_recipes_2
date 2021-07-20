@@ -7,31 +7,6 @@ const router = require("express").Router();
 
 /**
  * @swagger
- * tags:
- * - name: user
- *   description: "create an account and login"
- * definitions:
- *   User:
- *     properties:
- *       first_name:
- *         type: string
- *       subname:
- *          type: string
- *       login:
- *         type: string
- *       email:
- *          type: string
- *       password:
- *          type: string
- *       role:
- *         type: string
- *     # Both properties are required
- *     required:
- *       - id
- *       - name
- */
-/**
- * @swagger
  * /users/:
  *   post:
  *     tags:
@@ -52,7 +27,9 @@ const router = require("express").Router();
  *           id:
  *             type: string
  */
+
 router.route(`/`).post(UsersController.createUser);
+
 /**
  * @swagger
  * /users/login:
@@ -84,6 +61,33 @@ router.route(`/`).post(UsersController.createUser);
  *           refreshToken:
  *             type: string
  */
+
 router.route("/login").post(authenticateSchema, authenticate);
 
 export default router;
+
+/**
+ * @swagger
+ * tags:
+ * - name: user
+ *   description: "create an account and login"
+ * definitions:
+ *   User:
+ *     properties:
+ *       first_name:
+ *         type: string
+ *       subname:
+ *          type: string
+ *       login:
+ *         type: string
+ *       email:
+ *          type: string
+ *       password:
+ *          type: string
+ *       role:
+ *         type: string
+ *     # Both properties are required
+ *     required:
+ *       - id
+ *       - name
+ */
