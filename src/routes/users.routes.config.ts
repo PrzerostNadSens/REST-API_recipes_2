@@ -44,7 +44,7 @@ router.route(`/`).post(UsersController.createUser);
  *         properties:
  *           first_name:
  *             type: string
- *           subname:
+ *           last_name:
  *              type: string
  *
  *     responses:
@@ -75,7 +75,7 @@ export default router;
  *     properties:
  *       first_name:
  *         type: string
- *       surname:
+ *       last_name:
  *          type: string
  *       login:
  *         type: string
@@ -89,7 +89,7 @@ export default router;
  *     required:
  *       - id
  *       - first_name
- *       - surname
+ *       - last_name
  *       - login
  *       - email
  *       - password
