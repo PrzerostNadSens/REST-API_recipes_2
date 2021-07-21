@@ -27,7 +27,7 @@ app.use(
   })
 );
 
-app.use("/Recipe", recipeRoutes);
+app.use("/recipe", recipeRoutes);
 app.use("/users", userRoutes);
 app.use(errorMiddleware);
 
@@ -38,7 +38,8 @@ app.get("/", (req: Request, res: Response) =>
 const swaggerDefinition: SwaggerDefinition = {
   info: {
     title: "REST-API_RECIPES",
-    description: "Handling of cooking recipes Rafał Chmielewski",
+    description:
+      "Handling of cooking recipes Rafał Chmielewski.\n\nUsers who are not logged in can create an account themselves assigning themselves roles.\nThere are two types of users 'User' and 'Admin' in the application.\n'User' can only view, edit and delete his own recipes and create a new recipe.\n'Admin' can additionally display all recipes.\n\nJSON Web Token is used for authentication in the application.",
     version: "1.0.0",
   },
   host: "localhost:8080",
@@ -53,8 +54,6 @@ const swaggerOptions: SwaggerOptions = {
 const swaggerSpec = swaggerJSDoc(swaggerOptions);
 
 app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-
-//app.get("/docs", (req, res) => res.sendStatus(200));
 
 app.get("*", (req: Request, res: Response) => {
   return res.status(404).json({
