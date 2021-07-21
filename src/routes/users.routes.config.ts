@@ -75,7 +75,7 @@ export default router;
  *     properties:
  *       first_name:
  *         type: string
- *       subname:
+ *       surname:
  *          type: string
  *       login:
  *         type: string
@@ -88,5 +88,10 @@ export default router;
  *     # Both properties are required
  *     required:
  *       - id
- *       - name
+ *       - first_name
+ *       - surname
+ *       - login
+ *       - email
+ *       - password
+ *       - role
  */
