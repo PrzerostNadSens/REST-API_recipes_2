@@ -72,13 +72,19 @@ router
 
 /**
  * @swagger
- * /recipe/<id>:
+ * /recipe/{id}:
  *   get:
  *     tags:
  *       - recipe
  *     description: display recipe belonging to the user
  *     produces:
  *       - application/json
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
  *
  *     responses:
  *       200:
@@ -92,7 +98,7 @@ router.route("/:recipe_id").get(authorize(), RecipesController.findByIdRecipe);
 
 /**
  * @swagger
- * /recipe/<id>:
+ * /recipe/{id}:
  *   put:
  *     tags:
  *       - recipe
@@ -100,6 +106,11 @@ router.route("/:recipe_id").get(authorize(), RecipesController.findByIdRecipe);
  *     produces:
  *       - application/json
  *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
  *       - in: body
  *         name: recipe
  *         schema:
@@ -116,13 +127,19 @@ router.route("/:recipe_id").put(authorize(), RecipesController.updateRecipe);
 
 /**
  * @swagger
- * /recipe/<id>:
+ * /recipe/{id}:
  *   delete:
  *     tags:
  *       - recipe
  *     description: removes recipe belonging to the user
  *     produces:
  *       - application/json
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
  *
  *     responses:
  *       200:
