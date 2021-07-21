@@ -1,18 +1,24 @@
 import RecipesDao from "../daos/recipes.dao";
-import { RECIPE } from "../interfaces/recipe.interface";
-import { CreateRecipesDto } from "../dto/create.recipe.dto";
+import { IRecipe } from "../model/recipeModel";
 
-class RecipesService implements RECIPE {
-  async create(resource: CreateRecipesDto) {
-    return RecipesDao.addRecipe(resource);
+class RecipesService {
+  async create(resource: IRecipe) {
+    return RecipesDao.createRecipe(resource);
+  }
+  async get(userId: string) {
+    return RecipesDao.getUserRecipes(userId);
   }
 
-  async update(id: string, resource: CreateRecipesDto) {
+  async findById(id: string) {
+    return RecipesDao.findByIdRecipe(id);
+  }
+
+  async update(id: string, resource: IRecipe) {
     return RecipesDao.updateRecipe(id, resource);
   }
 
   async remove(id: string) {
-    return RecipesDao.removeRecipe(id);
+    return RecipesDao.removeByIdRecipe(id);
   }
 }
 

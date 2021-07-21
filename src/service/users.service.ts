@@ -1,57 +1,14 @@
 import UsersDao from "../daos/users.dao";
-import { USER } from "../interfaces/user.interface";
-import { CreateUserDto } from "../dto/create.user.dto";
-import { PutUserDto } from "../dto/put.user.dto";
-import config from "../../config.json";
-import jwt from "jsonwebtoken";
-import bcrypt from "bcryptjs";
-import { User } from "../model/userModel";
+import { IUser } from "../model/userModel";
 
-class UsersService implements USER {
-  async create(resource: CreateUserDto) {
-    return UsersDao.addUser(resource);
+class UsersService {
+  async create(resource: IUser) {
+    return UsersDao.createUser(resource);
   }
 
-  async deleteById(id: string) {
-    return UsersDao.removeUserById(id);
+  async authenticate(login: string, password: string) {
+    return UsersDao.authenticate_function(login, password);
   }
-
-  async list(limit: number, page: number) {
-    return UsersDao.getUsers();
-  }
-
-  async readById(id: string) {
-    return UsersDao.getUserById(id);
-  }
-
-  async putById(id: string, resource: PutUserDto) {
-    return UsersDao.putUserById(id, resource);
-  }
-
-  async getUserByEmail(email: string) {
-    return UsersDao.getUserByEmail(email);
-  }
-
-  async authenticate_function(login: string, password: string) {
-    const user = await User.findOne({ login });
-
-    if (!user) {
-      return { message: "Unauthorized" };
-    }
-    if (!bcrypt.compare(password, user.password as any)) {
-      return { message: "Unauthorized" };
-    }
-
-    const jwtToken = Token(user);
-    return {
-      jwtToken,
-    };
-  }
-}
-export function Token(user: any) {
-  return jwt.sign({ sub: user.id, id: user.id }, config.secret, {
-    expiresIn: "15m",
-  });
 }
 
 export default new UsersService();

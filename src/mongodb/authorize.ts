@@ -3,11 +3,11 @@ import { secret } from "../../config.json";
 import { User } from "../model/userModel";
 import { Request, Response, NextFunction } from "express";
 
-interface AuthorizedRequest extends Request {
+export interface AuthorizedRequest extends Request {
   user?: any;
 }
 
-function return_id(req: AuthorizedRequest) {
+export function returnId(req: AuthorizedRequest) {
   jwt({ secret, algorithms: ["HS256"] });
   return req.user.id;
 }
@@ -19,7 +19,7 @@ export function authorize(roles: string[] = []) {
   return [
     jwt({ secret, algorithms: ["HS256"] }),
     async (req: Request, res: Response, next: NextFunction) => {
-      const user = await User.findById(return_id(req));
+      const user = await User.findById(returnId(req));
 
       if (!user || (roles.length && !roles.includes(user.role))) {
         return res.status(401).json();

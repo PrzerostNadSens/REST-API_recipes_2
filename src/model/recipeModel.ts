@@ -1,6 +1,6 @@
 import mongoose, { Document } from "mongoose";
 const Schema = mongoose.Schema;
-export interface Recipe {
+export interface IRecipe {
   name: string;
   type: string;
   photo: string;
@@ -8,7 +8,7 @@ export interface Recipe {
   added_by?: string;
 }
 
-export interface RecipeDocument extends Recipe, Document {}
+export interface RecipeDocument extends IRecipe, Document {}
 
 const recipeSchema = new mongoose.Schema({
   name: {

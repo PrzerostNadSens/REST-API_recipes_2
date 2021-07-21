@@ -1,7 +1,7 @@
 import mongoose, { Document } from "mongoose";
 const Schema = mongoose.Schema;
 
-export interface User {
+export interface IUser {
   first_name: string;
   subname: string;
   login: string;
@@ -10,7 +10,7 @@ export interface User {
   role: string;
 }
 
-export interface UserDocument extends User, Document {}
+export interface UserDocument extends IUser, Document {}
 
 const schema = new Schema({
   first_name: { type: String, required: true },
