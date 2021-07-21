@@ -16,7 +16,11 @@ export function init(): void {
   mongoose.Promise = global.Promise;
 
   mongoose.connection.on("connected", () =>
-    console.log("mongoose connected!", mongoose.connection.db.databaseName)
+    console.log(
+      "mongoose connected!",
+      mongoose.connection.db.databaseName,
+      "\n"
+    )
   );
   mongoose.connection.on("error", (error) =>
     console.log("mongoose error!", error)
