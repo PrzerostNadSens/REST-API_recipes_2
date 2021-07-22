@@ -3,7 +3,7 @@ import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import recipeRoutes from "./routes/recipe.routes.config";
-import userRoutes from "../src/routes/users.routes.config";
+import userRoutes from "./routes/users.routes.config";
 import errorMiddleware from "./middleware/error.middleware";
 import * as db from "./mongodb/db";
 import morgan from "morgan";

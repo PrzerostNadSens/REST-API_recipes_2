@@ -1,4 +1,4 @@
-import config from "../../config.json";
+import config from "../config.json";
 import mongoose from "mongoose";
 
 const connectionOptions = {
