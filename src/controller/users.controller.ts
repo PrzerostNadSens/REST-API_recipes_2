@@ -1,11 +1,9 @@
 import express, { NextFunction, Request, Response } from "express";
-import bcrypt from "bcryptjs";
 import Joi from "@hapi/joi";
 import UsersService from "../service/users.service";
 
 class UsersController {
   async createUser(req: Request, res: Response): Promise<Response> {
-    req.body.password = await bcrypt.hash(req.body.password, 10);
     const userId = await UsersService.create(req.body);
 
     return res.status(201).send({ id: userId });
