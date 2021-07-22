@@ -1,21 +1,34 @@
-import express, { NextFunction, Request, Response } from "express";
-import Joi from "@hapi/joi";
+import { Request, Response, NextFunction } from "express";
 import UsersService from "../service/users.service";
 
 class UsersController {
   async createUser(req: Request, res: Response): Promise<Response> {
-    const userId = await UsersService.create(req.body);
+    try {
+      const userId = await UsersService.create(req.body);
 
-    return res.status(201).send({ id: userId });
+      return res.status(201).send({ id: userId });
+    } catch (e) {
+      return res.status(500).send(e.message);
+    }
   }
 
   async authenticateSchema(req: Request, res: Response, next: NextFunction) {
-    const schema = Joi.object({
-      login: Joi.string().required(),
-      password: Joi.string().required(),
-    });
+    try {
+      const { login, password } = req.body;
 
-    validateRequest(req, res, next, schema);
+      UsersService.validateRequest(login, password, next);
+    } catch (e) {
+      if (e.code(401)) {
+        return res.status(401).send(
+          e.message({
+            message: `Validation error: ${e.details
+              .map((x: any) => x.message)
+              .join(", ")}`,
+          })
+        );
+      }
+      return res.status(500).send(e.message);
+    }
   }
 
   async authenticate(
@@ -30,31 +43,6 @@ class UsersController {
         res.json(user);
       })
       .catch(next);
-  }
-}
-
-async function validateRequest(
-  req: Request,
-  res: Response,
-  next: NextFunction,
-  schema: any
-) {
-  const options = {
-    abortEarly: false,
-    allowUnknown: true,
-    stripUnknown: true,
-  };
-  const { error, value } = schema.validate(req.body, options);
-
-  if (error) {
-    return res.status(401).json({
-      message: `Validation error: ${error.details
-        .map((x: any) => x.message)
-        .join(", ")}`,
-    });
-  } else {
-    req.body = value;
-    next();
   }
 }
 
