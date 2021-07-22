@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 export interface IUser {
   first_name: string;
-  subname: string;
+  last_name: string;
   login: string;
   email: string;
   password?: string;
@@ -14,7 +14,7 @@ export interface UserDocument extends IUser, Document {}
 
 const schema = new Schema({
   first_name: { type: String, required: true },
-  subname: { type: String, required: true },
+  last_name: { type: String, required: true },
   login: { type: String, unique: true, required: true },
   email: { type: String, unique: true, required: true },
   password: { type: String, required: true },

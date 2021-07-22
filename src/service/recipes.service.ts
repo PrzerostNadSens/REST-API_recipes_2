@@ -1,12 +1,14 @@
 import RecipesDao from "../daos/recipes.dao";
-import { IRecipe } from "../model/recipeModel";
+import { IRecipe, PartialIRecipe, OmitIRecipe } from "../model/recipeModel";
 
 class RecipesService {
   async create(resource: IRecipe) {
     return RecipesDao.createRecipe(resource);
   }
-  async get(userId: string) {
-    return RecipesDao.getUserRecipes(userId);
+  async get(userId: string, filter: OmitIRecipe) {
+    const fulFilter = PartialIRecipe(filter, { added_by: userId });
+
+    return RecipesDao.getUserRecipes(fulFilter);
   }
 
   async findById(id: string) {
