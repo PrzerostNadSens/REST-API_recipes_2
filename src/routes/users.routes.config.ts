@@ -4,7 +4,7 @@ const router = require("express").Router();
 
 /**
  * @swagger
- * /users/:
+ * /user/:
  *   post:
  *     tags:
  *       - user
@@ -29,7 +29,7 @@ router.route(`/`).post(UsersController.createUser);
 
 /**
  * @swagger
- * /users/login:
+ * /user/login:
  *   post:
  *     tags:
  *       - user

@@ -27,7 +27,7 @@ app.use(
 );
 
 app.use("/recipe", recipeRoutes);
-app.use("/users", userRoutes);
+app.use("/user", userRoutes);
 app.use(errorMiddleware);
 
 app.get("/", (req: Request, res: Response) =>
