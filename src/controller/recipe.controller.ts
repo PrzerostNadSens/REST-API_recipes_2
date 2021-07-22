@@ -32,7 +32,8 @@ class RecipesController {
 
   async getAllRecipe(req: AuthorizedRequest, res: Response): Promise<Response> {
     try {
-      const recipes = await Recipe.find({});
+      const filter: OmitIRecipe = req.query;
+      const recipes = await RecipesService.getAll(filter);
 
       return res.send(recipes);
     } catch (e) {
