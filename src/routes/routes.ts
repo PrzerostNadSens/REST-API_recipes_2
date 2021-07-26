@@ -10,11 +10,9 @@ routes.get("/", (req: Request, res: Response) =>
   res.send("Obsługa przepisów kuchennych Rafał Chmielewski")
 );
 
-// TODO: /recipes
-routes.use("/recipe", recipeRoutes);
+routes.use("/recipes", recipeRoutes);
 
-// TODO: /users
-routes.use("/user", userRoutes);
+routes.use("/users", userRoutes);
 
 routes.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
