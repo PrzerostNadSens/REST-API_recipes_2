@@ -69,8 +69,8 @@ router
 router
   .route("/login")
   .post(
-    UsersController.authenticateSchema,
     validate(validateUserLogin),
+    UsersController.authenticateSchema,
     UsersController.authenticate
   );
 

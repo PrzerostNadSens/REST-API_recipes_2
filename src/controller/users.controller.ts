@@ -1,3 +1,4 @@
+import { date } from "@hapi/joi";
 import { Request, Response, NextFunction } from "express";
 import { matchedData, validationResult } from "express-validator";
 import { IUser } from "../model/userModel";
@@ -18,9 +19,9 @@ class UsersController {
 
   async authenticateSchema(req: Request, res: Response, next: NextFunction) {
     try {
-      const { login, password } = req.body;
+      const data = <IUser>matchedData(req);
 
-      UsersService.validateRequest(login, password, next);
+      UsersService.validateRequest(data.login, data.password!, next);
     } catch (e) {
       if (e.code(401)) {
         return res.status(401).send(
