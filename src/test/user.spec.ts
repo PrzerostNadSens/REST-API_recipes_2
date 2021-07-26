@@ -1,17 +1,17 @@
-import chai, { expect, should } from "chai";
+import * as testSetup from "./test.config";
+import chai, { expect } from "chai";
+import chaiHttp from "chai-http";
 import app from "../index";
+import { createUserPayload } from "./user.mocks";
+chai.use(chaiHttp);
 
 describe("User", function () {
   describe("POST /user/", function () {
-    it("it should POST create user", async function () {
-      const response = await chai.request(app).post("/user").send({
-        first_name: "Rafal",
-        last_name: "Chmielewski",
-        login: "134dd33dw",
-        email: "313d3dw@pr4dzyklad.com",
-        password: "trudne.haslo123",
-        role: "Admin",
-      });
+    it("should create user", async function () {
+      const response = await chai
+        .request(app)
+        .post("/user")
+        .send(createUserPayload);
       expect(response.error).to.be.false;
       expect(response).to.have.status(201);
       expect(response.body).to.not.be.null;
@@ -19,7 +19,7 @@ describe("User", function () {
   });
 
   describe("POST /user/login", function () {
-    it("it should POST login user", async function () {
+    it("should login user", async function () {
       const response = await chai.request(app).post("/user/login").send({
         login: "13433dw",
         password: "trudne.haslo123",

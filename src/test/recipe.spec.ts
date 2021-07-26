@@ -1,3 +1,4 @@
+import * as testSetup from "./test.config";
 import chai, { expect } from "chai";
 
 describe("cos", function () {
