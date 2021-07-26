@@ -2,7 +2,7 @@ import UsersController from "../controller/users.controller";
 import {
   validateUserRegister,
   validateUserLogin,
-} from "../validators/users.validator";
+} from "../validators/validate.middleware";
 import { validate } from "../middleware/user.validation";
 
 const router = require("express").Router();
