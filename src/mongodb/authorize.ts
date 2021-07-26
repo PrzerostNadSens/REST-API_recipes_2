@@ -1,8 +1,8 @@
 import jwt from "express-jwt";
-import { secret } from "../config.json";
 import { User } from "../model/userModel";
 import { Request, Response, NextFunction } from "express";
 
+const secret = process.env.JWT_SECRET!;
 export interface AuthorizedRequest extends Request {
   user?: any;
 }
