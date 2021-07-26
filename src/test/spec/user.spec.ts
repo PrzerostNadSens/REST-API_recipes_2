@@ -1,9 +1,7 @@
-import * as testSetup from "./test.config";
-import chai, { expect } from "chai";
-import chaiHttp from "chai-http";
-import app from "../index";
-import { createUserPayload } from "./user.mocks";
+import { chai, expect, app, chaiHttp } from "../test.config";
 chai.use(chaiHttp);
+
+import { createUserPayload } from "../mocks/user.mocks";
 
 describe("User", function () {
   describe("POST /user/", function () {

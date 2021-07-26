@@ -1,4 +1,8 @@
 import dotenv from "dotenv";
+import chai, { expect } from "chai";
+import chaiHttp from "chai-http";
+import app from "../index";
+import faker from "faker";
 
 dotenv.config();
 
@@ -10,3 +14,5 @@ console.log(
   "process.env.DATABASE_CONNECTION_STRING",
   process.env.DATABASE_CONNECTION_STRING
 );
+
+export { chai, expect, chaiHttp, faker, app };

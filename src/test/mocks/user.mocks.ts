@@ -1,4 +1,4 @@
-import faker from "faker";
+import { faker } from "../test.config";
 
 export const createUserPayload = {
   first_name: faker.name.firstName(),
