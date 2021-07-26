@@ -7,8 +7,10 @@ const connectionOptions = {
   useFindAndModify: false,
 };
 
+const connectionString = `${process.env.DATABASE_PROTOCOL}${process.env.DATABASE_USERNAME}:${process.env.DATABASE_PASSWORD}@${process.env.DATABASE_URL}/${process.env.DATABASE_NAME}?${process.env.DATABASE_CONNECTION_OPTIONS}`;
+
 export function init(): void {
-  mongoose.connect(process.env.DATABASE_CONNECTION_STRING!, connectionOptions);
+  mongoose.connect(connectionString, connectionOptions);
   mongoose.Promise = global.Promise;
 
   mongoose.connection.on("connected", () =>

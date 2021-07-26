@@ -5,10 +5,10 @@ import faker from "faker";
 chai.use(chaiHttp);
 
 dotenv.config();
+// const DATABASE_NAME = "recipe-test-db";
+// const connectionString = `${process.env.DATABASE_PROTOCOL}${process.env.DATABASE_USERNAME}:${process.env.DATABASE_PASSWORD}@${process.env.DATABASE_URL}/${DATABASE_NAME}?${process.env.DATABASE_CONNECTION_OPTIONS}`;
 
-process.env.DATABASE_CONNECTION_STRING =
-  "mongodb+srv://Admin:trudne_haslo.123@cluster0.edli7.mongodb.net/recipe-test-db?retryWrites=true&w=majority";
-
+process.env.DATABASE_NAME = "recipe-test-db";
 import app from "../index";
 
 export { chai, expect, faker, app };
