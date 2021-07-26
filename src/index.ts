@@ -34,3 +34,5 @@ db.init();
 app.listen(port, function () {
   console.log("Running REST_RECIPES on port " + port);
 });
+
+export default app;
