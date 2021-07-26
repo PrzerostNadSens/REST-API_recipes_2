@@ -1,5 +1,4 @@
-import { chai, expect, app, chaiHttp } from "../test.config";
-chai.use(chaiHttp);
+import { chai, expect, app } from "../test.config";
 
 describe("cos", function () {
   it("should do something", function () {

@@ -1,6 +1,4 @@
-import { chai, expect, app, chaiHttp } from "../test.config";
-chai.use(chaiHttp);
-
+import { chai, expect, app } from "../test.config";
 import { createUserPayload } from "../mocks/user.mocks";
 
 describe("User", function () {
