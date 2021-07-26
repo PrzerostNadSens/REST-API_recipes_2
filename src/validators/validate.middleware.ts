@@ -36,7 +36,9 @@ const validateRole = body("role")
   .isString()
   .withMessage(messageString)
   .notEmpty()
-  .withMessage(messageEmpty);
+  .withMessage(messageEmpty)
+  .isIn(["Admin", "User"])
+  .withMessage(`Required Admin or User.`);
 
 export const validateUserRegister: ValidationChain[] = [
   validateFirstName,

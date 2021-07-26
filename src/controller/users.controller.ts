@@ -45,6 +45,9 @@ class UsersController {
 
     UsersService.authenticate(login, password)
       .then((...user) => {
+        if (!user[0]) {
+          return res.status(401).json({ message: "Unauthorized" });
+        }
         res.json(user);
       })
       .catch(next);
