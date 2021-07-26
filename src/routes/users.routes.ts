@@ -1,4 +1,9 @@
 import UsersController from "../controller/users.controller";
+import {
+  validateUserRegister,
+  validateUserLogin,
+} from "../validators/validate.middleware";
+import { validate } from "../middleware/user.validation";
 
 const router = require("express").Router();
 
@@ -25,7 +30,9 @@ const router = require("express").Router();
  *             type: string
  */
 
-router.route(`/`).post(UsersController.createUser);
+router
+  .route(`/`)
+  .post(validate(validateUserRegister), UsersController.createUser);
 
 /**
  * @swagger
@@ -61,7 +68,11 @@ router.route(`/`).post(UsersController.createUser);
 
 router
   .route("/login")
-  .post(UsersController.authenticateSchema, UsersController.authenticate);
+  .post(
+    validate(validateUserLogin),
+    UsersController.authenticateSchema,
+    UsersController.authenticate
+  );
 
 export default router;
 
