@@ -1,4 +1,3 @@
-import config from "../config.json";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import { IUser, User } from "../model/userModel";
@@ -27,7 +26,7 @@ class UsersDao {
 }
 
 function Token(user: any) {
-  return jwt.sign({ sub: user.id, id: user.id }, config.secret, {
+  return jwt.sign({ sub: user.id, id: user.id }, process.env.JWT_SECRET!, {
     expiresIn: "15m",
   });
 }

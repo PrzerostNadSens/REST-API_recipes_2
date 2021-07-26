@@ -1,4 +1,3 @@
-import config from "../config.json";
 import mongoose from "mongoose";
 
 const connectionOptions = {
@@ -9,10 +8,7 @@ const connectionOptions = {
 };
 
 export function init(): void {
-  mongoose.connect(
-    process.env.MONGODB_URI || config.connectionString,
-    connectionOptions
-  );
+  mongoose.connect(process.env.DATABASE_CONNECTION_STRING!, connectionOptions);
   mongoose.Promise = global.Promise;
 
   mongoose.connection.on("connected", () =>

@@ -1,3 +1,4 @@
+import dotenv from "dotenv";
 import express from "express";
 import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
@@ -5,6 +6,9 @@ import cors from "cors";
 import errorMiddleware from "./middleware/error.middleware";
 import * as db from "./mongodb/db";
 import morgan from "morgan";
+
+dotenv.config();
+
 import { routes } from "./routes/routes";
 
 const app = express();
