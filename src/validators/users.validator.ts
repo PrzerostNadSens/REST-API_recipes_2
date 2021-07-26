@@ -46,3 +46,8 @@ export const validateUserRegister: ValidationChain[] = [
   validatePassword,
   validateRole,
 ];
+
+export const validateUserLogin: ValidationChain[] = [
+  validateLogin,
+  validatePassword,
+];
