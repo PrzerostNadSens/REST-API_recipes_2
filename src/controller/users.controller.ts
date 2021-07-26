@@ -1,10 +1,20 @@
 import { Request, Response, NextFunction } from "express";
+import { matchedData, validationResult } from "express-validator";
+import { IUser } from "../model/userModel";
 import UsersService from "../service/users.service";
 
 class UsersController {
   async createUser(req: Request, res: Response): Promise<Response> {
     try {
-      const userId = await UsersService.create(req.body);
+      const errors = validationResult(req);
+
+      if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+      }
+
+      const data = <IUser>matchedData(req);
+
+      const userId = await UsersService.create(data);
 
       return res.status(201).send({ id: userId });
     } catch (e) {

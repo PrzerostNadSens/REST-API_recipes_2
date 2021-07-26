@@ -1,4 +1,5 @@
 import UsersController from "../controller/users.controller";
+import { validateUserRegister } from "../validators/users.validator";
 
 const router = require("express").Router();
 
@@ -25,7 +26,7 @@ const router = require("express").Router();
  *             type: string
  */
 
-router.route(`/`).post(UsersController.createUser);
+router.route(`/`).post(validateUserRegister, UsersController.createUser);
 
 /**
  * @swagger
