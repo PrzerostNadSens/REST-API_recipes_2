@@ -1,4 +1,3 @@
-import { date } from "@hapi/joi";
 import { Request, Response, NextFunction } from "express";
 import { matchedData } from "express-validator";
 import { IUser } from "../model/userModel";
