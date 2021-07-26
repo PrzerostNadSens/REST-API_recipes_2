@@ -9,7 +9,7 @@ const router = require("express").Router();
 
 /**
  * @swagger
- * /user/:
+ * /users/:
  *   post:
  *     tags:
  *       - user
@@ -36,7 +36,7 @@ router
 
 /**
  * @swagger
- * /user/login:
+ * /users/login:
  *   post:
  *     tags:
  *       - user
