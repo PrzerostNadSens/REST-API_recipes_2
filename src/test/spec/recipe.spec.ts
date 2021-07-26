@@ -1,7 +1,7 @@
 import { chai, expect, app } from "../test.config";
 
-describe("cos", function () {
-  it("should do something", function () {
+describe("Test", function () {
+  it("should test", function () {
     const sum = 2 + 2;
     expect(sum).to.eq(4);
   });

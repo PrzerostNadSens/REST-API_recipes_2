@@ -8,8 +8,8 @@ describe("User", function () {
         .request(app)
         .post("/user")
         .send(createUserPayload);
-      expect(response.error).to.be.false;
       expect(response).to.have.status(201);
+      expect(response.error).to.be.false;
       expect(response.body).to.not.be.null;
     });
   });
@@ -20,8 +20,8 @@ describe("User", function () {
         login: "13433dw",
         password: "trudne.haslo123",
       });
-      expect(response.error).to.be.false;
       expect(response).to.have.status(200);
+      expect(response.error).to.be.false;
       expect(response.body).to.not.be.null;
     });
   });
