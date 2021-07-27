@@ -43,11 +43,11 @@ class UsersController {
     const { login, password } = req.body;
 
     UsersService.authenticate(login, password)
-      .then((...user) => {
-        if (!user[0]) {
+      .then((jwtToken) => {
+        if (!jwtToken) {
           return res.status(401).json({ message: "Unauthorized" });
         }
-        res.json(user);
+        res.json(jwtToken);
       })
       .catch(next);
   }

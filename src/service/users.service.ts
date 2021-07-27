@@ -14,7 +14,7 @@ class UsersService {
   }
 
   async authenticate(login: string, password: string) {
-    return UsersDao.authenticate_function(login, password);
+    return UsersDao.authenticateUser(login, password);
   }
 
   async validateRequest(login: string, password: string, next: NextFunction) {
