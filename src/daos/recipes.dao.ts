@@ -20,6 +20,12 @@ class RecipesDao {
     return recipes;
   }
 
+  async getAllUserRecipes(filter: OmitIRecipe) {
+    const recipes = await Recipe.find(filter);
+
+    return recipes;
+  }
+
   async findByIdRecipe(id: string) {
     const recipe = await Recipe.findById(id);
 

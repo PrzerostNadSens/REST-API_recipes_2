@@ -10,6 +10,9 @@ class RecipesService {
 
     return RecipesDao.getUserRecipes(fulFilter);
   }
+  async getAll(filter: OmitIRecipe) {
+    return RecipesDao.getAllUserRecipes(filter);
+  }
 
   async findById(id: string) {
     return RecipesDao.findByIdRecipe(id);

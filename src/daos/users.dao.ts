@@ -1,4 +1,3 @@
-import config from "../config.json";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import { IUser, User } from "../model/userModel";
@@ -9,14 +8,16 @@ class UsersDao {
     await userToSave.save();
     return userToSave.id;
   }
-  async authenticate_function(login: string, password: string) {
+  async authenticateUser(login: string, password: string) {
     const user = await User.findOne({ login });
 
     if (!user) {
-      return { message: "Unauthorized" };
+      return null;
     }
-    if (!bcrypt.compare(password, user.password as any)) {
-      return { message: "Unauthorized" };
+    const loginPassword = user.password;
+
+    if (!(await bcrypt.compare(password, loginPassword!))) {
+      return null;
     }
 
     const jwtToken = Token(user);
@@ -27,7 +28,7 @@ class UsersDao {
 }
 
 function Token(user: any) {
-  return jwt.sign({ sub: user.id, id: user.id }, config.secret, {
+  return jwt.sign({ sub: user.id, id: user.id }, process.env.JWT_SECRET!, {
     expiresIn: "15m",
   });
 }

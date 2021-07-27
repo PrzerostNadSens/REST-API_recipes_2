@@ -1,10 +1,15 @@
 import UsersController from "../controller/users.controller";
+import {
+  validateUserRegister,
+  validateUserLogin,
+} from "../validators/validate.middleware";
+import { validate } from "../middleware/validate.middleware";
 
 const router = require("express").Router();
 
 /**
  * @swagger
- * /user/:
+ * /users/:
  *   post:
  *     tags:
  *       - user
@@ -14,6 +19,7 @@ const router = require("express").Router();
  *     parameters:
  *       - in: body
  *         name: user
+ *         description: Required Admin or User in role.
  *         schema:
  *           $ref: '#/definitions/User'
  *
@@ -25,11 +31,13 @@ const router = require("express").Router();
  *             type: string
  */
 
-router.route(`/`).post(UsersController.createUser);
+router
+  .route(`/`)
+  .post(validate(validateUserRegister), UsersController.createUser);
 
 /**
  * @swagger
- * /user/login:
+ * /users/login:
  *   post:
  *     tags:
  *       - user
@@ -42,9 +50,9 @@ router.route(`/`).post(UsersController.createUser);
  *         required: true
  *         in: body
  *         properties:
- *           first_name:
+ *           login:
  *             type: string
- *           last_name:
+ *           password:
  *              type: string
  *
  *     responses:
@@ -61,7 +69,11 @@ router.route(`/`).post(UsersController.createUser);
 
 router
   .route("/login")
-  .post(UsersController.authenticateSchema, UsersController.authenticate);
+  .post(
+    validate(validateUserLogin),
+    UsersController.authenticateSchema,
+    UsersController.authenticate
+  );
 
 export default router;
 

@@ -1,11 +1,11 @@
 const router = require("express").Router();
 import Role from "../mongodb/role";
 import { authorize } from "../mongodb/authorize";
-import RecipesController from "../controller/recipe.controller";
+import RecipesController from "../controller/recipes.controller";
 
 /**
  * @swagger
- * /recipe/:
+ * /recipes/:
  *   get:
  *     tags:
  *       - recipe
@@ -25,7 +25,7 @@ router.route("/").get(authorize(), RecipesController.getUserRecipes);
 
 /**
  * @swagger
- * /recipe/:
+ * /recipes/:
  *   post:
  *     tags:
  *       - recipe
@@ -50,7 +50,7 @@ router.route("/").post(authorize(), RecipesController.createRecipe);
 
 /**
  * @swagger
- * /recipe/all:
+ * /recipes/all:
  *   get:
  *     tags:
  *       - recipe
@@ -72,7 +72,7 @@ router
 
 /**
  * @swagger
- * /recipe/{id}:
+ * /recipes/{id}:
  *   get:
  *     tags:
  *       - recipe
@@ -98,7 +98,7 @@ router.route("/:recipe_id").get(authorize(), RecipesController.findByIdRecipe);
 
 /**
  * @swagger
- * /recipe/{id}:
+ * /recipes/{id}:
  *   put:
  *     tags:
  *       - recipe
@@ -127,7 +127,7 @@ router.route("/:recipe_id").put(authorize(), RecipesController.updateRecipe);
 
 /**
  * @swagger
- * /recipe/{id}:
+ * /recipes/{id}:
  *   delete:
  *     tags:
  *       - recipe
