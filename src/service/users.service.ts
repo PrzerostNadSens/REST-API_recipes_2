@@ -1,5 +1,5 @@
 import UsersDao from "../daos/users.dao";
-import { IUser } from "../model/userModel";
+import { IUser, UserDocument } from "../model/userModel";
 import bcrypt from "bcryptjs";
 import Joi from "@hapi/joi";
 import { NextFunction } from "express";
@@ -13,8 +13,8 @@ class UsersService {
     return UsersDao.createUser(newUser);
   }
 
-  async authenticate(login: string, password: string) {
-    return UsersDao.authenticateUser(login, password);
+  async authenticate(user: UserDocument) {
+    return UsersDao.authenticateUser(user);
   }
 
   async validateRequest(login: string, password: string, next: NextFunction) {

@@ -1,12 +1,11 @@
 import UsersController from "../controller/users.controller";
-import {
-  validateUserRegister,
-  validateUserLogin,
-} from "../validators/validate.middleware";
+import { validateUserRegister } from "../validators/validate.middleware";
 import { validate } from "../middleware/validate.middleware";
+import express from "express";
 
-const router = require("express").Router();
+import { Strategy, auth } from "../middleware/auth.middleware";
 
+const router = express.Router();
 /**
  * @swagger
  * /users/:
@@ -67,13 +66,11 @@ router
  *             type: string
  */
 
-router
-  .route("/login")
-  .post(
-    validate(validateUserLogin),
-    UsersController.authenticateSchema,
-    UsersController.authenticate
-  );
+router.post(
+  "/login",
+  auth.authenticate([Strategy.Basic]),
+  UsersController.authenticate
+);
 
 export default router;
 

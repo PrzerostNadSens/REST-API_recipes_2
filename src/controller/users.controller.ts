@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { matchedData } from "express-validator";
-import { IUser } from "../model/userModel";
+import { IUser, UserDocument } from "../model/userModel";
 import UsersService from "../service/users.service";
 
 class UsersController {
@@ -40,13 +40,10 @@ class UsersController {
     res: Response,
     next: NextFunction
   ): Promise<void> {
-    const { login, password } = req.body;
+    const user = <UserDocument>req.user;
 
-    UsersService.authenticate(login, password)
+    UsersService.authenticate(user)
       .then((jwtToken) => {
-        if (!jwtToken) {
-          return res.status(401).json({ message: "Unauthorized" });
-        }
         res.json(jwtToken);
       })
       .catch(next);
