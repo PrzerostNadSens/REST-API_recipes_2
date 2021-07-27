@@ -19,6 +19,7 @@ const router = require("express").Router();
  *     parameters:
  *       - in: body
  *         name: user
+ *         description: Required Admin or User in role.
  *         schema:
  *           $ref: '#/definitions/User'
  *
@@ -49,9 +50,9 @@ router
  *         required: true
  *         in: body
  *         properties:
- *           first_name:
+ *           login:
  *             type: string
- *           last_name:
+ *           password:
  *              type: string
  *
  *     responses:
