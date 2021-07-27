@@ -3,7 +3,7 @@ import {
   validateUserRegister,
   validateUserLogin,
 } from "../validators/validate.middleware";
-import { validate } from "../middleware/user.validation";
+import { validate } from "../middleware/validate.middleware";
 
 const router = require("express").Router();
 

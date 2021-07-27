@@ -1,4 +1,3 @@
-import { date } from "@hapi/joi";
 import { Request, Response, NextFunction } from "express";
 import { matchedData } from "express-validator";
 import { IUser } from "../model/userModel";
@@ -45,6 +44,9 @@ class UsersController {
 
     UsersService.authenticate(login, password)
       .then((...user) => {
+        if (!user[0]) {
+          return res.status(401).json({ message: "Unauthorized" });
+        }
         res.json(user);
       })
       .catch(next);

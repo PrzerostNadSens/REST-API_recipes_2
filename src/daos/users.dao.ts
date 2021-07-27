@@ -12,10 +12,13 @@ class UsersDao {
     const user = await User.findOne({ login });
 
     if (!user) {
-      return { message: "Unauthorized" };
+      return null;
     }
-    if (!bcrypt.compare(password, user.password as any)) {
-      return { message: "Unauthorized" };
+
+    const password1 = password;
+    const loginPassword = user.password;
+    if (!(await bcrypt.compare(password, loginPassword!))) {
+      return null;
     }
 
     const jwtToken = Token(user);
