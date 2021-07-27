@@ -3,7 +3,8 @@ import { body, ValidationChain } from "express-validator";
 const messageString = "Field must be a string!";
 const messageEmpty = "Field can not be empty!";
 
-const reg = /^[a-z\d]+[\w\d.-]*@(?:[a-z\d]+[a-z\d-]+\.){1,5}[a-z]{2,6}$/i;
+const regexEmail =
+  /^[a-z\d]+[\w\d.-]*@(?:[a-z\d]+[a-z\d-]+\.){1,5}[a-z]{2,6}$/i;
 
 const validateFirstName = body("first_name")
   .isString()
@@ -25,7 +26,7 @@ const validateEmail = body("email")
   .withMessage(messageString)
   .notEmpty()
   .withMessage(messageEmpty)
-  .matches(reg)
+  .matches(regexEmail)
   .withMessage("This is not an email!");
 const validatePassword = body("password")
   .isString()
