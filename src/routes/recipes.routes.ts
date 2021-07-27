@@ -2,6 +2,11 @@ const router = require("express").Router();
 import Role from "../mongodb/role";
 import { authorize } from "../mongodb/authorize";
 import RecipesController from "../controller/recipes.controller";
+import {
+  validateCreateRecipe,
+  validateUpdateRecipe,
+} from "../validators/validate.middleware";
+import { validate } from "../middleware/validate.middleware";
 
 /**
  * @swagger
@@ -35,6 +40,7 @@ router.route("/").get(authorize(), RecipesController.getUserRecipes);
  *     parameters:
  *       - in: body
  *         name: recipe
+ *         description: Required URL in photo.
  *         schema:
  *           $ref: '#/definitions/Recipe'
  *
@@ -46,7 +52,13 @@ router.route("/").get(authorize(), RecipesController.getUserRecipes);
  *             type: string
  */
 
-router.route("/").post(authorize(), RecipesController.createRecipe);
+router
+  .route("/")
+  .post(
+    authorize(),
+    validate(validateCreateRecipe),
+    RecipesController.createRecipe
+  );
 
 /**
  * @swagger
@@ -113,6 +125,7 @@ router.route("/:recipe_id").get(authorize(), RecipesController.findByIdRecipe);
  *           type: string
  *       - in: body
  *         name: recipe
+ *         description: Required URL in photo.
  *         schema:
  *           $ref: '#/definitions/Recipe'
  *
@@ -123,7 +136,13 @@ router.route("/:recipe_id").get(authorize(), RecipesController.findByIdRecipe);
  *           id:
  *             type: string
  */
-router.route("/:recipe_id").put(authorize(), RecipesController.updateRecipe);
+router
+  .route("/:recipe_id")
+  .put(
+    authorize(),
+    validate(validateUpdateRecipe),
+    RecipesController.updateRecipe
+  );
 
 /**
  * @swagger
