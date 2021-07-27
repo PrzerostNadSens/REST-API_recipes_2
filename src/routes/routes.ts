@@ -10,7 +10,7 @@ routes.get("/", (req: Request, res: Response) =>
   res.send("Obsługa przepisów kuchennych Rafał Chmielewski")
 );
 
-routes.use("/recipes", recipeRoutes);
+routes.use("/", recipeRoutes);
 
 routes.use("/users", userRoutes);
 

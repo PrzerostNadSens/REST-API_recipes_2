@@ -26,11 +26,11 @@ import { validate } from "../middleware/validate.middleware";
  *             type: string
  */
 
-router.route("/").get(authorize(), RecipesController.getUserRecipes);
+router.route("/recipes/").get(authorize(), RecipesController.getUserRecipes);
 
 /**
  * @swagger
- * /recipes/:
+ * /recipe/:
  *   post:
  *     tags:
  *       - recipe
@@ -53,7 +53,7 @@ router.route("/").get(authorize(), RecipesController.getUserRecipes);
  */
 
 router
-  .route("/")
+  .route("/recipe/")
   .post(
     authorize(),
     validate(validateCreateRecipe),
@@ -79,12 +79,12 @@ router
  */
 
 router
-  .route("/all")
+  .route("/recipes/all")
   .get(authorize(Role.Admin as any), RecipesController.getAllRecipe);
 
 /**
  * @swagger
- * /recipes/{id}:
+ * /recipe/{id}:
  *   get:
  *     tags:
  *       - recipe
@@ -106,11 +106,13 @@ router
  *             type: string
  */
 
-router.route("/:recipe_id").get(authorize(), RecipesController.findByIdRecipe);
+router
+  .route("/recipe/:recipe_id")
+  .get(authorize(), RecipesController.findByIdRecipe);
 
 /**
  * @swagger
- * /recipes/{id}:
+ * /recipe/{id}:
  *   put:
  *     tags:
  *       - recipe
@@ -137,7 +139,7 @@ router.route("/:recipe_id").get(authorize(), RecipesController.findByIdRecipe);
  *             type: string
  */
 router
-  .route("/:recipe_id")
+  .route("/recipe/:recipe_id")
   .put(
     authorize(),
     validate(validateUpdateRecipe),
@@ -146,7 +148,7 @@ router
 
 /**
  * @swagger
- * /recipes/{id}:
+ * /recipe/{id}:
  *   delete:
  *     tags:
  *       - recipe
@@ -169,7 +171,7 @@ router
  */
 
 router
-  .route("/:recipe_id")
+  .route("/recipe/:recipe_id")
   .delete(authorize(), RecipesController.removeByIdRecipe);
 
 export default router;
