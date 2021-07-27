@@ -57,12 +57,12 @@ export const validateUserLogin: ValidationChain[] = [
   validatePassword,
 ];
 
-const validateNamePOST = body("name")
+const validateNameRequired = body("name")
   .isString()
   .withMessage(messageString)
   .notEmpty()
   .withMessage(messageEmpty);
-const validateNamePUT = body("name")
+const validateNameOptional = body("name")
   .isString()
   .withMessage(messageString)
   .notEmpty()
@@ -85,15 +85,15 @@ const validateRecipe = body("recipe")
   .withMessage(messageString)
   .optional();
 
-export const validateRecipesPOST: ValidationChain[] = [
-  validateNamePOST,
+export const validateCreateRecipe: ValidationChain[] = [
+  validateNameRequired,
   validateType,
   validatePhoto,
   validateRecipe,
 ];
 
-export const validateRecipesPUT: ValidationChain[] = [
-  validateNamePUT,
+export const validateUpdateRecipe: ValidationChain[] = [
+  validateNameOptional,
   validateType,
   validatePhoto,
   validateRecipe,

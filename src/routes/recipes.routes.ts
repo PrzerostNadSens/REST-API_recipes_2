@@ -3,8 +3,8 @@ import Role from "../mongodb/role";
 import { authorize } from "../mongodb/authorize";
 import RecipesController from "../controller/recipes.controller";
 import {
-  validateRecipesPOST,
-  validateRecipesPUT,
+  validateCreateRecipe,
+  validateUpdateRecipe,
 } from "../validators/validate.middleware";
 import { validate } from "../middleware/validate.middleware";
 
@@ -56,7 +56,7 @@ router
   .route("/")
   .post(
     authorize(),
-    validate(validateRecipesPOST),
+    validate(validateCreateRecipe),
     RecipesController.createRecipe
   );
 
@@ -140,7 +140,7 @@ router
   .route("/:recipe_id")
   .put(
     authorize(),
-    validate(validateRecipesPUT),
+    validate(validateUpdateRecipe),
     RecipesController.updateRecipe
   );
 
