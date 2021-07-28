@@ -73,7 +73,7 @@ router.post(
  *       - recipe
  *     description: displaying all recipes available only for logged in administrator
  *     produces:
- *       - application/json
+ *       - application/jsons
  *
  *     responses:
  *       200:
@@ -115,7 +115,7 @@ router.get(
  */
 
 router.get(
-  "/:recipe_id",
+  "/:recipeId",
   auth.authenticate([StrategyOptions.Bearer]),
   RecipesController.findByIdRecipe
 );
@@ -150,7 +150,7 @@ router.get(
  */
 
 router.put(
-  "/:recipe_id",
+  "/:recipeId",
   auth.authenticate([StrategyOptions.Bearer]),
   RecipesController.updateRecipe
 );
@@ -180,7 +180,7 @@ router.put(
  */
 
 router.delete(
-  "/:recipe_id",
+  "/:recipeId",
   auth.authenticate([StrategyOptions.Bearer]),
   RecipesController.removeByIdRecipe
 );

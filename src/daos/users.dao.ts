@@ -8,7 +8,7 @@ class UsersDao {
 
   async generateToken(user: UserDocument): Promise<string> {
     return jwt.sign({ sub: user.id, id: user.id }, process.env.JWT_SECRET!, {
-      expiresIn: "15m",
+      expiresIn: "2h",
     });
   }
 }

@@ -43,7 +43,7 @@ class RecipesController {
 
   async findByIdRecipe(req: Request, res: Response): Promise<Response> {
     try {
-      const id = req.params.recipe_id;
+      const id = req.params.recipeId;
       const userId = returnId(req);
       const recipe = await RecipesService.findById(id);
 
@@ -64,7 +64,7 @@ class RecipesController {
 
   async updateRecipe(req: Request, res: Response): Promise<Response> {
     try {
-      const id = req.params.recipe_id;
+      const id = req.params.recipeId;
       const userId = returnId(req);
       const recipe = await Recipe.findById(id);
 
@@ -86,7 +86,7 @@ class RecipesController {
 
   async removeByIdRecipe(req: Request, res: Response): Promise<Response> {
     try {
-      const id = req.params.recipe_id;
+      const id = req.params.recipeId;
       const userId = returnId(req);
       const recipe = await Recipe.findById(id);
 
