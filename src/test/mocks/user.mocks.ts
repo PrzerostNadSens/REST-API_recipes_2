@@ -6,5 +6,5 @@ export const createUserPayload = {
   login: faker.name.firstName(),
   email: faker.internet.email(),
   password: faker.internet.password(),
-  role: 'Admin'
+  role: 'Admin',
 };

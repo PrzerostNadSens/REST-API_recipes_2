@@ -41,9 +41,9 @@ class RecipesDao {
         name,
         type,
         photo,
-        recipe
+        recipe,
       },
-      { omitUndefined: true, new: true }
+      { omitUndefined: true, new: true },
     );
 
     return recipeToUpdate;

@@ -15,10 +15,7 @@ class RecipesController {
     }
   }
 
-  async getUserRecipes(
-    req: AuthorizedRequest,
-    res: Response
-  ): Promise<Response> {
+  async getUserRecipes(req: AuthorizedRequest, res: Response): Promise<Response> {
     try {
       const userId = returnId(req);
       const filter: OmitIRecipe = req.query;
@@ -49,7 +46,7 @@ class RecipesController {
 
       if (!recipe) {
         return res.status(404).json({
-          message: `The recipe with the given id: ${id} does not exist`
+          message: `The recipe with the given id: ${id} does not exist`,
         });
       }
       if (recipe.added_by != userId) {
@@ -70,7 +67,7 @@ class RecipesController {
 
       if (!recipe) {
         return res.status(404).json({
-          message: `The recipe with the given id: ${id} does not exist`
+          message: `The recipe with the given id: ${id} does not exist`,
         });
       }
       if (recipe.added_by != userId) {
@@ -92,7 +89,7 @@ class RecipesController {
 
       if (!recipe) {
         return res.status(404).json({
-          message: `The recipe with the given id: ${id} does not exist`
+          message: `The recipe with the given id: ${id} does not exist`,
         });
       }
       if (recipe.added_by != userId) {

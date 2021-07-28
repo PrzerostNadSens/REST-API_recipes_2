@@ -26,6 +26,6 @@ export function authorize(roles: string[] = []) {
       }
       (req.user as any).role = user.role;
       next();
-    }
+    },
   ];
 }

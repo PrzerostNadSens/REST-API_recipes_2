@@ -64,11 +64,7 @@ router.post('/', validate(validateUserRegister), UsersController.createUser);
  *             type: string
  */
 
-router.post(
-  '/login',
-  auth.authenticate([StrategyOptions.Basic]),
-  UsersController.generateToken
-);
+router.post('/login', auth.authenticate([StrategyOptions.Basic]), UsersController.generateToken);
 
 export default router;
 

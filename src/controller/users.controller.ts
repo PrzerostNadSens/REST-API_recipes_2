@@ -16,15 +16,11 @@ class UsersController {
     }
   }
 
-  async generateToken(
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ): Promise<void> {
+  async generateToken(req: Request, res: Response, next: NextFunction): Promise<void> {
     const user = <UserDocument>req.user;
 
     UsersService.generateToken(user)
-      .then((jwtToken) => {
+      .then(jwtToken => {
         res.json(jwtToken);
       })
       .catch(next);
