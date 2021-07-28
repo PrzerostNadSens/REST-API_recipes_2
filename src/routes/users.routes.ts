@@ -1,12 +1,11 @@
+import express from "express";
 import UsersController from "../controller/users.controller";
-import {
-  validateUserRegister,
-  validateUserLogin,
-} from "../validators/validate.middleware";
+import { validateUserRegister } from "../validators/validate.middleware";
 import { validate } from "../middleware/validate.middleware";
 
-const router = require("express").Router();
+import { StrategyOptions, auth } from "../middleware/auth.middleware";
 
+const router = express.Router();
 /**
  * @swagger
  * /users/:
@@ -31,9 +30,7 @@ const router = require("express").Router();
  *             type: string
  */
 
-router
-  .route(`/`)
-  .post(validate(validateUserRegister), UsersController.createUser);
+router.post("/", validate(validateUserRegister), UsersController.createUser);
 
 /**
  * @swagger
@@ -67,13 +64,11 @@ router
  *             type: string
  */
 
-router
-  .route("/login")
-  .post(
-    validate(validateUserLogin),
-    UsersController.authenticateSchema,
-    UsersController.authenticate
-  );
+router.post(
+  "/login",
+  auth.authenticate([StrategyOptions.Basic]),
+  UsersController.generateToken
+);
 
 export default router;
 

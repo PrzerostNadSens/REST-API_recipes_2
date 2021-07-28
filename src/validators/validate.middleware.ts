@@ -56,3 +56,45 @@ export const validateUserLogin: ValidationChain[] = [
   validateLogin,
   validatePassword,
 ];
+
+const validateNameRequired = body("name")
+  .isString()
+  .withMessage(messageString)
+  .notEmpty()
+  .withMessage(messageEmpty);
+const validateNameOptional = body("name")
+  .isString()
+  .withMessage(messageString)
+  .notEmpty()
+  .withMessage(messageEmpty)
+  .optional();
+const validateType = body("type")
+  .isString()
+  .withMessage(messageString)
+  .optional();
+
+const validatePhoto = body("photo")
+  .isString()
+  .withMessage(messageString)
+  .isURL()
+  .withMessage(`Photo must be in the form of a URL`)
+  .optional();
+
+const validateRecipe = body("recipe")
+  .isString()
+  .withMessage(messageString)
+  .optional();
+
+export const validateCreateRecipe: ValidationChain[] = [
+  validateNameRequired,
+  validateType,
+  validatePhoto,
+  validateRecipe,
+];
+
+export const validateUpdateRecipe: ValidationChain[] = [
+  validateNameOptional,
+  validateType,
+  validatePhoto,
+  validateRecipe,
+];

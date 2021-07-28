@@ -1,36 +1,16 @@
 import jwt from "jsonwebtoken";
-import bcrypt from "bcryptjs";
-import { IUser, User } from "../model/userModel";
+import { IUser, User, UserDocument } from "../model/userModel";
 
 class UsersDao {
-  async createUser(createUserBody: IUser) {
-    const userToSave = new User(createUserBody);
-    await userToSave.save();
-    return userToSave.id;
+  public createUser(createUserBody: IUser): Promise<UserDocument> {
+    return new User(createUserBody).save();
   }
-  async authenticateUser(login: string, password: string) {
-    const user = await User.findOne({ login });
 
-    if (!user) {
-      return null;
-    }
-    const loginPassword = user.password;
-
-    if (!(await bcrypt.compare(password, loginPassword!))) {
-      return null;
-    }
-
-    const jwtToken = Token(user);
-    return {
-      jwtToken,
-    };
+  async generateToken(user: UserDocument): Promise<string> {
+    return jwt.sign({ sub: user.id, id: user.id }, process.env.JWT_SECRET!, {
+      expiresIn: "2h",
+    });
   }
-}
-
-function Token(user: any) {
-  return jwt.sign({ sub: user.id, id: user.id }, process.env.JWT_SECRET!, {
-    expiresIn: "15m",
-  });
 }
 
 export default new UsersDao();
