@@ -6,3 +6,12 @@ services:
       - ./data:/data/db
     ports:
       - "27017:27017"
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./src:/app/src
+    ports:
+      - "8000:8000"
