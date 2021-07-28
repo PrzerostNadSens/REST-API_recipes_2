@@ -1,9 +1,9 @@
+import express from "express";
 import UsersController from "../controller/users.controller";
 import { validateUserRegister } from "../validators/validate.middleware";
 import { validate } from "../middleware/validate.middleware";
-import express from "express";
 
-import { Strategy, auth } from "../middleware/auth.middleware";
+import { StrategyOptions, auth } from "../middleware/auth.middleware";
 
 const router = express.Router();
 /**
@@ -30,9 +30,7 @@ const router = express.Router();
  *             type: string
  */
 
-router
-  .route(`/`)
-  .post(validate(validateUserRegister), UsersController.createUser);
+router.post("/", validate(validateUserRegister), UsersController.createUser);
 
 /**
  * @swagger
@@ -68,7 +66,7 @@ router
 
 router.post(
   "/login",
-  auth.authenticate([Strategy.Basic]),
+  auth.authenticate([StrategyOptions.Basic]),
   UsersController.authenticate
 );
 

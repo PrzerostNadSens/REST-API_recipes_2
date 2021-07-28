@@ -73,6 +73,7 @@
     "@types/passport": "^1.0.7",
     "@types/passport-http": "^0.3.9",
     "@types/passport-http-bearer": "^1.0.37",
+    "@types/passport-jwt": "^3.0.6",
     "@types/shortid": "0.0.29",
     "@types/swagger-jsdoc": "^6.0.1",
     "@types/swagger-ui-express": "^4.1.3",

@@ -1,4 +1,4 @@
-const router = require("express").Router();
+import express from "express";
 import Role from "../mongodb/role";
 import { authorize } from "../mongodb/authorize";
 import RecipesController from "../controller/recipes.controller";
@@ -7,7 +7,9 @@ import {
   validateUpdateRecipe,
 } from "../validators/validate.middleware";
 import { validate } from "../middleware/validate.middleware";
+import { StrategyOptions, auth } from "../middleware/auth.middleware";
 
+const router = express.Router();
 /**
  * @swagger
  * /recipes/:
@@ -26,7 +28,11 @@ import { validate } from "../middleware/validate.middleware";
  *             type: string
  */
 
-router.route("/").get(authorize(), RecipesController.getUserRecipes);
+router.get(
+  "/",
+  auth.authenticate([StrategyOptions.Bearer]),
+  RecipesController.getUserRecipes
+);
 
 /**
  * @swagger

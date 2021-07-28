@@ -2,8 +2,9 @@ import passport from "passport";
 import bcrypt from "bcryptjs";
 import { User } from "../model/userModel";
 import { BasicStrategy } from "passport-http";
+import { Strategy, ExtractJwt } from "passport-jwt";
 
-enum Strategy {
+enum StrategyOptions {
   Basic = "basic",
   Bearer = "bearer",
 }
@@ -23,12 +24,32 @@ const basicStrategy = new BasicStrategy(async (login, password, done) => {
   }
 });
 
-passport.use(Strategy.Basic, basicStrategy);
+const BearerStrategy = new Strategy(
+  {
+    jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+    secretOrKey: process.env.JWT_SECRET,
+    algorithms: ["HS256"],
+  },
+  async (payload, done) => {
+    try {
+      const user = await User.findById(payload.id);
+      if (user) {
+        return done(null, user);
+      }
+      return done(null, false);
+    } catch (err) {
+      done(err, null);
+    }
+  }
+);
+
+passport.use(StrategyOptions.Basic, basicStrategy);
+passport.use(StrategyOptions.Bearer, BearerStrategy);
 
 const auth = {
-  authenticate: (strategies: Array<Strategy>) => {
+  authenticate: (strategies: Array<StrategyOptions>) => {
     return passport.authenticate(strategies, { session: false });
   },
 };
 
-export { Strategy, auth };
+export { StrategyOptions, auth };
