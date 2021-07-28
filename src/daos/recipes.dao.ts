@@ -34,7 +34,7 @@ class RecipesDao {
 
   async updateRecipe(id: string, updateRecipeBody: IRecipe) {
     const name = updateRecipeBody.name;
-    let { type, photo, recipe } = updateRecipeBody;
+    const { type, photo, recipe } = updateRecipeBody;
     const recipeToUpdate = await Recipe.findByIdAndUpdate(
       id,
       {
@@ -50,7 +50,7 @@ class RecipesDao {
   }
 
   async removeByIdRecipe(id: string) {
-    const tak = await Recipe.findByIdAndRemove(id);
+    Recipe.findByIdAndRemove(id);
 
     return `${id} Removed`;
   }

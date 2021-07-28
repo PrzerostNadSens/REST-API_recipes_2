@@ -10,7 +10,9 @@
     "start:development": "ts-node src/index.ts",
     "start:debug": "node --nolazy --inspect=8089 -r ts-node/register ./src/index.ts",
     "test": "nyc --reporter=text-summary --reporter=text ts-mocha $(find . -path ./node_modules -prune -o -name '*.spec.ts') --timeout 20000 --exit",
-    "prettier-format": "prettier --config .prettierrc 'src/**/*.ts' --write"
+    "prettier": "prettier --write \"src/**/*.{ts,js}?(x)\"",
+    "lint": "eslint --ext 'js,ts' .",
+    "lint:fix": "eslint --ext 'js,ts' --fix ."
   },
   "repository": {
     "type": "git",

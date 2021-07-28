@@ -18,7 +18,3 @@ export function init(): void {
   );
   mongoose.connection.on('error', error => console.log('mongoose error!', error));
 }
-
-export function isValidId(id: string) {
-  return mongoose.Types.ObjectId.isValid(id);
-}
