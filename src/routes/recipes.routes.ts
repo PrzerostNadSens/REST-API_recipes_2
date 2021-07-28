@@ -58,13 +58,12 @@ router.get(
  *             type: string
  */
 
-router
-  .route("/")
-  .post(
-    authorize(),
-    validate(validateCreateRecipe),
-    RecipesController.createRecipe
-  );
+router.post(
+  "/",
+  auth.authenticate([StrategyOptions.Bearer]),
+  validate(validateCreateRecipe),
+  RecipesController.createRecipe
+);
 
 /**
  * @swagger
@@ -84,9 +83,12 @@ router
  *             type: string
  */
 
-router
-  .route("/all")
-  .get(authorize(Role.Admin as any), RecipesController.getAllRecipe);
+router.get(
+  "/all",
+  auth.authenticate([StrategyOptions.Bearer]),
+  authorize(Role.Admin as any),
+  RecipesController.getAllRecipe
+);
 
 /**
  * @swagger
@@ -112,7 +114,11 @@ router
  *             type: string
  */
 
-router.route("/:recipe_id").get(authorize(), RecipesController.findByIdRecipe);
+router.get(
+  "/:recipe_id",
+  auth.authenticate([StrategyOptions.Bearer]),
+  RecipesController.findByIdRecipe
+);
 
 /**
  * @swagger
@@ -142,13 +148,12 @@ router.route("/:recipe_id").get(authorize(), RecipesController.findByIdRecipe);
  *           id:
  *             type: string
  */
-router
-  .route("/:recipe_id")
-  .put(
-    authorize(),
-    validate(validateUpdateRecipe),
-    RecipesController.updateRecipe
-  );
+
+router.put(
+  "/:recipe_id",
+  auth.authenticate([StrategyOptions.Bearer]),
+  RecipesController.updateRecipe
+);
 
 /**
  * @swagger
@@ -174,9 +179,11 @@ router
  *             type: string
  */
 
-router
-  .route("/:recipe_id")
-  .delete(authorize(), RecipesController.removeByIdRecipe);
+router.delete(
+  "/:recipe_id",
+  auth.authenticate([StrategyOptions.Bearer]),
+  RecipesController.removeByIdRecipe
+);
 
 export default router;
 
