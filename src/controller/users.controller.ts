@@ -1,7 +1,7 @@
-import { Request, Response, NextFunction } from "express";
-import { matchedData } from "express-validator";
-import { IUser, UserDocument } from "../model/userModel";
-import UsersService from "../service/users.service";
+import { Request, Response, NextFunction } from 'express';
+import { matchedData } from 'express-validator';
+import { IUser, UserDocument } from '../model/userModel';
+import UsersService from '../service/users.service';
 
 class UsersController {
   async createUser(req: Request, res: Response): Promise<Response> {
@@ -16,15 +16,11 @@ class UsersController {
     }
   }
 
-  async generateToken(
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ): Promise<void> {
+  async generateToken(req: Request, res: Response, next: NextFunction): Promise<void> {
     const user = <UserDocument>req.user;
 
     UsersService.generateToken(user)
-      .then((jwtToken) => {
+      .then(jwtToken => {
         res.json(jwtToken);
       })
       .catch(next);

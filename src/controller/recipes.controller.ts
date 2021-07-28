@@ -1,7 +1,7 @@
-import { Recipe, OmitIRecipe } from "../model/recipeModel";
-import { Request, Response } from "express";
-import { returnId, AuthorizedRequest } from "../mongodb/authorize";
-import RecipesService from "../service/recipes.service";
+import { Recipe, OmitIRecipe } from '../model/recipeModel';
+import { Request, Response } from 'express';
+import { returnId, AuthorizedRequest } from '../mongodb/authorize';
+import RecipesService from '../service/recipes.service';
 
 class RecipesController {
   async createRecipe(req: Request, res: Response): Promise<Response> {
@@ -15,10 +15,7 @@ class RecipesController {
     }
   }
 
-  async getUserRecipes(
-    req: AuthorizedRequest,
-    res: Response
-  ): Promise<Response> {
+  async getUserRecipes(req: AuthorizedRequest, res: Response): Promise<Response> {
     try {
       const userId = returnId(req);
       const filter: OmitIRecipe = req.query;
@@ -53,7 +50,7 @@ class RecipesController {
         });
       }
       if (recipe.added_by != userId) {
-        return res.status(401).json({ message: "Unauthorized" });
+        return res.status(401).json({ message: 'Unauthorized' });
       }
 
       return res.status(200).send(recipe);
@@ -74,7 +71,7 @@ class RecipesController {
         });
       }
       if (recipe.added_by != userId) {
-        return res.status(401).json({ message: "Unauthorized" });
+        return res.status(401).json({ message: 'Unauthorized' });
       }
       const newRecipe = await RecipesService.update(id, req.body);
 
@@ -96,7 +93,7 @@ class RecipesController {
         });
       }
       if (recipe.added_by != userId) {
-        return res.status(401).json({ message: "Unauthorized" });
+        return res.status(401).json({ message: 'Unauthorized' });
       }
       const message = await RecipesService.remove(id);
 

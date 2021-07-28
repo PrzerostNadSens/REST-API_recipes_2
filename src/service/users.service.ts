@@ -1,6 +1,6 @@
-import UsersDao from "../daos/users.dao";
-import { IUser, UserDocument } from "../model/userModel";
-import bcrypt from "bcryptjs";
+import UsersDao from '../daos/users.dao';
+import { IUser, UserDocument } from '../model/userModel';
+import bcrypt from 'bcryptjs';
 class UsersService {
   async create(resource: IUser): Promise<string> {
     const newUser: IUser = resource;

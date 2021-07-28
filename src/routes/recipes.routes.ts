@@ -1,13 +1,10 @@
-import express from "express";
-import Role from "../mongodb/role";
-import { authorize } from "../mongodb/authorize";
-import RecipesController from "../controller/recipes.controller";
-import {
-  validateCreateRecipe,
-  validateUpdateRecipe,
-} from "../validators/validate.middleware";
-import { validate } from "../middleware/validate.middleware";
-import { StrategyOptions, auth } from "../middleware/auth.middleware";
+import express from 'express';
+import Role from '../mongodb/role';
+import { authorize } from '../mongodb/authorize';
+import RecipesController from '../controller/recipes.controller';
+import { validateCreateRecipe } from '../validators/validate.middleware';
+import { validate } from '../middleware/validate.middleware';
+import { StrategyOptions, auth } from '../middleware/auth.middleware';
 
 const router = express.Router();
 /**
@@ -28,11 +25,7 @@ const router = express.Router();
  *             type: string
  */
 
-router.get(
-  "/",
-  auth.authenticate([StrategyOptions.Bearer]),
-  RecipesController.getUserRecipes
-);
+router.get('/', auth.authenticate([StrategyOptions.Bearer]), RecipesController.getUserRecipes);
 
 /**
  * @swagger
@@ -59,10 +52,10 @@ router.get(
  */
 
 router.post(
-  "/",
+  '/',
   auth.authenticate([StrategyOptions.Bearer]),
   validate(validateCreateRecipe),
-  RecipesController.createRecipe
+  RecipesController.createRecipe,
 );
 
 /**
@@ -84,10 +77,10 @@ router.post(
  */
 
 router.get(
-  "/all",
+  '/all',
   auth.authenticate([StrategyOptions.Bearer]),
   authorize(Role.Admin as any),
-  RecipesController.getAllRecipe
+  RecipesController.getAllRecipe,
 );
 
 /**
@@ -114,11 +107,7 @@ router.get(
  *             type: string
  */
 
-router.get(
-  "/:recipeId",
-  auth.authenticate([StrategyOptions.Bearer]),
-  RecipesController.findByIdRecipe
-);
+router.get('/:recipeId', auth.authenticate([StrategyOptions.Bearer]), RecipesController.findByIdRecipe);
 
 /**
  * @swagger
@@ -149,11 +138,7 @@ router.get(
  *             type: string
  */
 
-router.put(
-  "/:recipeId",
-  auth.authenticate([StrategyOptions.Bearer]),
-  RecipesController.updateRecipe
-);
+router.put('/:recipeId', auth.authenticate([StrategyOptions.Bearer]), RecipesController.updateRecipe);
 
 /**
  * @swagger
@@ -179,11 +164,7 @@ router.put(
  *             type: string
  */
 
-router.delete(
-  "/:recipeId",
-  auth.authenticate([StrategyOptions.Bearer]),
-  RecipesController.removeByIdRecipe
-);
+router.delete('/:recipeId', auth.authenticate([StrategyOptions.Bearer]), RecipesController.removeByIdRecipe);
 
 export default router;
 

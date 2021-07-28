@@ -1,5 +1,4 @@
-import mongoose, { Document } from "mongoose";
-const Schema = mongoose.Schema;
+import { Schema, Document, model } from 'mongoose';
 
 export interface IUser {
   first_name: string;
@@ -21,7 +20,7 @@ const schema = new Schema({
   role: { type: String, required: true },
 });
 
-schema.set("toJSON", {
+schema.set('toJSON', {
   virtuals: true,
   versionKey: false,
   transform: function (doc: unknown, ret: UserDocument) {
@@ -30,4 +29,4 @@ schema.set("toJSON", {
   },
 });
 
-export const User = mongoose.model<UserDocument>("User", schema);
+export const User = model<UserDocument>('User', schema);

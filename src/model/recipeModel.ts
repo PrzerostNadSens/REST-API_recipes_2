@@ -1,5 +1,4 @@
-import mongoose, { Document } from "mongoose";
-const Schema = mongoose.Schema;
+import { Schema, Document, model } from 'mongoose';
 export interface IRecipe {
   name: string;
   type: string;
@@ -10,16 +9,13 @@ export interface IRecipe {
 
 export interface RecipeDocument extends IRecipe, Document {}
 
-export type OmitIRecipe = Omit<IRecipe, "name" | "type" | "photo" | "recipe">;
+export type OmitIRecipe = Omit<IRecipe, 'name' | 'type' | 'photo' | 'recipe'>;
 
-export function PartialIRecipe(
-  recipe: OmitIRecipe,
-  fieldsToUpdate: Partial<OmitIRecipe>
-) {
+export function PartialIRecipe(recipe: OmitIRecipe, fieldsToUpdate: Partial<OmitIRecipe>) {
   return { ...recipe, ...fieldsToUpdate };
 }
 
-const recipeSchema = new mongoose.Schema({
+const recipeSchema = new Schema({
   name: {
     type: String,
     required: true,
@@ -40,7 +36,7 @@ const recipeSchema = new mongoose.Schema({
   },
 });
 
-recipeSchema.set("toJSON", {
+recipeSchema.set('toJSON', {
   virtuals: true,
   versionKey: false,
   transform: function (doc: unknown, ret: RecipeDocument) {
@@ -49,4 +45,4 @@ recipeSchema.set("toJSON", {
   },
 });
 
-export const Recipe = mongoose.model<RecipeDocument>("Recipe", recipeSchema);
+export const Recipe = model<RecipeDocument>('Recipe', recipeSchema);
