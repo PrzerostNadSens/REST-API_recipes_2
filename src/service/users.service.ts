@@ -11,7 +11,7 @@ class UsersService {
     return id;
   }
 
-  async generateToken(user: UserDocument): Promise<string> {
+  async generateToken(user: UserDocument): Promise<object> {
     return UsersDao.generateToken(user);
   }
 }

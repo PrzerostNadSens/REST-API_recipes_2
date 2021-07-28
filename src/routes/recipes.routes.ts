@@ -188,4 +188,5 @@ export default router;
  *     required:
  *       - id
  *       - name
+ *       - recipe
  */

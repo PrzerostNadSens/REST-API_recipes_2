@@ -18,7 +18,7 @@ const router = express.Router();
  *     parameters:
  *       - in: body
  *         name: user
- *         description: Required Admin or User in role.
+ *         description: "Required Admin or User in role.\nThe password must not be shorter than 8 characters.\nMust contain at least one character from each of the following groups: \nLowercase, \nUppercase, \nNumbers, \nSpecial signs.\n\nExample: Trudne.haslo1"
  *         schema:
  *           $ref: '#/definitions/User'
  *
@@ -38,19 +38,17 @@ router.post('/', validate(validateUserRegister), UsersController.createUser);
  *   post:
  *     tags:
  *       - user
- *     description: Sign in as customer or admin
+ *     description: Sign in as customer or admin with Basic Auth
  *     produces:
  *       - application/json
- *     parameters:
- *       - name: body
- *         description:
- *         required: true
- *         in: body
- *         properties:
- *           login:
- *             type: string
- *           password:
- *              type: string
+ *     components:
+ *       securitySchemes:
+ *         basicAuth:
+ *           type: http
+ *           scheme: basic
+ *     security:
+ *       - basicAuth: []
+ *
  *
  *     responses:
  *       200:
