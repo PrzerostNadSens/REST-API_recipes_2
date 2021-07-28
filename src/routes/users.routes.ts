@@ -38,19 +38,17 @@ router.post("/", validate(validateUserRegister), UsersController.createUser);
  *   post:
  *     tags:
  *       - user
- *     description: Sign in as customer or admin
+ *     description: Sign in as customer or admin with Basic Auth
  *     produces:
  *       - application/json
- *     parameters:
- *       - name: body
- *         description:
- *         required: true
- *         in: body
- *         properties:
- *           login:
- *             type: string
- *           password:
- *              type: string
+ *     components:
+ *       securitySchemes:
+ *         basicAuth:
+ *           type: http
+ *           scheme: basic
+ *     security:
+ *       - basicAuth: []
+ *
  *
  *     responses:
  *       200:
