@@ -18,7 +18,7 @@ const router = express.Router();
  *     parameters:
  *       - in: body
  *         name: user
- *         description: Required Admin or User in role.
+ *         description: "Required Admin or User in role.\nThe password must not be shorter than 8 characters.\nMust contain at least one character from each of the following groups: \nLowercase, \nUppercase, \nNumbers, \nSpecial signs.\n\nExample: Trudne.haslo1"
  *         schema:
  *           $ref: '#/definitions/User'
  *
