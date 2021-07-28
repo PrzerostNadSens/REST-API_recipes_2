@@ -1,4 +1,4 @@
-import { faker } from "../test.config";
+import { faker } from '../test.config';
 
 export const createUserPayload = {
   first_name: faker.name.firstName(),
@@ -6,5 +6,5 @@ export const createUserPayload = {
   login: faker.name.firstName(),
   email: faker.internet.email(),
   password: faker.internet.password(),
-  role: "Admin",
+  role: 'Admin'
 };

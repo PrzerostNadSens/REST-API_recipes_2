@@ -1,4 +1,4 @@
-import mongoose, { Document } from "mongoose";
+import mongoose, { Document } from 'mongoose';
 const Schema = mongoose.Schema;
 export interface IRecipe {
   name: string;
@@ -10,7 +10,7 @@ export interface IRecipe {
 
 export interface RecipeDocument extends IRecipe, Document {}
 
-export type OmitIRecipe = Omit<IRecipe, "name" | "type" | "photo" | "recipe">;
+export type OmitIRecipe = Omit<IRecipe, 'name' | 'type' | 'photo' | 'recipe'>;
 
 export function PartialIRecipe(
   recipe: OmitIRecipe,
@@ -22,31 +22,31 @@ export function PartialIRecipe(
 const recipeSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: true,
+    required: true
   },
   type: {
-    type: String,
+    type: String
   },
   photo: {
-    type: String,
+    type: String
   },
   recipe: {
     type: String,
-    required: true,
+    required: true
   },
   added_by: {
     type: String,
-    required: true,
-  },
+    required: true
+  }
 });
 
-recipeSchema.set("toJSON", {
+recipeSchema.set('toJSON', {
   virtuals: true,
   versionKey: false,
   transform: function (doc: unknown, ret: RecipeDocument) {
     delete ret._id;
     delete ret.added_by;
-  },
+  }
 });
 
-export const Recipe = mongoose.model<RecipeDocument>("Recipe", recipeSchema);
+export const Recipe = mongoose.model<RecipeDocument>('Recipe', recipeSchema);

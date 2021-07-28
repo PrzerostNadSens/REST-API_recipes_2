@@ -1,7 +1,7 @@
-import { Request, Response, NextFunction } from "express";
-import { matchedData } from "express-validator";
-import { IUser, UserDocument } from "../model/userModel";
-import UsersService from "../service/users.service";
+import { Request, Response, NextFunction } from 'express';
+import { matchedData } from 'express-validator';
+import { IUser, UserDocument } from '../model/userModel';
+import UsersService from '../service/users.service';
 
 class UsersController {
   async createUser(req: Request, res: Response): Promise<Response> {

@@ -1,13 +1,13 @@
-import express from "express";
-import Role from "../mongodb/role";
-import { authorize } from "../mongodb/authorize";
-import RecipesController from "../controller/recipes.controller";
+import express from 'express';
+import Role from '../mongodb/role';
+import { authorize } from '../mongodb/authorize';
+import RecipesController from '../controller/recipes.controller';
 import {
   validateCreateRecipe,
-  validateUpdateRecipe,
-} from "../validators/validate.middleware";
-import { validate } from "../middleware/validate.middleware";
-import { StrategyOptions, auth } from "../middleware/auth.middleware";
+  validateUpdateRecipe
+} from '../validators/validate.middleware';
+import { validate } from '../middleware/validate.middleware';
+import { StrategyOptions, auth } from '../middleware/auth.middleware';
 
 const router = express.Router();
 /**
@@ -29,7 +29,7 @@ const router = express.Router();
  */
 
 router.get(
-  "/",
+  '/',
   auth.authenticate([StrategyOptions.Bearer]),
   RecipesController.getUserRecipes
 );
@@ -59,7 +59,7 @@ router.get(
  */
 
 router.post(
-  "/",
+  '/',
   auth.authenticate([StrategyOptions.Bearer]),
   validate(validateCreateRecipe),
   RecipesController.createRecipe
@@ -84,7 +84,7 @@ router.post(
  */
 
 router.get(
-  "/all",
+  '/all',
   auth.authenticate([StrategyOptions.Bearer]),
   authorize(Role.Admin as any),
   RecipesController.getAllRecipe
@@ -115,7 +115,7 @@ router.get(
  */
 
 router.get(
-  "/:recipeId",
+  '/:recipeId',
   auth.authenticate([StrategyOptions.Bearer]),
   RecipesController.findByIdRecipe
 );
@@ -150,7 +150,7 @@ router.get(
  */
 
 router.put(
-  "/:recipeId",
+  '/:recipeId',
   auth.authenticate([StrategyOptions.Bearer]),
   RecipesController.updateRecipe
 );
@@ -180,7 +180,7 @@ router.put(
  */
 
 router.delete(
-  "/:recipeId",
+  '/:recipeId',
   auth.authenticate([StrategyOptions.Bearer]),
   RecipesController.removeByIdRecipe
 );

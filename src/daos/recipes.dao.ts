@@ -1,10 +1,10 @@
-import debug from "debug";
-import { Recipe, IRecipe, OmitIRecipe } from "../model/recipeModel";
-const log: debug.IDebugger = debug("app:in-memory-dao");
+import debug from 'debug';
+import { Recipe, IRecipe, OmitIRecipe } from '../model/recipeModel';
+const log: debug.IDebugger = debug('app:in-memory-dao');
 
 class RecipesDao {
   constructor() {
-    log("Created new instance of RecipesDao");
+    log('Created new instance of RecipesDao');
   }
 
   async createRecipe(createRecipeBody: IRecipe) {
@@ -41,7 +41,7 @@ class RecipesDao {
         name,
         type,
         photo,
-        recipe,
+        recipe
       },
       { omitUndefined: true, new: true }
     );

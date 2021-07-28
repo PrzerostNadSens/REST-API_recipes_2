@@ -1,5 +1,5 @@
-import express from "express";
-import { validationResult, ValidationChain } from "express-validator";
+import express from 'express';
+import { validationResult, ValidationChain } from 'express-validator';
 
 export const validate = (validations: ValidationChain[]) => {
   return async (
