@@ -16,33 +16,14 @@ class UsersController {
     }
   }
 
-  async authenticateSchema(req: Request, res: Response, next: NextFunction) {
-    try {
-      const { login, password } = <IUser>matchedData(req);
-
-      UsersService.validateRequest(login, password!, next);
-    } catch (e) {
-      if (e.code(401)) {
-        return res.status(401).send(
-          e.message({
-            message: `Validation error: ${e.details
-              .map((x: any) => x.message)
-              .join(", ")}`,
-          })
-        );
-      }
-      return res.status(500).send(e.message);
-    }
-  }
-
-  async authenticate(
+  async generateToken(
     req: Request,
     res: Response,
     next: NextFunction
   ): Promise<void> {
     const user = <UserDocument>req.user;
 
-    UsersService.authenticate(user)
+    UsersService.generateToken(user)
       .then((jwtToken) => {
         res.json(jwtToken);
       })

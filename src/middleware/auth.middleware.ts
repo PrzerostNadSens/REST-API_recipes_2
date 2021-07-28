@@ -24,7 +24,7 @@ const basicStrategy = new BasicStrategy(async (login, password, done) => {
   }
 });
 
-const BearerStrategy = new Strategy(
+const bearerStrategy = new Strategy(
   {
     jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
     secretOrKey: process.env.JWT_SECRET,
@@ -44,7 +44,7 @@ const BearerStrategy = new Strategy(
 );
 
 passport.use(StrategyOptions.Basic, basicStrategy);
-passport.use(StrategyOptions.Bearer, BearerStrategy);
+passport.use(StrategyOptions.Bearer, bearerStrategy);
 
 const auth = {
   authenticate: (strategies: Array<StrategyOptions>) => {

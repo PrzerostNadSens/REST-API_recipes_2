@@ -2,24 +2,15 @@ import jwt from "jsonwebtoken";
 import { IUser, User, UserDocument } from "../model/userModel";
 
 class UsersDao {
-  async createUser(createUserBody: IUser) {
-    const userToSave = new User(createUserBody);
-    await userToSave.save();
-    return userToSave.id;
+  public createUser(createUserBody: IUser): Promise<UserDocument> {
+    return new User(createUserBody).save();
   }
 
-  async authenticateUser(user: UserDocument) {
-    const jwtToken = Token(user);
-    return {
-      jwtToken,
-    };
+  async generateToken(user: UserDocument): Promise<string> {
+    return jwt.sign({ sub: user.id, id: user.id }, process.env.JWT_SECRET!, {
+      expiresIn: "15m",
+    });
   }
-}
-
-function Token(user: UserDocument) {
-  return jwt.sign({ sub: user.id, id: user.id }, process.env.JWT_SECRET!, {
-    expiresIn: "15m",
-  });
 }
 
 export default new UsersDao();
