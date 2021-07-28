@@ -1,4 +1,4 @@
-const router = require("express").Router();
+import express from "express";
 import Role from "../mongodb/role";
 import { authorize } from "../mongodb/authorize";
 import RecipesController from "../controller/recipes.controller";
@@ -7,7 +7,9 @@ import {
   validateUpdateRecipe,
 } from "../validators/validate.middleware";
 import { validate } from "../middleware/validate.middleware";
+import { StrategyOptions, auth } from "../middleware/auth.middleware";
 
+const router = express.Router();
 /**
  * @swagger
  * /recipes/:
@@ -26,7 +28,11 @@ import { validate } from "../middleware/validate.middleware";
  *             type: string
  */
 
-router.route("/").get(authorize(), RecipesController.getUserRecipes);
+router.get(
+  "/",
+  auth.authenticate([StrategyOptions.Bearer]),
+  RecipesController.getUserRecipes
+);
 
 /**
  * @swagger
@@ -52,13 +58,12 @@ router.route("/").get(authorize(), RecipesController.getUserRecipes);
  *             type: string
  */
 
-router
-  .route("/")
-  .post(
-    authorize(),
-    validate(validateCreateRecipe),
-    RecipesController.createRecipe
-  );
+router.post(
+  "/",
+  auth.authenticate([StrategyOptions.Bearer]),
+  validate(validateCreateRecipe),
+  RecipesController.createRecipe
+);
 
 /**
  * @swagger
@@ -68,7 +73,7 @@ router
  *       - recipe
  *     description: displaying all recipes available only for logged in administrator
  *     produces:
- *       - application/json
+ *       - application/jsons
  *
  *     responses:
  *       200:
@@ -78,9 +83,12 @@ router
  *             type: string
  */
 
-router
-  .route("/all")
-  .get(authorize(Role.Admin as any), RecipesController.getAllRecipe);
+router.get(
+  "/all",
+  auth.authenticate([StrategyOptions.Bearer]),
+  authorize(Role.Admin as any),
+  RecipesController.getAllRecipe
+);
 
 /**
  * @swagger
@@ -106,7 +114,11 @@ router
  *             type: string
  */
 
-router.route("/:recipe_id").get(authorize(), RecipesController.findByIdRecipe);
+router.get(
+  "/:recipeId",
+  auth.authenticate([StrategyOptions.Bearer]),
+  RecipesController.findByIdRecipe
+);
 
 /**
  * @swagger
@@ -136,13 +148,12 @@ router.route("/:recipe_id").get(authorize(), RecipesController.findByIdRecipe);
  *           id:
  *             type: string
  */
-router
-  .route("/:recipe_id")
-  .put(
-    authorize(),
-    validate(validateUpdateRecipe),
-    RecipesController.updateRecipe
-  );
+
+router.put(
+  "/:recipeId",
+  auth.authenticate([StrategyOptions.Bearer]),
+  RecipesController.updateRecipe
+);
 
 /**
  * @swagger
@@ -168,9 +179,11 @@ router
  *             type: string
  */
 
-router
-  .route("/:recipe_id")
-  .delete(authorize(), RecipesController.removeByIdRecipe);
+router.delete(
+  "/:recipeId",
+  auth.authenticate([StrategyOptions.Bearer]),
+  RecipesController.removeByIdRecipe
+);
 
 export default router;
 
