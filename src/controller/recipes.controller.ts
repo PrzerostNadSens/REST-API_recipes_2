@@ -49,7 +49,7 @@ class RecipesController {
           message: `The recipe with the given id: ${id} does not exist`,
         });
       }
-      if (recipe.added_by != userId) {
+      if (recipe.added_by !== userId) {
         return res.status(401).json({ message: 'Unauthorized' });
       }
 
@@ -70,7 +70,7 @@ class RecipesController {
           message: `The recipe with the given id: ${id} does not exist`,
         });
       }
-      if (recipe.added_by != userId) {
+      if (recipe.added_by !== userId) {
         return res.status(401).json({ message: 'Unauthorized' });
       }
       const newRecipe = await RecipesService.update(id, req.body);
@@ -92,7 +92,8 @@ class RecipesController {
           message: `The recipe with the given id: ${id} does not exist`,
         });
       }
-      if (recipe.added_by != userId) {
+
+      if (recipe.added_by !== userId) {
         return res.status(401).json({ message: 'Unauthorized' });
       }
       const message = await RecipesService.remove(id);
