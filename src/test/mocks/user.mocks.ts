@@ -1,10 +1,45 @@
 import { faker } from '../test.config';
+import jwt from 'jsonwebtoken';
 
-export const createUserPayload = {
+import { User } from '../../model/userModel';
+
+const loginTest = 'dotcecdstów';
+const passwordTest = 'tdfgdfgsgdfsdA.11';
+
+const createUserPayload = {
   first_name: faker.name.firstName(),
   last_name: faker.name.lastName(),
-  login: faker.name.firstName(),
+  login: faker.internet.userName(),
   email: faker.internet.email(),
-  password: faker.internet.password(),
+  password: 'Trudne.haslo12',
   role: 'Admin',
 };
+
+const createUserPayloadTest = {
+  first_name: faker.name.firstName(),
+  last_name: faker.name.lastName(),
+  login: loginTest,
+  email: faker.internet.email(),
+  password: '$2a$10$KrUPzb1p6PPBylea/JrGIe/0shAQmlcFppB9w8Ydzw2irEPTsjOfq',
+  role: 'Admin',
+};
+
+const generateToken = async function () {
+  const user = await createUserTest();
+  const { _id } = user;
+  const tokenActivityTime = '2h';
+  const Token = jwt.sign({ sub: _id, id: _id }, process.env.JWT_SECRET!, {
+    expiresIn: tokenActivityTime,
+  });
+  return { Token, _id };
+};
+
+const createUserTest = function () {
+  return new User(createUserPayloadTest).save();
+};
+
+const deleteAllUsers = function () {
+  return User.deleteMany();
+};
+
+export { createUserPayload, generateToken, loginTest, passwordTest, createUserTest, deleteAllUsers };
