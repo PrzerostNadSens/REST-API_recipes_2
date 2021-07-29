@@ -1,4 +1,4 @@
-import { Recipe, OmitIRecipe } from '../model/recipeModel';
+import { Recipe, OmitIRecipe } from '../model/recipe.model';
 import { Request, Response } from 'express';
 import { returnId, AuthorizedRequest } from '../mongodb/authorize';
 import RecipesService from '../service/recipes.service';
@@ -34,7 +34,9 @@ class RecipesController {
 
       return res.send(recipes);
     } catch (e) {
-      return res.status(500).send(e.message);
+      return res.status(500).json({
+        message: `${e.message}`,
+      });
     }
   }
 
@@ -55,7 +57,9 @@ class RecipesController {
 
       return res.status(200).send(recipe);
     } catch (e) {
-      return res.status(500).send(e.message);
+      return res.status(500).json({
+        message: `${e.message}`,
+      });
     }
   }
 
@@ -75,9 +79,11 @@ class RecipesController {
       }
       const newRecipe = await RecipesService.update(id, req.body);
 
-      return res.status(201).send(newRecipe);
+      return res.status(200).send(newRecipe);
     } catch (e) {
-      return res.status(500).send(e.message);
+      return res.status(500).json({
+        message: `${e.message}`,
+      });
     }
   }
 
@@ -97,9 +103,11 @@ class RecipesController {
       }
       const message = await RecipesService.remove(id);
 
-      return res.status(200).send({ message });
+      return res.status(204).send({ message });
     } catch (e) {
-      return res.status(500).send(e.message);
+      return res.status(500).json({
+        message: `${e.message}`,
+      });
     }
   }
 }

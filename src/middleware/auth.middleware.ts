@@ -1,6 +1,6 @@
 import passport from 'passport';
 import bcrypt from 'bcryptjs';
-import { User } from '../model/userModel';
+import { User } from '../model/user.model';
 import { BasicStrategy } from 'passport-http';
 import { Strategy, ExtractJwt } from 'passport-jwt';
 

@@ -1,5 +1,5 @@
 import UsersDao from '../daos/users.dao';
-import { IUser, UserDocument } from '../model/userModel';
+import { IUser, UserDocument } from '../model/user.model';
 import bcrypt from 'bcryptjs';
 class UsersService {
   async create(resource: IUser): Promise<string> {

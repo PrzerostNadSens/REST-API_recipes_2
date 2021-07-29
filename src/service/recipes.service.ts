@@ -1,5 +1,5 @@
 import RecipesDao from '../daos/recipes.dao';
-import { IRecipe, PartialIRecipe, OmitIRecipe } from '../model/recipeModel';
+import { IRecipe, PartialIRecipe, OmitIRecipe } from '../model/recipe.model';
 
 class RecipesService {
   async create(resource: IRecipe) {

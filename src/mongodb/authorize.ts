@@ -1,5 +1,5 @@
 import jwt from 'express-jwt';
-import { User } from '../model/userModel';
+import { User } from '../model/user.model';
 import { Request, Response, NextFunction } from 'express';
 
 const secret = process.env.JWT_SECRET!;
