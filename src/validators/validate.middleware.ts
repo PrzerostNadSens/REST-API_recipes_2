@@ -5,8 +5,8 @@ const messageEmpty = 'Field can not be empty!';
 
 const regexEmail = /^[a-z\d]+[\w\d.-]*@(?:[a-z\d]+[a-z\d-]+\.){1,5}[a-z]{2,6}$/i;
 
-const validateFirstName = body('first_name').isString().withMessage(messageString).notEmpty().withMessage(messageEmpty);
-const validateFirstLast = body('last_name').isString().withMessage(messageString).notEmpty().withMessage(messageEmpty);
+const validateFirstName = body('firstName').isString().withMessage(messageString).notEmpty().withMessage(messageEmpty);
+const validateFirstLast = body('lastName').isString().withMessage(messageString).notEmpty().withMessage(messageEmpty);
 const validateLogin = body('login').isString().withMessage(messageString).notEmpty().withMessage(messageEmpty);
 const validateEmail = body('email')
   .isString()

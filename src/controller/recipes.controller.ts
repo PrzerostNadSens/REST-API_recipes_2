@@ -6,7 +6,7 @@ import RecipesService from '../service/recipes.service';
 class RecipesController {
   async createRecipe(req: Request, res: Response): Promise<Response> {
     try {
-      req.body.added_by = returnId(req);
+      req.body.addedBy = returnId(req);
       const recipeId = await RecipesService.create(req.body);
 
       return res.status(201).send({ id: recipeId });
@@ -51,7 +51,7 @@ class RecipesController {
           message: `The recipe with the given id: ${id} does not exist`,
         });
       }
-      if (recipe.added_by != userId) {
+      if (recipe.addedBy != userId) {
         return res.status(401).json({ message: 'Unauthorized' });
       }
 
@@ -74,7 +74,7 @@ class RecipesController {
           message: `The recipe with the given id: ${id} does not exist`,
         });
       }
-      if (recipe.added_by != userId) {
+      if (recipe.addedBy != userId) {
         return res.status(401).json({ message: 'Unauthorized' });
       }
       const newRecipe = await RecipesService.update(id, req.body);
@@ -98,7 +98,7 @@ class RecipesController {
           message: `The recipe with the given id: ${id} does not exist`,
         });
       }
-      if (recipe.added_by != userId) {
+      if (recipe.addedBy != userId) {
         return res.status(401).json({ message: 'Unauthorized' });
       }
       const message = await RecipesService.remove(id);

@@ -6,7 +6,7 @@ class RecipesService {
     return RecipesDao.createRecipe(resource);
   }
   async get(userId: string, filter: OmitIRecipe) {
-    const fulFilter = PartialIRecipe(filter, { added_by: userId });
+    const fulFilter = PartialIRecipe(filter, { addedBy: userId });
 
     return RecipesDao.getUserRecipes(fulFilter);
   }

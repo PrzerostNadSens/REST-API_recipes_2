@@ -4,7 +4,7 @@ export interface IRecipe {
   type: string;
   photo: string;
   recipe: string;
-  added_by?: string;
+  addedBy?: string;
 }
 
 export interface RecipeDocument extends IRecipe, Document {}
@@ -30,7 +30,7 @@ const recipeSchema = new Schema({
     type: String,
     required: true,
   },
-  added_by: {
+  addedBy: {
     type: String,
     required: true,
   },
@@ -41,7 +41,7 @@ recipeSchema.set('toJSON', {
   versionKey: false,
   transform: function (doc: unknown, ret: RecipeDocument) {
     delete ret._id;
-    delete ret.added_by;
+    delete ret.addedBy;
   },
 });
 
