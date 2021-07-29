@@ -33,7 +33,7 @@ describe('Recipe', function () {
 
   describe('GET /recipes/', function () {
     it('should get recipes', async function () {
-      const response = await chai.request(app).get('/recipes').set('Authorization', token).send(createRecipePayload);
+      const response = await chai.request(app).get('/recipes').set('Authorization', token);
 
       expect(response).to.have.status(200);
       expect(response.error).to.be.false;
@@ -41,13 +41,48 @@ describe('Recipe', function () {
     });
   });
 
+  describe('GET /recipes/all', function () {
+    it('should get all recipes', async function () {
+      const response = await chai.request(app).get('/recipes/all').set('Authorization', token);
+
+      expect(response).to.have.status(200);
+      expect(response.error).to.be.false;
+      expect(response.body).to.not.be.null;
+    });
+  });
   describe('GET /recipes/', function () {
     it('should get recipe by id', async function () {
       const response = await chai
         .request(app)
         .get('/recipes/' + id)
+        .set('Authorization', token);
+
+      expect(response).to.have.status(200);
+      expect(response.error).to.be.false;
+      expect(response.body).to.not.be.null;
+    });
+  });
+
+  describe('PUT/recipes/', function () {
+    it('should put recipe by id', async function () {
+      const response = await chai
+        .request(app)
+        .get('/recipes/' + id)
         .set('Authorization', token)
         .send(createRecipePayload);
+
+      expect(response).to.have.status(200);
+      expect(response.error).to.be.false;
+      expect(response.body).to.not.be.null;
+    });
+  });
+
+  describe('DELETE/recipes/', function () {
+    it('should delete recipe by id', async function () {
+      const response = await chai
+        .request(app)
+        .get('/recipes/' + id)
+        .set('Authorization', token);
 
       expect(response).to.have.status(200);
       expect(response.error).to.be.false;
