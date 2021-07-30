@@ -23,22 +23,25 @@ const testUser = {
   role: 'Admin',
 };
 
-const generateToken = async function () {
-  const { _id } = await createUserTest();
+const generateToken = async function (_id: any) {
   const tokenActivityTime = '2h';
   const token = jwt.sign({ sub: _id, id: _id }, process.env.JWT_SECRET!, {
     expiresIn: tokenActivityTime,
   });
-  return { token, _id };
+  return token;
 };
 
-const { token, _id } = await generateToken();
-const id = _id;
-const bearerToken = `Bearer ${token}`;
+const generateId = async function () {
+  const { _id } = await createUserTest();
+  return _id;
+};
 
-const createUserTest = function (): Promise<UserDocument> {
+const createUserTest = function () {
   return new User(testUser).save();
 };
+const id = generateId();
+const token = generateToken(id);
+const bearerToken = `Bearer ${token}`;
 
 const deleteAllUsers = function () {
   return User.deleteMany();
