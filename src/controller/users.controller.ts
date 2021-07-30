@@ -2,6 +2,10 @@ import { Request, Response, NextFunction } from 'express';
 import { matchedData } from 'express-validator';
 import { IUser, UserDocument } from '../model/user.model';
 import UsersService from '../service/users.service';
+import { StatusCodes } from 'http-status-codes';
+
+const internalServerError = { message: 'Internal Server Error' };
+const notUniqueLogin = { message: 'User with the given login already exists.' };
 
 class UsersController {
   async createUser(req: Request, res: Response): Promise<Response> {
@@ -10,16 +14,12 @@ class UsersController {
 
       const userId = await UsersService.create(data);
 
-      return res.status(201).send({ id: userId });
+      return res.status(StatusCodes.CREATED).send({ id: userId });
     } catch (e) {
       if (e.code == 11000) {
-        return res.status(400).json({
-          message: `${e.message}`,
-        });
+        return res.status(StatusCodes.BAD_REQUEST).json(notUniqueLogin);
       }
-      return res.status(500).json({
-        message: `${e.message}`,
-      });
+      return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(internalServerError);
     }
   }
 

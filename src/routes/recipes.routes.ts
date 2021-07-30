@@ -2,7 +2,7 @@ import express from 'express';
 import Role from '../mongodb/role';
 import { authorize } from '../mongodb/authorize';
 import RecipesController from '../controller/recipes.controller';
-import { validateCreateRecipe } from '../validators/validate.middleware';
+import { validateCreateRecipe, validateUpdateRecipe, validateMongoId } from '../validators/validate.middleware';
 import { validate } from '../middleware/validate.middleware';
 import { StrategyOptions, auth } from '../middleware/auth.middleware';
 
@@ -49,6 +49,9 @@ router.get('/', auth.authenticate([StrategyOptions.Bearer]), RecipesController.g
  *         properties:
  *           id:
  *             type: string
+ *       400:
+ *         description: Bad Request. For example, validation errors.
+ *
  */
 
 router.post(
@@ -74,6 +77,8 @@ router.post(
  *         properties:
  *           id:
  *             type: string
+ *       403:
+ *         description: When a user without administrator rights tries to use this endpoint.
  */
 
 router.get(
@@ -105,9 +110,20 @@ router.get(
  *         properties:
  *           id:
  *             type: string
+ *       400:
+ *         description: Bad Request. For example, giving an id of wrong origin.
+ *       401:
+ *         description: Unauthorized
+ *       404:
+ *         description: The recipe with the given id does not exist.
  */
 
-router.get('/:recipeId', auth.authenticate([StrategyOptions.Bearer]), RecipesController.findByIdRecipe);
+router.get(
+  '/:recipeId',
+  auth.authenticate([StrategyOptions.Bearer]),
+  validate(validateMongoId),
+  RecipesController.findByIdRecipe,
+);
 
 /**
  * @swagger
@@ -131,14 +147,26 @@ router.get('/:recipeId', auth.authenticate([StrategyOptions.Bearer]), RecipesCon
  *           $ref: '#/definitions/Recipe'
  *
  *     responses:
- *       201:
+ *       200:
  *         description: Recipes
  *         properties:
  *           id:
  *             type: string
+ *       400:
+ *         description: Bad Request. For example, giving an id of wrong origin or validation errors.
+ *       401:
+ *         description: Unauthorized
+ *       404:
+ *         description: The recipe with the given id does not exist.
  */
 
-router.put('/:recipeId', auth.authenticate([StrategyOptions.Bearer]), RecipesController.updateRecipe);
+router.put(
+  '/:recipeId',
+  auth.authenticate([StrategyOptions.Bearer]),
+  validate(validateUpdateRecipe),
+  validate(validateMongoId),
+  RecipesController.updateRecipe,
+);
 
 /**
  * @swagger
@@ -157,14 +185,25 @@ router.put('/:recipeId', auth.authenticate([StrategyOptions.Bearer]), RecipesCon
  *           type: string
  *
  *     responses:
- *       200:
+ *       204:
  *         description: Recipes
  *         properties:
  *           id:
  *             type: string
+ *       400:
+ *         description: Bad Request. For example, giving an id of wrong origin.
+ *       401:
+ *         description: Unauthorized
+ *       404:
+ *         description: The recipe with the given id does not exist.
  */
 
-router.delete('/:recipeId', auth.authenticate([StrategyOptions.Bearer]), RecipesController.removeByIdRecipe);
+router.delete(
+  '/:recipeId',
+  auth.authenticate([StrategyOptions.Bearer]),
+  validate(validateMongoId),
+  RecipesController.removeByIdRecipe,
+);
 
 export default router;
 

@@ -1,5 +1,6 @@
 import { chai, expect, app } from '../test.config';
 import { createRecipePayload, createRecipeTest, deleteAllRecipes } from '../mocks/recipe.mocks';
+import { StatusCodes } from 'http-status-codes';
 
 import { bearerToken, id, deleteAllUsers } from '../mocks/user.mocks';
 
@@ -24,7 +25,7 @@ describe('Recipe', function () {
         .set(authorization, bearerToken)
         .send(createRecipePayload);
 
-      expect(response).to.have.status(201);
+      expect(response).to.have.status(StatusCodes.CREATED);
       expect(response.error).to.be.false;
       expect(response.body).to.not.be.null;
     });
@@ -34,7 +35,7 @@ describe('Recipe', function () {
     it('should get recipes', async function () {
       const response = await chai.request(app).get('/recipes').set(authorization, bearerToken);
 
-      expect(response).to.have.status(200);
+      expect(response).to.have.status(StatusCodes.OK);
       expect(response.error).to.be.false;
       expect(response.body).to.not.be.null;
     });
@@ -44,7 +45,7 @@ describe('Recipe', function () {
     it('should get all recipes', async function () {
       const response = await chai.request(app).get('/recipes/all').set(authorization, bearerToken);
 
-      expect(response).to.have.status(200);
+      expect(response).to.have.status(StatusCodes.OK);
       expect(response.error).to.be.false;
       expect(response.body).to.not.be.null;
     });
@@ -56,7 +57,7 @@ describe('Recipe', function () {
         .get('/recipes/' + id)
         .set(authorization, bearerToken);
 
-      expect(response).to.have.status(200);
+      expect(response).to.have.status(StatusCodes.OK);
       expect(response.error).to.be.false;
       expect(response.body).to.not.be.null;
     });
@@ -70,7 +71,7 @@ describe('Recipe', function () {
         .set(authorization, bearerToken)
         .send(createRecipePayload);
 
-      expect(response).to.have.status(200);
+      expect(response).to.have.status(StatusCodes.OK);
       expect(response.error).to.be.false;
       expect(response.body).to.not.be.null;
     });
@@ -83,7 +84,7 @@ describe('Recipe', function () {
         .get('/recipes/' + id)
         .set(authorization, bearerToken);
 
-      expect(response).to.have.status(200);
+      expect(response).to.have.status(StatusCodes.OK);
       expect(response.error).to.be.false;
       expect(response.body).to.not.be.null;
     });

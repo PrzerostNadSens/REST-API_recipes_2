@@ -1,9 +1,14 @@
-import { body, ValidationChain } from 'express-validator';
+import { body, param, ValidationChain } from 'express-validator';
 
 const messageString = 'Field must be a string!';
 const messageEmpty = 'Field can not be empty!';
+const messageMongoId = 'Field must by mongoId!';
 
 const regexEmail = /^[a-z\d]+[\w\d.-]*@(?:[a-z\d]+[a-z\d-]+\.){1,5}[a-z]{2,6}$/i;
+
+const validateRecipeId = param('recipeId').isMongoId().withMessage(messageMongoId);
+
+export const validateMongoId: ValidationChain[] = [validateRecipeId];
 
 const validateFirstName = body('firstName').isString().withMessage(messageString).notEmpty().withMessage(messageEmpty);
 const validateFirstLast = body('lastName').isString().withMessage(messageString).notEmpty().withMessage(messageEmpty);

@@ -3,7 +3,11 @@ import { Request, Response } from 'express';
 import { returnId, AuthorizedRequest } from '../mongodb/authorize';
 import RecipesService from '../service/recipes.service';
 import { matchedData } from 'express-validator';
+import { StatusCodes } from 'http-status-codes';
 
+const unauthorized = { message: 'Unauthorized' };
+const notFound = { message: `The recipe with the given id does not exist.` };
+const internalServerError = { message: 'Internal Server Error' };
 class RecipesController {
   async createRecipe(req: Request, res: Response): Promise<Response> {
     try {
@@ -11,9 +15,9 @@ class RecipesController {
       data.addedBy = returnId(req);
       const recipeId = await RecipesService.create(data);
 
-      return res.status(201).send({ id: recipeId });
+      return res.status(StatusCodes.CREATED).send({ id: recipeId });
     } catch (e) {
-      return res.status(500).send(e.message);
+      return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(internalServerError);
     }
   }
 
@@ -23,9 +27,9 @@ class RecipesController {
       const filter: OmitIRecipe = req.query;
       const recipe = await RecipesService.get(userId, filter);
 
-      return res.status(200).send(recipe);
+      return res.status(StatusCodes.OK).send(recipe);
     } catch (e) {
-      return res.status(500).send(e.message);
+      return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(internalServerError);
     }
   }
 
@@ -36,9 +40,7 @@ class RecipesController {
 
       return res.send(recipes);
     } catch (e) {
-      return res.status(500).json({
-        message: `${e.message}`,
-      });
+      return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(internalServerError);
     }
   }
 
@@ -49,19 +51,15 @@ class RecipesController {
       const recipe = await RecipesService.findById(id);
 
       if (!recipe) {
-        return res.status(404).json({
-          message: `The recipe with the given id: ${id} does not exist`,
-        });
+        return res.status(StatusCodes.NOT_FOUND).json(notFound);
       }
       if (recipe.addedBy !== userId) {
-        return res.status(401).json({ message: 'Unauthorized' });
+        return res.status(StatusCodes.UNAUTHORIZED).json(unauthorized);
       }
 
-      return res.status(200).send(recipe);
+      return res.status(StatusCodes.OK).send(recipe);
     } catch (e) {
-      return res.status(500).json({
-        message: `${e.message}`,
-      });
+      return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(internalServerError);
     }
   }
 
@@ -72,20 +70,16 @@ class RecipesController {
       const recipe = await Recipe.findById(id);
 
       if (!recipe) {
-        return res.status(404).json({
-          message: `The recipe with the given id: ${id} does not exist`,
-        });
+        return res.status(StatusCodes.NOT_FOUND).json(notFound);
       }
       if (recipe.addedBy !== userId) {
-        return res.status(401).json({ message: 'Unauthorized' });
+        return res.status(StatusCodes.UNAUTHORIZED).json(unauthorized);
       }
       const newRecipe = await RecipesService.update(id, req.body);
 
-      return res.status(200).send(newRecipe);
+      return res.status(StatusCodes.OK).send(newRecipe);
     } catch (e) {
-      return res.status(500).json({
-        message: `${e.message}`,
-      });
+      return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(internalServerError);
     }
   }
 
@@ -96,20 +90,16 @@ class RecipesController {
       const recipe = await Recipe.findById(id);
 
       if (!recipe) {
-        return res.status(404).json({
-          message: `The recipe with the given id: ${id} does not exist`,
-        });
+        return res.status(StatusCodes.NOT_FOUND).json(notFound);
       }
       if (recipe.addedBy !== userId) {
-        return res.status(401).json({ message: 'Unauthorized' });
+        return res.status(StatusCodes.UNAUTHORIZED).json(unauthorized);
       }
       const message = await RecipesService.remove(id);
 
-      return res.status(204).send({ message });
+      return res.status(StatusCodes.NO_CONTENT).send({ message });
     } catch (e) {
-      return res.status(500).json({
-        message: `${e.message}`,
-      });
+      return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(internalServerError);
     }
   }
 }
