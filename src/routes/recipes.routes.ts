@@ -74,6 +74,8 @@ router.post(
  *         properties:
  *           id:
  *             type: string
+ *       401:
+ *         description: When a user without administrator rights tries to use this endpoint.
  */
 
 router.get(
@@ -131,7 +133,7 @@ router.get('/:recipeId', auth.authenticate([StrategyOptions.Bearer]), RecipesCon
  *           $ref: '#/definitions/Recipe'
  *
  *     responses:
- *       201:
+ *       200:
  *         description: Recipes
  *         properties:
  *           id:
@@ -157,7 +159,7 @@ router.put('/:recipeId', auth.authenticate([StrategyOptions.Bearer]), RecipesCon
  *           type: string
  *
  *     responses:
- *       200:
+ *       204:
  *         description: Recipes
  *         properties:
  *           id:
