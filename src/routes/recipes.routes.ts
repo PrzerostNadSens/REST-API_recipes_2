@@ -49,6 +49,8 @@ router.get('/', auth.authenticate([StrategyOptions.Bearer]), RecipesController.g
  *         properties:
  *           id:
  *             type: string
+ *       400:
+ *         description: Bad Request. For example, validation errors.
  *
  */
 
@@ -146,7 +148,7 @@ router.get('/:recipeId', auth.authenticate([StrategyOptions.Bearer]), RecipesCon
  *           id:
  *             type: string
  *       400:
- *         description: Bad Request. For example, giving an id of wrong origin.
+ *         description: Bad Request. For example, giving an id of wrong origin or validation errors.
  *       401:
  *         description: Unauthorized
  *       404:
