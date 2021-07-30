@@ -45,12 +45,19 @@ class RecipesController {
   async findByIdRecipe(req: Request, res: Response): Promise<Response> {
     try {
       const id = req.params.recipeId;
+
+      if (id.length != 24) {
+        return res.status(400).json({
+          message: `Bad Request`,
+        });
+      }
+
       const userId = returnId(req);
       const recipe = await RecipesService.findById(id);
 
       if (!recipe) {
         return res.status(404).json({
-          message: `The recipe with the given id: ${id} does not exist`,
+          message: `The recipe with the given id: ${id} does not exist.`,
         });
       }
       if (recipe.addedBy != userId) {
@@ -68,12 +75,19 @@ class RecipesController {
   async updateRecipe(req: Request, res: Response): Promise<Response> {
     try {
       const id = req.params.recipeId;
+
+      if (id.length != 24) {
+        return res.status(400).json({
+          message: `Bad Request`,
+        });
+      }
+
       const userId = returnId(req);
       const recipe = await Recipe.findById(id);
 
       if (!recipe) {
         return res.status(404).json({
-          message: `The recipe with the given id: ${id} does not exist`,
+          message: `The recipe with the given id: ${id} does not exist.`,
         });
       }
       if (recipe.addedBy != userId) {
@@ -92,12 +106,19 @@ class RecipesController {
   async removeByIdRecipe(req: Request, res: Response): Promise<Response> {
     try {
       const id = req.params.recipeId;
+
+      if (id.length != 24) {
+        return res.status(400).json({
+          message: `Bad Request`,
+        });
+      }
+
       const userId = returnId(req);
       const recipe = await Recipe.findById(id);
 
       if (!recipe) {
         return res.status(404).json({
-          message: `The recipe with the given id: ${id} does not exist`,
+          message: `The recipe with the given id: ${id} does not exist.`,
         });
       }
       if (recipe.addedBy != userId) {

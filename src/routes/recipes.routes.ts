@@ -49,6 +49,7 @@ router.get('/', auth.authenticate([StrategyOptions.Bearer]), RecipesController.g
  *         properties:
  *           id:
  *             type: string
+ *
  */
 
 router.post(
@@ -74,7 +75,7 @@ router.post(
  *         properties:
  *           id:
  *             type: string
- *       401:
+ *       403:
  *         description: When a user without administrator rights tries to use this endpoint.
  */
 
@@ -107,6 +108,12 @@ router.get(
  *         properties:
  *           id:
  *             type: string
+ *       400:
+ *         description: Bad Request. For example, giving an id of wrong origin.
+ *       401:
+ *         description: Unauthorized
+ *       404:
+ *         description: The recipe with the given id does not exist.
  */
 
 router.get('/:recipeId', auth.authenticate([StrategyOptions.Bearer]), RecipesController.findByIdRecipe);
@@ -138,6 +145,12 @@ router.get('/:recipeId', auth.authenticate([StrategyOptions.Bearer]), RecipesCon
  *         properties:
  *           id:
  *             type: string
+ *       400:
+ *         description: Bad Request. For example, giving an id of wrong origin.
+ *       401:
+ *         description: Unauthorized
+ *       404:
+ *         description: The recipe with the given id does not exist.
  */
 
 router.put('/:recipeId', auth.authenticate([StrategyOptions.Bearer]), RecipesController.updateRecipe);
@@ -164,6 +177,12 @@ router.put('/:recipeId', auth.authenticate([StrategyOptions.Bearer]), RecipesCon
  *         properties:
  *           id:
  *             type: string
+ *       400:
+ *         description: Bad Request. For example, giving an id of wrong origin.
+ *       401:
+ *         description: Unauthorized
+ *       404:
+ *         description: The recipe with the given id does not exist.
  */
 
 router.delete('/:recipeId', auth.authenticate([StrategyOptions.Bearer]), RecipesController.removeByIdRecipe);
