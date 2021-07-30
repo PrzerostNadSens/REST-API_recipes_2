@@ -5,6 +5,7 @@ import UsersService from '../service/users.service';
 import { StatusCodes } from 'http-status-codes';
 
 const internalServerError = { message: 'Internal Server Error' };
+const notUniqueLogin = { message: 'User with the given login already exists.' };
 
 class UsersController {
   async createUser(req: Request, res: Response): Promise<Response> {
@@ -16,9 +17,7 @@ class UsersController {
       return res.status(StatusCodes.CREATED).send({ id: userId });
     } catch (e) {
       if (e.code == 11000) {
-        return res.status(StatusCodes.BAD_REQUEST).json({
-          message: `${e.message}`,
-        });
+        return res.status(StatusCodes.BAD_REQUEST).json(notUniqueLogin);
       }
       return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(internalServerError);
     }

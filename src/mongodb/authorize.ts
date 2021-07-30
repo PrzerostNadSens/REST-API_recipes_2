@@ -1,6 +1,7 @@
 import jwt from 'express-jwt';
 import { User } from '../model/user.model';
 import { Request, Response, NextFunction } from 'express';
+import { StatusCodes } from 'http-status-codes';
 
 const secret = process.env.JWT_SECRET!;
 const HS256 = ['HS256'];
@@ -24,7 +25,7 @@ export function authorize(roles: string[] = []) {
       const user = await User.findById(returnId(req));
 
       if (!user || (roles.length && !roles.includes(user.role))) {
-        return res.status(403).json();
+        return res.status(StatusCodes.FORBIDDEN).json();
       }
       (req.user as any).role = user.role;
       next();
