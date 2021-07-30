@@ -2,7 +2,7 @@ import express from 'express';
 import Role from '../mongodb/role';
 import { authorize } from '../mongodb/authorize';
 import RecipesController from '../controller/recipes.controller';
-import { validateCreateRecipe } from '../validators/validate.middleware';
+import { validateCreateRecipe, validateUpdateRecipe, validateMongoId } from '../validators/validate.middleware';
 import { validate } from '../middleware/validate.middleware';
 import { StrategyOptions, auth } from '../middleware/auth.middleware';
 
@@ -118,7 +118,12 @@ router.get(
  *         description: The recipe with the given id does not exist.
  */
 
-router.get('/:recipeId', auth.authenticate([StrategyOptions.Bearer]), RecipesController.findByIdRecipe);
+router.get(
+  '/:recipeId',
+  auth.authenticate([StrategyOptions.Bearer]),
+  validate(validateMongoId),
+  RecipesController.findByIdRecipe,
+);
 
 /**
  * @swagger
@@ -155,7 +160,13 @@ router.get('/:recipeId', auth.authenticate([StrategyOptions.Bearer]), RecipesCon
  *         description: The recipe with the given id does not exist.
  */
 
-router.put('/:recipeId', auth.authenticate([StrategyOptions.Bearer]), RecipesController.updateRecipe);
+router.put(
+  '/:recipeId',
+  auth.authenticate([StrategyOptions.Bearer]),
+  validate(validateUpdateRecipe),
+  validate(validateMongoId),
+  RecipesController.updateRecipe,
+);
 
 /**
  * @swagger
@@ -187,7 +198,12 @@ router.put('/:recipeId', auth.authenticate([StrategyOptions.Bearer]), RecipesCon
  *         description: The recipe with the given id does not exist.
  */
 
-router.delete('/:recipeId', auth.authenticate([StrategyOptions.Bearer]), RecipesController.removeByIdRecipe);
+router.delete(
+  '/:recipeId',
+  auth.authenticate([StrategyOptions.Bearer]),
+  validate(validateMongoId),
+  RecipesController.removeByIdRecipe,
+);
 
 export default router;
 

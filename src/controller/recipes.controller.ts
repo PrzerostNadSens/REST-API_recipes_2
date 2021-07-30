@@ -5,7 +5,6 @@ import RecipesService from '../service/recipes.service';
 import { matchedData } from 'express-validator';
 import { StatusCodes } from 'http-status-codes';
 
-const badRequest = { message: `Bad Request` };
 const unauthorized = { message: 'Unauthorized' };
 const notFound = { message: `The recipe with the given id does not exist.` };
 
@@ -50,11 +49,6 @@ class RecipesController {
   async findByIdRecipe(req: Request, res: Response): Promise<Response> {
     try {
       const id = req.params.recipeId;
-
-      if (id.length != 24) {
-        return res.status(StatusCodes.BAD_REQUEST).json(badRequest);
-      }
-
       const userId = returnId(req);
       const recipe = await RecipesService.findById(id);
 
@@ -76,11 +70,6 @@ class RecipesController {
   async updateRecipe(req: Request, res: Response): Promise<Response> {
     try {
       const id = req.params.recipeId;
-
-      if (id.length != 24) {
-        return res.status(StatusCodes.BAD_REQUEST).json(badRequest);
-      }
-
       const userId = returnId(req);
       const recipe = await Recipe.findById(id);
 
@@ -103,11 +92,6 @@ class RecipesController {
   async removeByIdRecipe(req: Request, res: Response): Promise<Response> {
     try {
       const id = req.params.recipeId;
-
-      if (id.length != 24) {
-        return res.status(StatusCodes.BAD_REQUEST).json(badRequest);
-      }
-
       const userId = returnId(req);
       const recipe = await Recipe.findById(id);
 
