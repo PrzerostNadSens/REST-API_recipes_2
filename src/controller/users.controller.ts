@@ -4,6 +4,8 @@ import { IUser, UserDocument } from '../model/user.model';
 import UsersService from '../service/users.service';
 import { StatusCodes } from 'http-status-codes';
 
+const internalServerError = { message: 'Internal Server Error' };
+
 class UsersController {
   async createUser(req: Request, res: Response): Promise<Response> {
     try {
@@ -18,9 +20,7 @@ class UsersController {
           message: `${e.message}`,
         });
       }
-      return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-        message: `${e.message}`,
-      });
+      return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(internalServerError);
     }
   }
 
