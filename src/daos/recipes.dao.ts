@@ -50,7 +50,7 @@ class RecipesDao {
   }
 
   async removeByIdRecipe(id: string): Promise<string> {
-    Recipe.findByIdAndRemove(id);
+    const recipeRemoved = await Recipe.deleteOne({ _id: id });
 
     return `${id} Removed`;
   }
