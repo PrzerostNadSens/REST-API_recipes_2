@@ -1,13 +1,15 @@
-import { Recipe, OmitIRecipe } from '../model/recipeModel';
+import { IRecipe, Recipe, OmitIRecipe } from '../model/recipe.model';
 import { Request, Response } from 'express';
 import { returnId, AuthorizedRequest } from '../mongodb/authorize';
 import RecipesService from '../service/recipes.service';
+import { matchedData } from 'express-validator';
 
 class RecipesController {
   async createRecipe(req: Request, res: Response): Promise<Response> {
     try {
-      req.body.added_by = returnId(req);
-      const recipeId = await RecipesService.create(req.body);
+      const data = <IRecipe>matchedData(req);
+      data.addedBy = returnId(req);
+      const recipeId = await RecipesService.create(data);
 
       return res.status(201).send({ id: recipeId });
     } catch (e) {
@@ -34,7 +36,9 @@ class RecipesController {
 
       return res.send(recipes);
     } catch (e) {
-      return res.status(500).send(e.message);
+      return res.status(500).json({
+        message: `${e.message}`,
+      });
     }
   }
 
@@ -49,13 +53,15 @@ class RecipesController {
           message: `The recipe with the given id: ${id} does not exist`,
         });
       }
-      if (recipe.added_by !== userId) {
+      if (recipe.addedBy !== userId) {
         return res.status(401).json({ message: 'Unauthorized' });
       }
 
       return res.status(200).send(recipe);
     } catch (e) {
-      return res.status(500).send(e.message);
+      return res.status(500).json({
+        message: `${e.message}`,
+      });
     }
   }
 
@@ -70,14 +76,16 @@ class RecipesController {
           message: `The recipe with the given id: ${id} does not exist`,
         });
       }
-      if (recipe.added_by !== userId) {
+      if (recipe.addedBy !== userId) {
         return res.status(401).json({ message: 'Unauthorized' });
       }
       const newRecipe = await RecipesService.update(id, req.body);
 
-      return res.status(201).send(newRecipe);
+      return res.status(200).send(newRecipe);
     } catch (e) {
-      return res.status(500).send(e.message);
+      return res.status(500).json({
+        message: `${e.message}`,
+      });
     }
   }
 
@@ -92,15 +100,16 @@ class RecipesController {
           message: `The recipe with the given id: ${id} does not exist`,
         });
       }
-
-      if (recipe.added_by !== userId) {
+      if (recipe.addedBy !== userId) {
         return res.status(401).json({ message: 'Unauthorized' });
       }
       const message = await RecipesService.remove(id);
 
-      return res.status(200).send({ message });
+      return res.status(204).send({ message });
     } catch (e) {
-      return res.status(500).send(e.message);
+      return res.status(500).json({
+        message: `${e.message}`,
+      });
     }
   }
 }

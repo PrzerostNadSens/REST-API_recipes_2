@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { matchedData } from 'express-validator';
-import { IUser, UserDocument } from '../model/userModel';
+import { IUser, UserDocument } from '../model/user.model';
 import UsersService from '../service/users.service';
 
 class UsersController {
@@ -12,7 +12,14 @@ class UsersController {
 
       return res.status(201).send({ id: userId });
     } catch (e) {
-      return res.status(500).send(e.message);
+      if (e.code == 11000) {
+        return res.status(400).json({
+          message: `${e.message}`,
+        });
+      }
+      return res.status(500).json({
+        message: `${e.message}`,
+      });
     }
   }
 

@@ -1,14 +1,13 @@
 import { faker } from '../test.config';
 import jwt from 'jsonwebtoken';
-
-import { User } from '../../model/userModel';
+import { User } from '../../model/user.model';
 
 const loginTest = 'dotcecdstów';
 const passwordTest = 'tdfgdfgsgdfsdA.11';
 
 const createUserPayload = {
-  first_name: faker.name.firstName(),
-  last_name: faker.name.lastName(),
+  firstName: faker.name.firstName(),
+  lastName: faker.name.lastName(),
   login: faker.internet.userName(),
   email: faker.internet.email(),
   password: 'Trudne.haslo12',
@@ -16,8 +15,8 @@ const createUserPayload = {
 };
 
 const createUserPayloadTest = {
-  first_name: faker.name.firstName(),
-  last_name: faker.name.lastName(),
+  firstName: faker.name.firstName(),
+  lastName: faker.name.lastName(),
   login: loginTest,
   email: faker.internet.email(),
   password: '$2a$10$KrUPzb1p6PPBylea/JrGIe/0shAQmlcFppB9w8Ydzw2irEPTsjOfq',

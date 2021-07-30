@@ -5,8 +5,8 @@ const messageEmpty = 'Field can not be empty!';
 
 const regexEmail = /^[a-z\d]+[\w\d.-]*@(?:[a-z\d]+[a-z\d-]+\.){1,5}[a-z]{2,6}$/i;
 
-const validateFirstName = body('first_name').isString().withMessage(messageString).notEmpty().withMessage(messageEmpty);
-const validateFirstLast = body('last_name').isString().withMessage(messageString).notEmpty().withMessage(messageEmpty);
+const validateFirstName = body('firstName').isString().withMessage(messageString).notEmpty().withMessage(messageEmpty);
+const validateFirstLast = body('lastName').isString().withMessage(messageString).notEmpty().withMessage(messageEmpty);
 const validateLogin = body('login').isString().withMessage(messageString).notEmpty().withMessage(messageEmpty);
 const validateEmail = body('email')
   .isString()
@@ -42,6 +42,7 @@ export const validateUserRegister: ValidationChain[] = [
 export const validateUserLogin: ValidationChain[] = [validateLogin, validatePassword];
 
 const validateNameRequired = body('name').isString().withMessage(messageString).notEmpty().withMessage(messageEmpty);
+
 const validateNameOptional = body('name')
   .isString()
   .withMessage(messageString)
@@ -57,18 +58,29 @@ const validatePhoto = body('photo')
   .withMessage(`Photo must be in the form of a URL`)
   .optional();
 
-const validateRecipe = body('recipe').isString().withMessage(messageString).optional();
+const validateRecipeRequired = body('recipe')
+  .isString()
+  .withMessage(messageString)
+  .notEmpty()
+  .withMessage(messageEmpty);
+
+const validateRecipeOptional = body('recipe')
+  .isString()
+  .withMessage(messageString)
+  .notEmpty()
+  .withMessage(messageEmpty)
+  .optional();
 
 export const validateCreateRecipe: ValidationChain[] = [
   validateNameRequired,
   validateType,
   validatePhoto,
-  validateRecipe,
+  validateRecipeRequired,
 ];
 
 export const validateUpdateRecipe: ValidationChain[] = [
   validateNameOptional,
   validateType,
   validatePhoto,
-  validateRecipe,
+  validateRecipeOptional,
 ];
