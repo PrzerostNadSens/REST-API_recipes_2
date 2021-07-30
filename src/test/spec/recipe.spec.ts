@@ -50,7 +50,7 @@ describe('Recipe', function () {
       expect(response.body).to.not.be.null;
     });
   });
-  describe('GET /recipes/', function () {
+  describe('GET /recipes/:recipeId', function () {
     it('should get recipe by id', async function () {
       const response = await chai
         .request(app)
@@ -63,7 +63,7 @@ describe('Recipe', function () {
     });
   });
 
-  describe('PUT/recipes/', function () {
+  describe('PUT /recipes/:recipeId', function () {
     it('should put recipe by id', async function () {
       const response = await chai
         .request(app)
@@ -77,7 +77,7 @@ describe('Recipe', function () {
     });
   });
 
-  describe('DELETE/recipes/', function () {
+  describe('DELETE /recipes/:recipeId', function () {
     it('should delete recipe by id', async function () {
       const response = await chai
         .request(app)

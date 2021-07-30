@@ -14,7 +14,7 @@ const createUserPayload = {
   role: 'Admin',
 };
 
-const createUserPayloadTest = {
+const testUser = {
   firstName: faker.name.firstName(),
   lastName: faker.name.lastName(),
   login: loginTest,
@@ -34,7 +34,7 @@ const generateToken = async function () {
 };
 
 const createUserTest = function () {
-  return new User(createUserPayloadTest).save();
+  return new User(testUser).save();
 };
 
 const deleteAllUsers = function () {
