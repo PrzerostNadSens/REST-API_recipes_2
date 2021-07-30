@@ -6,7 +6,16 @@ import userRoutes from './users.routes';
 import { StatusCodes } from 'http-status-codes';
 
 export const routes = express();
+const allowedMethods = ['GET', 'PUT', 'POST', 'DELETE'];
 
+routes.use((req, res, next) => {
+  if (!allowedMethods.includes(req.method)) {
+    return res.status(StatusCodes.METHOD_NOT_ALLOWED).json({
+      message: `Method Not Allowed!`,
+    });
+  }
+  return next();
+});
 routes.get('/', (req: Request, res: Response) => res.send('Obsługa przepisów kuchennych Rafał Chmielewski'));
 
 routes.use('/recipes', recipeRoutes);
