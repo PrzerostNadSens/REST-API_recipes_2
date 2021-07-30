@@ -112,8 +112,8 @@ router.get(
  *             type: string
  *       400:
  *         description: Bad Request. For example, giving an id of wrong origin.
- *       401:
- *         description: Unauthorized
+ *       403:
+ *         description: Forbidden
  *       404:
  *         description: The recipe with the given id does not exist.
  */
@@ -154,8 +154,8 @@ router.get(
  *             type: string
  *       400:
  *         description: Bad Request. For example, giving an id of wrong origin or validation errors.
- *       401:
- *         description: Unauthorized
+ *       403:
+ *         description: Forbidden
  *       404:
  *         description: The recipe with the given id does not exist.
  */
@@ -192,8 +192,8 @@ router.put(
  *             type: string
  *       400:
  *         description: Bad Request. For example, giving an id of wrong origin.
- *       401:
- *         description: Unauthorized
+ *       403:
+ *         description: Forbidden
  *       404:
  *         description: The recipe with the given id does not exist.
  */
