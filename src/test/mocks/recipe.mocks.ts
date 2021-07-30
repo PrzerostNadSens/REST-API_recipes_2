@@ -1,5 +1,5 @@
 import { faker } from '../test.config';
-import { Recipe } from '../../model/recipe.model';
+import { Recipe, RecipeDocument } from '../../model/recipe.model';
 
 const createRecipePayload = {
   name: faker.name.title(),
@@ -8,7 +8,7 @@ const createRecipePayload = {
   recipe: faker.random.words(),
 };
 
-const createRecipePayloadTest = {
+const testRecipe = {
   name: faker.name.title(),
   type: faker.name.findName(),
   photo: faker.internet.url(),
@@ -16,9 +16,9 @@ const createRecipePayloadTest = {
   addedBy: '',
 };
 
-const createRecipeTest = async function (id: string) {
-  createRecipePayloadTest.addedBy = id;
-  const recipeToSave = new Recipe(createRecipePayloadTest);
+const createRecipeTest = async function (id: string): Promise<string> {
+  const recipeToSave = new Recipe(testRecipe);
+  recipeToSave.addedBy = id;
   await recipeToSave.save();
 
   return recipeToSave.id;

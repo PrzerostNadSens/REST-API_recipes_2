@@ -1,6 +1,6 @@
 import { faker } from '../test.config';
 import jwt from 'jsonwebtoken';
-import { User } from '../../model/user.model';
+import { User, UserDocument } from '../../model/user.model';
 
 const loginTest = 'dotcecdstów';
 const passwordTest = 'tdfgdfgsgdfsdA.11';
@@ -24,16 +24,19 @@ const testUser = {
 };
 
 const generateToken = async function () {
-  const user = await createUserTest();
-  const { _id } = user;
+  const { _id } = await createUserTest();
   const tokenActivityTime = '2h';
-  const Token = jwt.sign({ sub: _id, id: _id }, process.env.JWT_SECRET!, {
+  const token = jwt.sign({ sub: _id, id: _id }, process.env.JWT_SECRET!, {
     expiresIn: tokenActivityTime,
   });
-  return { Token, _id };
+  return { token, _id };
 };
 
-const createUserTest = function () {
+const { token, _id } = await generateToken();
+const id = _id;
+const bearerToken = `Bearer ${token}`;
+
+const createUserTest = function (): Promise<UserDocument> {
   return new User(testUser).save();
 };
 
@@ -41,4 +44,4 @@ const deleteAllUsers = function () {
   return User.deleteMany();
 };
 
-export { createUserPayload, generateToken, loginTest, passwordTest, createUserTest, deleteAllUsers };
+export { createUserPayload, bearerToken, id, loginTest, passwordTest, createUserTest, deleteAllUsers };

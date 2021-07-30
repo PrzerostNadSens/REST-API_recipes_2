@@ -1,21 +1,16 @@
 import { chai, expect, app } from '../test.config';
 import { createRecipePayload, createRecipeTest, deleteAllRecipes } from '../mocks/recipe.mocks';
 
-import { generateToken, deleteAllUsers } from '../mocks/user.mocks';
+import { bearerToken, id, deleteAllUsers } from '../mocks/user.mocks';
 
-let token = '';
-let id = '';
+const authorization = 'Authorization';
 
-beforeEach('Add new user and return token', async function () {
+beforeEach(async function () {
   await deleteAllRecipes();
   await deleteAllUsers();
-  const data = await generateToken();
-  const _id = data._id;
-  id = await createRecipeTest(_id);
-  token = `Bearer ${data.Token}`;
 });
 
-afterEach('Delete all recipes and all users', async function () {
+afterEach(async function () {
   await deleteAllRecipes();
   await deleteAllUsers();
 });
@@ -23,7 +18,11 @@ afterEach('Delete all recipes and all users', async function () {
 describe('Recipe', function () {
   describe('POST /recipes/', function () {
     it('should create recipe', async function () {
-      const response = await chai.request(app).post('/recipes').set('Authorization', token).send(createRecipePayload);
+      const response = await chai
+        .request(app)
+        .post('/recipes')
+        .set(authorization, bearerToken)
+        .send(createRecipePayload);
 
       expect(response).to.have.status(201);
       expect(response.error).to.be.false;
@@ -33,7 +32,7 @@ describe('Recipe', function () {
 
   describe('GET /recipes/', function () {
     it('should get recipes', async function () {
-      const response = await chai.request(app).get('/recipes').set('Authorization', token);
+      const response = await chai.request(app).get('/recipes').set(authorization, bearerToken);
 
       expect(response).to.have.status(200);
       expect(response.error).to.be.false;
@@ -43,7 +42,7 @@ describe('Recipe', function () {
 
   describe('GET /recipes/all', function () {
     it('should get all recipes', async function () {
-      const response = await chai.request(app).get('/recipes/all').set('Authorization', token);
+      const response = await chai.request(app).get('/recipes/all').set(authorization, bearerToken);
 
       expect(response).to.have.status(200);
       expect(response.error).to.be.false;
@@ -55,7 +54,7 @@ describe('Recipe', function () {
       const response = await chai
         .request(app)
         .get('/recipes/' + id)
-        .set('Authorization', token);
+        .set(authorization, bearerToken);
 
       expect(response).to.have.status(200);
       expect(response.error).to.be.false;
@@ -68,7 +67,7 @@ describe('Recipe', function () {
       const response = await chai
         .request(app)
         .get('/recipes/' + id)
-        .set('Authorization', token)
+        .set(authorization, bearerToken)
         .send(createRecipePayload);
 
       expect(response).to.have.status(200);
@@ -82,7 +81,7 @@ describe('Recipe', function () {
       const response = await chai
         .request(app)
         .get('/recipes/' + id)
-        .set('Authorization', token);
+        .set(authorization, bearerToken);
 
       expect(response).to.have.status(200);
       expect(response.error).to.be.false;
