@@ -1,5 +1,6 @@
 import { chai, expect, app } from '../test.config';
 import { createUserPayload, createUserTest, loginTest, passwordTest, deleteAllUsers } from '../mocks/user.mocks';
+import { StatusCodes } from 'http-status-codes';
 
 beforeEach('Add user and get token', async function () {
   await deleteAllUsers();
@@ -15,7 +16,7 @@ describe('User', function () {
     it('should create user', async function () {
       const response = await chai.request(app).post('/users').send(createUserPayload);
 
-      expect(response).to.have.status(201);
+      expect(response).to.have.status(StatusCodes.CREATED);
       expect(response.error).to.be.false;
       expect(response.body).to.not.be.null;
     });
@@ -25,7 +26,7 @@ describe('User', function () {
     it('should login user', async function () {
       const response = await chai.request(app).post('/users/login').auth(loginTest, passwordTest);
 
-      expect(response).to.have.status(200);
+      expect(response).to.have.status(StatusCodes.OK);
       expect(response.error).to.be.false;
       expect(response.body).to.not.be.null;
     });
