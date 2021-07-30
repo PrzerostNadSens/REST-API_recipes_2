@@ -4,6 +4,10 @@ import { returnId, AuthorizedRequest } from '../mongodb/authorize';
 import RecipesService from '../service/recipes.service';
 import { matchedData } from 'express-validator';
 
+const badRequest = { message: `Bad Request` };
+const unauthorized = { message: 'Unauthorized' };
+const notFound = { message: `The recipe with the given id does not exist.` };
+
 class RecipesController {
   async createRecipe(req: Request, res: Response): Promise<Response> {
     try {
@@ -47,21 +51,17 @@ class RecipesController {
       const id = req.params.recipeId;
 
       if (id.length != 24) {
-        return res.status(400).json({
-          message: `Bad Request`,
-        });
+        return res.status(400).json(badRequest);
       }
 
       const userId = returnId(req);
       const recipe = await RecipesService.findById(id);
 
       if (!recipe) {
-        return res.status(404).json({
-          message: `The recipe with the given id: ${id} does not exist.`,
-        });
+        return res.status(404).json(notFound);
       }
       if (recipe.addedBy !== userId) {
-        return res.status(401).json({ message: 'Unauthorized' });
+        return res.status(401).json(unauthorized);
       }
 
       return res.status(200).send(recipe);
@@ -77,21 +77,17 @@ class RecipesController {
       const id = req.params.recipeId;
 
       if (id.length != 24) {
-        return res.status(400).json({
-          message: `Bad Request`,
-        });
+        return res.status(400).json(badRequest);
       }
 
       const userId = returnId(req);
       const recipe = await Recipe.findById(id);
 
       if (!recipe) {
-        return res.status(404).json({
-          message: `The recipe with the given id: ${id} does not exist.`,
-        });
+        return res.status(404).json(notFound);
       }
       if (recipe.addedBy !== userId) {
-        return res.status(401).json({ message: 'Unauthorized' });
+        return res.status(401).json(unauthorized);
       }
       const newRecipe = await RecipesService.update(id, req.body);
 
@@ -108,21 +104,17 @@ class RecipesController {
       const id = req.params.recipeId;
 
       if (id.length != 24) {
-        return res.status(400).json({
-          message: `Bad Request`,
-        });
+        return res.status(400).json(badRequest);
       }
 
       const userId = returnId(req);
       const recipe = await Recipe.findById(id);
 
       if (!recipe) {
-        return res.status(404).json({
-          message: `The recipe with the given id: ${id} does not exist.`,
-        });
+        return res.status(404).json(notFound);
       }
       if (recipe.addedBy !== userId) {
-        return res.status(401).json({ message: 'Unauthorized' });
+        return res.status(401).json(unauthorized);
       }
       const message = await RecipesService.remove(id);
 
