@@ -1,13 +1,15 @@
-import { Recipe, OmitIRecipe } from '../model/recipe.model';
+import { IRecipe, Recipe, OmitIRecipe } from '../model/recipe.model';
 import { Request, Response } from 'express';
 import { returnId, AuthorizedRequest } from '../mongodb/authorize';
 import RecipesService from '../service/recipes.service';
+import { matchedData } from 'express-validator';
 
 class RecipesController {
   async createRecipe(req: Request, res: Response): Promise<Response> {
     try {
-      req.body.addedBy = returnId(req);
-      const recipeId = await RecipesService.create(req.body);
+      const data = <IRecipe>matchedData(req);
+      data.addedBy = returnId(req);
+      const recipeId = await RecipesService.create(data);
 
       return res.status(201).send({ id: recipeId });
     } catch (e) {

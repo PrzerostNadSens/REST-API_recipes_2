@@ -39,9 +39,9 @@ const recipeSchema = new Schema({
 recipeSchema.set('toJSON', {
   virtuals: true,
   versionKey: false,
-  transform: function (doc: unknown, ret: RecipeDocument) {
-    delete ret._id;
-    delete ret.addedBy;
+  transform: function (doc: unknown, recipe: RecipeDocument) {
+    delete recipe._id;
+    delete recipe.addedBy;
   },
 });
 

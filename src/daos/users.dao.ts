@@ -8,11 +8,11 @@ class UsersDao {
 
   async generateToken(user: UserDocument): Promise<object> {
     const tokenActivityTime = '2h';
-    const Token = jwt.sign({ sub: user.id, id: user.id }, process.env.JWT_SECRET!, {
+    const token = jwt.sign({ sub: user.id, id: user.id }, process.env.JWT_SECRET!, {
       expiresIn: tokenActivityTime,
     });
     return {
-      Token,
+      token,
     };
   }
 }
