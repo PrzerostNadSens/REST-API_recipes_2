@@ -1,5 +1,5 @@
 import debug from 'debug';
-import { Recipe, IRecipe, OmitIRecipe, RecipeDocument } from '../model/recipeModel';
+import { Recipe, IRecipe, OmitIRecipe, RecipeDocument } from '../model/recipe.model';
 const log: debug.IDebugger = debug('app:in-memory-dao');
 
 class RecipesDao {
