@@ -38,6 +38,8 @@ router.use((req: Request, res: Response, next: NextFunction) => {
  *         properties:
  *           id:
  *             type: string
+ *       400:
+ *         description: Bad Request. When validation errors.
  */
 
 router.post('/', validate(validateUserRegister), UsersController.createUser);
@@ -70,6 +72,10 @@ router.post('/', validate(validateUserRegister), UsersController.createUser);
  *             type: string
  *           refreshToken:
  *             type: string
+ *       400:
+ *         description: Bad Request. When validation errors.
+ *       401:
+ *         description: Unauthorized. When the user provides incorrect login details.
  */
 
 router.post('/login', auth.authenticate([StrategyOptions.Basic]), UsersController.generateToken);

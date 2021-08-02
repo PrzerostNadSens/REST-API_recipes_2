@@ -44,6 +44,8 @@ router.use('/all', (req: Request, res: Response, next: NextFunction) => {
  *         properties:
  *           id:
  *             type: string
+ *       401:
+ *         description: Unauthorized. When the user is not logged in.
  */
 
 router.get('/', auth.authenticate([StrategyOptions.Bearer]), RecipesController.getUserRecipes);
@@ -72,6 +74,8 @@ router.get('/', auth.authenticate([StrategyOptions.Bearer]), RecipesController.g
  *             type: string
  *       400:
  *         description: Bad Request. For example, validation errors.
+ *       401:
+ *         description: Unauthorized. When the user is not logged in.
  *
  */
 
@@ -98,6 +102,8 @@ router.post(
  *         properties:
  *           id:
  *             type: string
+ *       401:
+ *         description: Unauthorized. When the user is not logged in.
  *       403:
  *         description: When a user without administrator rights tries to use this endpoint.
  */
@@ -133,8 +139,10 @@ router.get(
  *             type: string
  *       400:
  *         description: Bad Request. For example, giving an id of wrong origin.
+ *       401:
+ *         description: Unauthorized. When the user is not logged in.
  *       403:
- *         description: Forbidden
+ *         description: Forbidden.
  *       404:
  *         description: The recipe with the given id does not exist.
  */
@@ -175,8 +183,10 @@ router.get(
  *             type: string
  *       400:
  *         description: Bad Request. For example, giving an id of wrong origin or validation errors.
+ *       401:
+ *         description: Unauthorized. When the user is not logged in.
  *       403:
- *         description: Forbidden
+ *         description: Forbidden.
  *       404:
  *         description: The recipe with the given id does not exist.
  */
@@ -213,8 +223,10 @@ router.put(
  *             type: string
  *       400:
  *         description: Bad Request. For example, giving an id of wrong origin.
+ *       401:
+ *         description: Unauthorized. When the user is not logged in.
  *       403:
- *         description: Forbidden
+ *         description: Forbidden.
  *       404:
  *         description: The recipe with the given id does not exist.
  */
