@@ -2,7 +2,7 @@ import express, { NextFunction, Request, Response } from 'express';
 import Role from '../mongodb/role';
 import { authorize } from '../mongodb/authorize';
 import RecipesController from '../controller/recipes.controller';
-import { validateCreateRecipe, validateUpdateRecipe, validateMongoId } from '../validators/validate.middleware';
+import { validateCreateRecipe, validateUpdateRecipe, validateMongoId } from '../validators/recipe.validate';
 import { validate } from '../middleware/validate.middleware';
 import { StrategyOptions, auth } from '../middleware/auth.middleware';
 import { StatusCodes } from 'http-status-codes';

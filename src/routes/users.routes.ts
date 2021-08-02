@@ -1,6 +1,6 @@
 import express, { NextFunction, Request, Response } from 'express';
 import UsersController from '../controller/users.controller';
-import { validateUserRegister } from '../validators/validate.middleware';
+import { validateUserRegister } from '../validators/user.validate';
 import { validate } from '../middleware/validate.middleware';
 import { StrategyOptions, auth } from '../middleware/auth.middleware';
 import { StatusCodes } from 'http-status-codes';
@@ -72,8 +72,6 @@ router.post('/', validate(validateUserRegister), UsersController.createUser);
  *             type: string
  *           refreshToken:
  *             type: string
- *       400:
- *         description: Bad Request. When validation errors.
  *       401:
  *         description: Unauthorized. When the user provides incorrect login details.
  */
