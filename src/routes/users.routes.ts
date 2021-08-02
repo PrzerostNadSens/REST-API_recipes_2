@@ -9,9 +9,7 @@ const router = express.Router();
 
 router.use((req: Request, res: Response, next: NextFunction) => {
   if (!'POST'.includes(req.method)) {
-    return res.status(StatusCodes.METHOD_NOT_ALLOWED).json({
-      message: `Method Not Allowed!`,
-    });
+    return res.status(StatusCodes.NOT_FOUND).json();
   }
   return next();
 });
