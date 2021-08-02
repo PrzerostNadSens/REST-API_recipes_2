@@ -9,21 +9,6 @@ import { StatusCodes } from 'http-status-codes';
 
 const router = express.Router();
 
-const allowedMethods = ['GET', 'POST'];
-router.use('/', (req: Request, res: Response, next: NextFunction) => {
-  if (!allowedMethods.includes(req.method)) {
-    return res.status(StatusCodes.NOT_FOUND).json();
-  }
-  return next();
-});
-
-router.use('/all', (req: Request, res: Response, next: NextFunction) => {
-  if (!'GET'.includes(req.method)) {
-    return res.status(StatusCodes.NOT_FOUND).json();
-  }
-  return next();
-});
-
 /**
  * @swagger
  * /recipes/:
@@ -233,6 +218,13 @@ router.delete(
   validate(validateMongoId),
   RecipesController.removeByIdRecipe,
 );
+
+router.use('/', (req: Request, res: Response, next: NextFunction) => {
+  if (!'GET'.includes(req.method)) {
+    return res.status(StatusCodes.NOT_FOUND).json();
+  }
+  return next();
+});
 
 export default router;
 
