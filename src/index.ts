@@ -5,8 +5,7 @@ import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import errorMiddleware from './middleware/error.middleware';
 import morgan from 'morgan';
-
-import { lodash } from 'lodash';
+import { cloneDeep, clone } from 'lodash';
 
 dotenv.config();
 
@@ -67,6 +66,8 @@ console.log('\nA ', myObjectA);
 
 // console.log('\nteste', myObjectA.someFieldE);
 
+console.log('subSubFieldB ', myObjectA.someFieldE.someFieldB);
+
 const myObjectB = myObjectA;
 
 console.log('\nB ', myObjectB);
@@ -75,11 +76,81 @@ myObjectB.someFieldA = 'some value 2';
 
 console.log('\nB ', myObjectB);
 
-console.log('test', myObjectA);
+console.log('testA', myObjectA);
 
-const objects = [{ a: 1 }, { b: 2 }];
+// let objects = { a: 1, b: { c: 2 } };
+// console.log('objects: ');
+// console.log(objects);
+// let deep = clone(objects);
+// let x = deep;
+// console.log('deep: ');
+// console.log(deep);
 
-const deep = _.cloneDeep(objects);
-console.log(deep[0] === objects[0]);
+// console.log('x: ');
+// console.log(x);
+// console.log('deep[0]: ');
+// console.log(deep[0]);
+// console.log('objects[0]: ');
+// console.log(objects[0]);
+// console.log('x');
+// console.log(x[0]);
+// deep.a = 5;
+// console.log('deep[0]: ');
+// console.log(deep[0]);
+// console.log('objects[0]: ');
+// console.log(objects[0]);
+// console.log('x');
+// console.log(x[0]);
+
+// console.log('objects: ');
+// console.log(objects);
+
+// console.log('deep: ');
+// console.log(deep);
+
+// console.log('x: ');
+// console.log(x);
+// objects.b.c = 100;
+// console.log('objects: ');
+// console.log(objects);
+
+// console.log('deep: ');
+// console.log(deep);
+
+// console.log('x: ');
+// console.log(x);
+// //const deep = _.cloneDeep(objects);
+// //console.log(deep[0] === objects[0]);
+
+function test() {
+  'use strict';
+
+  let obj1 = { a: 0, b: { c: 0 } }; // a: wartość, b: referencja, c: wartość
+  let obj2 = cloneDeep(obj1);
+  console.log(JSON.stringify(obj2)); // { a: 0, b: { c: 0}}
+  console.log(' ');
+  obj1.a = 1; // zmiana wartości, dotyczy tylko obj1
+  console.log(JSON.stringify(obj1)); // { a: 1, b: { c: 0}}
+  console.log(JSON.stringify(obj2)); // { a: 0, b: { c: 0}}
+  console.log(' ');
+  obj2.a = 2; // zmiana wartości, dotyczy tylko obj2
+  console.log(JSON.stringify(obj1)); // { a: 1, b: { c: 0}}
+  console.log(JSON.stringify(obj2)); // { a: 2, b: { c: 0}}
+  console.log(' ');
+  obj2.b.c = 3; // zmiana wartości w obiekcie o współdzielonej referencji
+  console.log(JSON.stringify(obj1)); // { a: 1, b: { c: 0}} //
+  console.log(JSON.stringify(obj2)); // { a: 2, b: { c: 3}} // i tu też b.c == 3, bo obj1.b === obj2.b
+  console.log(' ');
+  console.log(' ');
+  console.log(' ');
+  // Klonowanie głębokie
+  obj1 = { a: 0, b: { c: 0 } };
+  let obj3 = clone(obj1);
+  obj1.a = 4;
+  obj1.b.c = 4;
+  console.log(JSON.stringify(obj3)); // { a: 0, b: { c: 4}} // obj1.b !== obj2.b
+}
+
+test();
 
 export default app;
