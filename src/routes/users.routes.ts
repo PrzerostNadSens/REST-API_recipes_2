@@ -1,11 +1,21 @@
-import express from 'express';
+import express, { NextFunction, Request, Response } from 'express';
 import UsersController from '../controller/users.controller';
 import { validateUserRegister } from '../validators/validate.middleware';
 import { validate } from '../middleware/validate.middleware';
-
 import { StrategyOptions, auth } from '../middleware/auth.middleware';
+import { StatusCodes } from 'http-status-codes';
 
 const router = express.Router();
+
+router.use((req: Request, res: Response, next: NextFunction) => {
+  if (!'POST'.includes(req.method)) {
+    return res.status(StatusCodes.METHOD_NOT_ALLOWED).json({
+      message: `Method Not Allowed!`,
+    });
+  }
+  return next();
+});
+
 /**
  * @swagger
  * /users/:

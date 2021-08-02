@@ -1,12 +1,33 @@
-import express from 'express';
+import express, { NextFunction, Request, Response } from 'express';
 import Role from '../mongodb/role';
 import { authorize } from '../mongodb/authorize';
 import RecipesController from '../controller/recipes.controller';
 import { validateCreateRecipe, validateUpdateRecipe, validateMongoId } from '../validators/validate.middleware';
 import { validate } from '../middleware/validate.middleware';
 import { StrategyOptions, auth } from '../middleware/auth.middleware';
+import { StatusCodes } from 'http-status-codes';
 
 const router = express.Router();
+
+const allowedMethods = ['GET', 'POST'];
+router.use('/', (req: Request, res: Response, next: NextFunction) => {
+  if (!allowedMethods.includes(req.method)) {
+    return res.status(StatusCodes.METHOD_NOT_ALLOWED).json({
+      message: `Method Not Allowed!`,
+    });
+  }
+  return next();
+});
+
+router.use('/all', (req: Request, res: Response, next: NextFunction) => {
+  if (!'GET'.includes(req.method)) {
+    return res.status(StatusCodes.METHOD_NOT_ALLOWED).json({
+      message: `Method Not Allowed!`,
+    });
+  }
+  return next();
+});
+
 /**
  * @swagger
  * /recipes/:
