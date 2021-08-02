@@ -15,7 +15,7 @@ routes.use('/users', userRoutes);
 
 routes.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
-routes.get('*', (req: Request, res: Response) => {
+routes.use('*', (req: Request, res: Response) => {
   return res.status(StatusCodes.NOT_FOUND).json({
     message: `Make sure url is correct!`,
   });

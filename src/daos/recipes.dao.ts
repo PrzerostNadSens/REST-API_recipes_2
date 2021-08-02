@@ -1,12 +1,6 @@
-import debug from 'debug';
 import { Recipe, IRecipe, OmitIRecipe, RecipeDocument } from '../model/recipe.model';
-const log: debug.IDebugger = debug('app:in-memory-dao');
 
 class RecipesDao {
-  constructor() {
-    log('Created new instance of RecipesDao');
-  }
-
   async createRecipe(createRecipeBody: IRecipe): Promise<string> {
     const recipeToSave = new Recipe(createRecipeBody);
     await recipeToSave.save();
@@ -49,10 +43,8 @@ class RecipesDao {
     return recipeToUpdate!;
   }
 
-  async removeByIdRecipe(id: string): Promise<string> {
-    Recipe.findByIdAndRemove(id);
-
-    return `${id} Removed`;
+  async removeByIdRecipe(id: string) {
+    return Recipe.findByIdAndRemove(id);
   }
 }
 

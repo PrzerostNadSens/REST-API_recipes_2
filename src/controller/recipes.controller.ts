@@ -5,7 +5,7 @@ import RecipesService from '../service/recipes.service';
 import { matchedData } from 'express-validator';
 import { StatusCodes } from 'http-status-codes';
 
-const unauthorized = { message: 'Unauthorized' };
+const forbidden = { message: 'Forbidden' };
 const notFound = { message: `The recipe with the given id does not exist.` };
 const internalServerError = { message: 'Internal Server Error' };
 class RecipesController {
@@ -54,7 +54,7 @@ class RecipesController {
         return res.status(StatusCodes.NOT_FOUND).json(notFound);
       }
       if (recipe.addedBy !== userId) {
-        return res.status(StatusCodes.UNAUTHORIZED).json(unauthorized);
+        return res.status(StatusCodes.FORBIDDEN).json(forbidden);
       }
 
       return res.status(StatusCodes.OK).send(recipe);
@@ -73,7 +73,7 @@ class RecipesController {
         return res.status(StatusCodes.NOT_FOUND).json(notFound);
       }
       if (recipe.addedBy !== userId) {
-        return res.status(StatusCodes.UNAUTHORIZED).json(unauthorized);
+        return res.status(StatusCodes.FORBIDDEN).json(forbidden);
       }
       const newRecipe = await RecipesService.update(id, req.body);
 
@@ -93,7 +93,7 @@ class RecipesController {
         return res.status(StatusCodes.NOT_FOUND).json(notFound);
       }
       if (recipe.addedBy !== userId) {
-        return res.status(StatusCodes.UNAUTHORIZED).json(unauthorized);
+        return res.status(StatusCodes.FORBIDDEN).json(forbidden);
       }
       const message = await RecipesService.remove(id);
 
