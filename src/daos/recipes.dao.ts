@@ -14,8 +14,8 @@ class RecipesDao {
     return recipes;
   }
 
-  async getAllUserRecipes(filter: OmitIRecipe): Promise<RecipeDocument[]> {
-    const recipes = await Recipe.find(filter);
+  async getAllUserRecipes(filter: OmitIRecipe, limit: any, offset: any): Promise<RecipeDocument[]> {
+    const recipes = await Recipe.find().limit(limit).skip(offset);
 
     return recipes;
   }

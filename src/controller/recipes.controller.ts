@@ -4,6 +4,7 @@ import { returnId, AuthorizedRequest } from '../mongodb/authorize';
 import RecipesService from '../service/recipes.service';
 import { matchedData } from 'express-validator';
 import { StatusCodes } from 'http-status-codes';
+import { calculateLimitAndOffset, paginate } from 'paginate-info';
 
 const forbidden = { message: 'Forbidden' };
 const notFound = { message: `The recipe with the given id does not exist.` };
@@ -35,10 +36,16 @@ class RecipesController {
 
   async getAllRecipe(req: AuthorizedRequest, res: Response): Promise<Response> {
     try {
+      const {
+        query: { currentPage, pageSize },
+      } = req;
+      const count = await Recipe.estimatedDocumentCount();
+      const { limit, offset } = calculateLimitAndOffset(currentPage, pageSize);
       const filter: OmitIRecipe = req.query;
-      const recipes = await RecipesService.getAll(filter);
+      const rows = await RecipesService.getAll(filter, limit, offset);
+      const meta = paginate(currentPage, count, rows, pageSize);
 
-      return res.send(recipes);
+      return res.send({ rows, meta });
     } catch (e) {
       return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(internalServerError);
     }

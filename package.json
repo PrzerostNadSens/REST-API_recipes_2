@@ -40,6 +40,7 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.13.2",
     "morgan": "^1.10.0",
+    "paginate-info": "^1.0.4",
     "passport": "^0.4.1",
     "passport-http": "^0.3.0",
     "passport-http-bearer": "^1.0.1",
