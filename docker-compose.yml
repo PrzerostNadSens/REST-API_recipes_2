@@ -1,12 +1,15 @@
 version: "3"
 services:
   mongo:
-    image: mongo
+    image: mongo:4.2.14
+    restart: always
     volumes:
       - ./data:/data/db
     ports:
       - "27017:27017"
-services:
+    networks:
+      - recipe-network
+
   app:
     build:
       context: .
@@ -14,4 +17,11 @@ services:
     volumes:
       - ./src:/app/src
     ports:
-      - "8000:8000"
+      - "8080:8080"
+    depends_on:
+      - mongo
+    networks:
+      - recipe-network
+networks:
+  recipe-network:
+    driver: bridge
