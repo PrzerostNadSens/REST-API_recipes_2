@@ -1,11 +1,19 @@
-import express from "express";
-import UsersController from "../controller/users.controller";
-import { validateUserRegister } from "../validators/validate.middleware";
-import { validate } from "../middleware/validate.middleware";
-
-import { StrategyOptions, auth } from "../middleware/auth.middleware";
+import express, { NextFunction, Request, Response } from 'express';
+import UsersController from '../controller/users.controller';
+import { validateUserRegister } from '../validators/user.validate';
+import { validate } from '../middleware/validate.middleware';
+import { StrategyOptions, auth } from '../middleware/auth.middleware';
+import { StatusCodes } from 'http-status-codes';
 
 const router = express.Router();
+
+router.use((req: Request, res: Response, next: NextFunction) => {
+  if (!'POST'.includes(req.method)) {
+    return res.status(StatusCodes.NOT_FOUND).json();
+  }
+  return next();
+});
+
 /**
  * @swagger
  * /users/:
@@ -18,7 +26,7 @@ const router = express.Router();
  *     parameters:
  *       - in: body
  *         name: user
- *         description: Required Admin or User in role.
+ *         description: "Required Admin or User in role.\nThe password must not be shorter than 8 characters.\nMust contain at least one character from each of the following groups: \nLowercase, \nUppercase, \nNumbers, \nSpecial signs.\n\nExample: Trudne.haslo1"
  *         schema:
  *           $ref: '#/definitions/User'
  *
@@ -28,9 +36,11 @@ const router = express.Router();
  *         properties:
  *           id:
  *             type: string
+ *       400:
+ *         description: Bad Request. When validation errors.
  */
 
-router.post("/", validate(validateUserRegister), UsersController.createUser);
+router.post('/', validate(validateUserRegister), UsersController.createUser);
 
 /**
  * @swagger
@@ -38,19 +48,17 @@ router.post("/", validate(validateUserRegister), UsersController.createUser);
  *   post:
  *     tags:
  *       - user
- *     description: Sign in as customer or admin
+ *     description: Sign in as customer or admin with Basic Auth
  *     produces:
  *       - application/json
- *     parameters:
- *       - name: body
- *         description:
- *         required: true
- *         in: body
- *         properties:
- *           login:
- *             type: string
- *           password:
- *              type: string
+ *     components:
+ *       securitySchemes:
+ *         basicAuth:
+ *           type: http
+ *           scheme: basic
+ *     security:
+ *       - basicAuth: []
+ *
  *
  *     responses:
  *       200:
@@ -62,13 +70,11 @@ router.post("/", validate(validateUserRegister), UsersController.createUser);
  *             type: string
  *           refreshToken:
  *             type: string
+ *       401:
+ *         description: Unauthorized. When the user provides incorrect login details.
  */
 
-router.post(
-  "/login",
-  auth.authenticate([StrategyOptions.Basic]),
-  UsersController.generateToken
-);
+router.post('/login', auth.authenticate([StrategyOptions.Basic]), UsersController.generateToken);
 
 export default router;
 
@@ -80,9 +86,9 @@ export default router;
  * definitions:
  *   User:
  *     properties:
- *       first_name:
+ *       firstName:
  *         type: string
- *       last_name:
+ *       lastName:
  *          type: string
  *       login:
  *         type: string
@@ -95,8 +101,8 @@ export default router;
  *     # Both properties are required
  *     required:
  *       - id
- *       - first_name
- *       - last_name
+ *       - firstName
+ *       - lastName
  *       - login
  *       - email
  *       - password

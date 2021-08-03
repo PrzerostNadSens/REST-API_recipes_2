@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
 const connectionOptions = {
   useCreateIndex: true,
@@ -13,18 +13,8 @@ export function init(): void {
   mongoose.connect("mongodb://localhost:27017/api-db", connectionOptions);
   mongoose.Promise = global.Promise;
 
-  mongoose.connection.on("connected", () =>
-    console.log(
-      "mongoose connected!",
-      mongoose.connection.db.databaseName,
-      "\n"
-    )
+  mongoose.connection.on('connected', () =>
+    console.log('mongoose connected!', mongoose.connection.db.databaseName, '\n'),
   );
-  mongoose.connection.on("error", (error) =>
-    console.log("mongoose error!", error)
-  );
-}
-
-export function isValidId(id: string) {
-  return mongoose.Types.ObjectId.isValid(id);
+  mongoose.connection.on('error', error => console.log('mongoose error!', error));
 }

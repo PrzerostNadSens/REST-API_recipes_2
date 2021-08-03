@@ -1,32 +1,35 @@
-import { Recipe, OmitIRecipe } from "../model/recipeModel";
-import { Request, Response } from "express";
-import { returnId, AuthorizedRequest } from "../mongodb/authorize";
-import RecipesService from "../service/recipes.service";
+import { IRecipe, Recipe, OmitIRecipe } from '../model/recipe.model';
+import { Request, Response } from 'express';
+import { returnId, AuthorizedRequest } from '../mongodb/authorize';
+import RecipesService from '../service/recipes.service';
+import { matchedData } from 'express-validator';
+import { StatusCodes } from 'http-status-codes';
 
+const forbidden = { message: 'Forbidden' };
+const notFound = { message: `The recipe with the given id does not exist.` };
+const internalServerError = { message: 'Internal Server Error' };
 class RecipesController {
   async createRecipe(req: Request, res: Response): Promise<Response> {
     try {
-      req.body.added_by = returnId(req);
-      const recipeId = await RecipesService.create(req.body);
+      const data = <IRecipe>matchedData(req);
+      data.addedBy = returnId(req);
+      const recipeId = await RecipesService.create(data);
 
-      return res.status(201).send({ id: recipeId });
+      return res.status(StatusCodes.CREATED).send({ id: recipeId });
     } catch (e) {
-      return res.status(500).send(e.message);
+      return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(internalServerError);
     }
   }
 
-  async getUserRecipes(
-    req: AuthorizedRequest,
-    res: Response
-  ): Promise<Response> {
+  async getUserRecipes(req: AuthorizedRequest, res: Response): Promise<Response> {
     try {
       const userId = returnId(req);
       const filter: OmitIRecipe = req.query;
       const recipe = await RecipesService.get(userId, filter);
 
-      return res.status(200).send(recipe);
+      return res.status(StatusCodes.OK).send(recipe);
     } catch (e) {
-      return res.status(500).send(e.message);
+      return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(internalServerError);
     }
   }
 
@@ -37,7 +40,7 @@ class RecipesController {
 
       return res.send(recipes);
     } catch (e) {
-      return res.status(500).send(e.message);
+      return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(internalServerError);
     }
   }
 
@@ -48,17 +51,15 @@ class RecipesController {
       const recipe = await RecipesService.findById(id);
 
       if (!recipe) {
-        return res.status(404).json({
-          message: `The recipe with the given id: ${id} does not exist`,
-        });
+        return res.status(StatusCodes.NOT_FOUND).json(notFound);
       }
-      if (recipe.added_by != userId) {
-        return res.status(401).json({ message: "Unauthorized" });
+      if (recipe.addedBy !== userId) {
+        return res.status(StatusCodes.FORBIDDEN).json(forbidden);
       }
 
-      return res.status(200).send(recipe);
+      return res.status(StatusCodes.OK).send(recipe);
     } catch (e) {
-      return res.status(500).send(e.message);
+      return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(internalServerError);
     }
   }
 
@@ -69,18 +70,16 @@ class RecipesController {
       const recipe = await Recipe.findById(id);
 
       if (!recipe) {
-        return res.status(404).json({
-          message: `The recipe with the given id: ${id} does not exist`,
-        });
+        return res.status(StatusCodes.NOT_FOUND).json(notFound);
       }
-      if (recipe.added_by != userId) {
-        return res.status(401).json({ message: "Unauthorized" });
+      if (recipe.addedBy !== userId) {
+        return res.status(StatusCodes.FORBIDDEN).json(forbidden);
       }
       const newRecipe = await RecipesService.update(id, req.body);
 
-      return res.status(201).send(newRecipe);
+      return res.status(StatusCodes.OK).send(newRecipe);
     } catch (e) {
-      return res.status(500).send(e.message);
+      return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(internalServerError);
     }
   }
 
@@ -91,18 +90,16 @@ class RecipesController {
       const recipe = await Recipe.findById(id);
 
       if (!recipe) {
-        return res.status(404).json({
-          message: `The recipe with the given id: ${id} does not exist`,
-        });
+        return res.status(StatusCodes.NOT_FOUND).json(notFound);
       }
-      if (recipe.added_by != userId) {
-        return res.status(401).json({ message: "Unauthorized" });
+      if (recipe.addedBy !== userId) {
+        return res.status(StatusCodes.FORBIDDEN).json(forbidden);
       }
       const message = await RecipesService.remove(id);
 
-      return res.status(200).send({ message });
+      return res.status(StatusCodes.NO_CONTENT).send({ message });
     } catch (e) {
-      return res.status(500).send(e.message);
+      return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(internalServerError);
     }
   }
 }

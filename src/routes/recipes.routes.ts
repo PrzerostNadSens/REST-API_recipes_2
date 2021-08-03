@@ -1,15 +1,14 @@
-import express from "express";
-import Role from "../mongodb/role";
-import { authorize } from "../mongodb/authorize";
-import RecipesController from "../controller/recipes.controller";
-import {
-  validateCreateRecipe,
-  validateUpdateRecipe,
-} from "../validators/validate.middleware";
-import { validate } from "../middleware/validate.middleware";
-import { StrategyOptions, auth } from "../middleware/auth.middleware";
+import express, { NextFunction, Request, Response } from 'express';
+import Role from '../mongodb/role';
+import { authorize } from '../mongodb/authorize';
+import RecipesController from '../controller/recipes.controller';
+import { validateCreateRecipe, validateUpdateRecipe, validateMongoId } from '../validators/recipe.validate';
+import { validate } from '../middleware/validate.middleware';
+import { StrategyOptions, auth } from '../middleware/auth.middleware';
+import { StatusCodes } from 'http-status-codes';
 
 const router = express.Router();
+
 /**
  * @swagger
  * /recipes/:
@@ -26,13 +25,11 @@ const router = express.Router();
  *         properties:
  *           id:
  *             type: string
+ *       401:
+ *         description: Unauthorized. When the user is not logged in.
  */
 
-router.get(
-  "/",
-  auth.authenticate([StrategyOptions.Bearer]),
-  RecipesController.getUserRecipes
-);
+router.get('/', auth.authenticate([StrategyOptions.Bearer]), RecipesController.getUserRecipes);
 
 /**
  * @swagger
@@ -56,13 +53,18 @@ router.get(
  *         properties:
  *           id:
  *             type: string
+ *       400:
+ *         description: Bad Request. For example, validation errors.
+ *       401:
+ *         description: Unauthorized. When the user is not logged in.
+ *
  */
 
 router.post(
-  "/",
+  '/',
   auth.authenticate([StrategyOptions.Bearer]),
   validate(validateCreateRecipe),
-  RecipesController.createRecipe
+  RecipesController.createRecipe,
 );
 
 /**
@@ -81,13 +83,17 @@ router.post(
  *         properties:
  *           id:
  *             type: string
+ *       401:
+ *         description: Unauthorized. When the user is not logged in.
+ *       403:
+ *         description: When a user without administrator rights tries to use this endpoint.
  */
 
 router.get(
-  "/all",
+  '/all',
   auth.authenticate([StrategyOptions.Bearer]),
   authorize(Role.Admin as any),
-  RecipesController.getAllRecipe
+  RecipesController.getAllRecipe,
 );
 
 /**
@@ -112,12 +118,21 @@ router.get(
  *         properties:
  *           id:
  *             type: string
+ *       400:
+ *         description: Bad Request. For example, giving an id of wrong origin.
+ *       401:
+ *         description: Unauthorized. When the user is not logged in.
+ *       403:
+ *         description: Forbidden.
+ *       404:
+ *         description: The recipe with the given id does not exist.
  */
 
 router.get(
-  "/:recipeId",
+  '/:recipeId',
   auth.authenticate([StrategyOptions.Bearer]),
-  RecipesController.findByIdRecipe
+  validate(validateMongoId),
+  RecipesController.findByIdRecipe,
 );
 
 /**
@@ -142,17 +157,27 @@ router.get(
  *           $ref: '#/definitions/Recipe'
  *
  *     responses:
- *       201:
+ *       200:
  *         description: Recipes
  *         properties:
  *           id:
  *             type: string
+ *       400:
+ *         description: Bad Request. For example, giving an id of wrong origin or validation errors.
+ *       401:
+ *         description: Unauthorized. When the user is not logged in.
+ *       403:
+ *         description: Forbidden.
+ *       404:
+ *         description: The recipe with the given id does not exist.
  */
 
 router.put(
-  "/:recipeId",
+  '/:recipeId',
   auth.authenticate([StrategyOptions.Bearer]),
-  RecipesController.updateRecipe
+  validate(validateUpdateRecipe),
+  validate(validateMongoId),
+  RecipesController.updateRecipe,
 );
 
 /**
@@ -172,18 +197,34 @@ router.put(
  *           type: string
  *
  *     responses:
- *       200:
+ *       204:
  *         description: Recipes
  *         properties:
  *           id:
  *             type: string
+ *       400:
+ *         description: Bad Request. For example, giving an id of wrong origin.
+ *       401:
+ *         description: Unauthorized. When the user is not logged in.
+ *       403:
+ *         description: Forbidden.
+ *       404:
+ *         description: The recipe with the given id does not exist.
  */
 
 router.delete(
-  "/:recipeId",
+  '/:recipeId',
   auth.authenticate([StrategyOptions.Bearer]),
-  RecipesController.removeByIdRecipe
+  validate(validateMongoId),
+  RecipesController.removeByIdRecipe,
 );
+
+router.use('/', (req: Request, res: Response, next: NextFunction) => {
+  if (!'GET'.includes(req.method)) {
+    return res.status(StatusCodes.NOT_FOUND).json();
+  }
+  return next();
+});
 
 export default router;
 
@@ -207,4 +248,5 @@ export default router;
  *     required:
  *       - id
  *       - name
+ *       - recipe
  */
