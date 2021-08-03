@@ -1,14 +1,16 @@
 version: "3"
 services:
-  mongo:
+  mongodb:
+    container_name: mongodb
     image: mongo:4.2.14
-    restart: always
-    volumes:
-      - ./data:/data/db
     ports:
       - "27017:27017"
+    restart: always
     networks:
       - recipe-network
+    hostname: mongodb
+    volumes:
+      - ~/mongodata:/data/db
 
   app:
     build:
@@ -18,8 +20,6 @@ services:
       - ./src:/app/src
     ports:
       - "8080:8080"
-    depends_on:
-      - mongo
     networks:
       - recipe-network
 networks:
