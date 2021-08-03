@@ -126,29 +126,72 @@ function test() {
   'use strict';
 
   let obj1 = { a: 0, b: { c: 0 } }; // a: wartość, b: referencja, c: wartość
-  let obj2 = cloneDeep(obj1);
+  let obj2 = Object.assign(obj1);
   console.log(JSON.stringify(obj2)); // { a: 0, b: { c: 0}}
   console.log(' ');
   obj1.a = 1; // zmiana wartości, dotyczy tylko obj1
   console.log(JSON.stringify(obj1)); // { a: 1, b: { c: 0}}
   console.log(JSON.stringify(obj2)); // { a: 0, b: { c: 0}}
   console.log(' ');
-  obj2.a = 2; // zmiana wartości, dotyczy tylko obj2
+  obj2.a = null; // zmiana wartości, dotyczy tylko obj2
   console.log(JSON.stringify(obj1)); // { a: 1, b: { c: 0}}
   console.log(JSON.stringify(obj2)); // { a: 2, b: { c: 0}}
   console.log(' ');
-  obj2.b.c = 3; // zmiana wartości w obiekcie o współdzielonej referencji
+  obj2.b.c = null; // zmiana wartości w obiekcie o współdzielonej referencji
   console.log(JSON.stringify(obj1)); // { a: 1, b: { c: 0}} //
   console.log(JSON.stringify(obj2)); // { a: 2, b: { c: 3}} // i tu też b.c == 3, bo obj1.b === obj2.b
   console.log(' ');
   console.log(' ');
   console.log(' ');
   // Klonowanie głębokie
-  obj1 = { a: 0, b: { c: 0 } };
-  let obj3 = clone(obj1);
-  obj1.a = 4;
-  obj1.b.c = 4;
-  console.log(JSON.stringify(obj3)); // { a: 0, b: { c: 4}} // obj1.b !== obj2.b
+  // obj1 = { a: 0, b: { c: 0 } };
+  // let obj3 = cloneDeep(obj1);
+  // obj1.a = null;
+  // obj1.b.c = null;
+  // console.log(JSON.stringify(obj3)); // { a: 0, b: { c: 4}} // obj1.b !== obj2.b
+
+  // // Klonowanie głębokie
+  // obj1 = { a: 0, b: { c: 0 } };
+  // let obj3 = clone(obj1);
+  // obj1.a = null;
+  // obj1.b.c = null;
+  // console.log(JSON.stringify(obj3)); // { a: 0, b: { c: 4}} // obj1.b !== obj2.b
+
+  const date1 = new Date('1995-12-17T03:24:00');
+  console.log(' ');
+  console.log('cloneDeep');
+  let date2 = cloneDeep(date1);
+  console.log(' ');
+  console.log(date1);
+  console.log(' ');
+  console.log(date2);
+
+  console.log(' ');
+  const date11 = new Date('1995-12-17T03:24:00');
+  console.log('clone');
+  let date22 = clone(date11);
+  console.log(' ');
+  console.log(date11);
+  console.log(' ');
+  console.log(date22);
+
+  console.log(' ');
+  const date111 = new Date('1995-12-17T03:24:00');
+  console.log('assign');
+  let date222 = Object.assign(date111);
+  console.log(' ');
+  console.log(date111);
+  console.log(' ');
+  console.log(date222);
+
+  console.log(' ');
+  const date1111 = new Date('1995-12-17T03:24:00');
+  console.log('JSON.parse');
+  let date2222 = JSON.parse(JSON.stringify(date1111));
+  console.log(' ');
+  console.log(date1111);
+  console.log(' ');
+  console.log(date2222);
 }
 
 test();
