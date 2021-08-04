@@ -2,6 +2,7 @@ import { IRecipe, Recipe, OmitIRecipe } from '../model/recipe.model';
 import { Request, Response } from 'express';
 import { returnId, AuthorizedRequest } from '../mongodb/authorize';
 import RecipesService from '../service/recipes.service';
+import WebhookService from '../service/webhooks.service';
 import { matchedData } from 'express-validator';
 import { StatusCodes } from 'http-status-codes';
 
@@ -14,6 +15,11 @@ class RecipesController {
       const data = <IRecipe>matchedData(req);
       data.addedBy = returnId(req);
       const recipeId = await RecipesService.create(data);
+
+      WebhookService.webhook(
+        data.addedBy!,
+        `User with the given id: ${data.addedBy} create new recipe id: ${recipeId}`,
+      );
 
       return res.status(StatusCodes.CREATED).send({ id: recipeId });
     } catch (e) {
