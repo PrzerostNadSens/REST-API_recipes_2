@@ -7,6 +7,8 @@ export interface IWebhook {
 
 export interface WebhookDocument extends IWebhook, Document {}
 
+export type OmitIWebhook = Omit<IWebhook, 'url'>;
+
 const webhookSchema = new Schema({
   url: {
     type: String,
@@ -23,7 +25,7 @@ webhookSchema.set('toJSON', {
   versionKey: false,
   transform: function (doc: unknown, webhook: WebhookDocument) {
     delete webhook._id;
-    delete recipe.addedBy;
+    delete webhook.addedBy;
   },
 });
 
