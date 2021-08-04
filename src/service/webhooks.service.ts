@@ -12,8 +12,8 @@ class WebhooksService {
     return WebhooksDao.getUserWebhooks(fulFilter);
   }
 
-  async webhook(userId: string, event: string): Promise<void> {
-    const webhooks = await this.get(userId);
+  async webhook(filter: string, event: string): Promise<void> {
+    const webhooks = await this.get(filter);
     if (webhooks) {
       webhooks.map(async (webhook: WebhookDocument) => {
         await axios.post(`${webhook.url}`, event);
