@@ -1,5 +1,7 @@
 import express, { NextFunction, Request, Response } from 'express';
 import WebhooksController from '../controller/webhooks.controller';
+import { validateWebhook } from '../validators/webhook.validate';
+import { validate } from '../middleware/validate.middleware';
 import { StrategyOptions, auth } from '../middleware/auth.middleware';
 import { StatusCodes } from 'http-status-codes';
 
@@ -50,7 +52,12 @@ router.get('/', auth.authenticate([StrategyOptions.Bearer]), WebhooksController.
  *
  */
 
-router.post('/', auth.authenticate([StrategyOptions.Bearer]), WebhooksController.createWebhook);
+router.post(
+  '/',
+  auth.authenticate([StrategyOptions.Bearer]),
+  validate(validateWebhook),
+  WebhooksController.createWebhook,
+);
 
 router.use('/', (req: Request, res: Response, next: NextFunction) => {
   if (!'GET'.includes(req.method)) {

@@ -2,13 +2,14 @@ import { IWebhook } from '../model/webhook.model';
 import { Request, Response } from 'express';
 import { returnId, AuthorizedRequest } from '../mongodb/authorize';
 import WebhooksService from '../service/webhooks.service';
+import { matchedData } from 'express-validator';
 import { StatusCodes } from 'http-status-codes';
 
 const internalServerError = { message: 'Internal Server Error' };
 class WebhooksController {
   async createWebhook(req: Request, res: Response): Promise<Response> {
     try {
-      const data: IWebhook = req;
+      const data = <IWebhook>matchedData(req);
       data.addedBy = returnId(req);
       const webhookId = await WebhooksService.create(data);
 
