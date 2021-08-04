@@ -11,7 +11,6 @@ class WebhooksController {
     try {
       const data = <IWebhook>matchedData(req);
       data.addedBy = returnId(req);
-      data.role = returnRole(req);
       const webhookId = await WebhooksService.create(data);
 
       return res.status(StatusCodes.CREATED).send({ id: webhookId });

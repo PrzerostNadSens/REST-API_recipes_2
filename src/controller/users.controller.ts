@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import { matchedData } from 'express-validator';
 import { IUser, UserDocument } from '../model/user.model';
 import UsersService from '../service/users.service';
+import WebhookService from '../service/webhooks.service';
 import { StatusCodes } from 'http-status-codes';
 
 const internalServerError = { message: 'Internal Server Error' };
@@ -13,6 +14,8 @@ class UsersController {
       const data = <IUser>matchedData(req);
 
       const userId = await UsersService.create(data);
+
+      WebhookService.webhook('Admin', `User with the given id: ${userId} create accont.`);
 
       return res.status(StatusCodes.CREATED).send({ id: userId });
     } catch (e) {

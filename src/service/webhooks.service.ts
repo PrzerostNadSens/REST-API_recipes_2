@@ -6,8 +6,11 @@ class WebhooksService {
   async create(resource: IWebhook) {
     return WebhooksDao.createWebhook(resource);
   }
-  async get(userId: string) {
-    const fulFilter: OmitIWebhook = { addedBy: userId };
+  async get(filter: string) {
+    let fulFilter: OmitIWebhook = { addedBy: filter };
+    if (filter === 'Admin') {
+      fulFilter = { role: filter };
+    }
 
     return WebhooksDao.getUserWebhooks(fulFilter);
   }
