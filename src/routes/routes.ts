@@ -14,7 +14,7 @@ routes.use('/recipes', recipeRoutes);
 
 routes.use('/users', userRoutes);
 
-routes.use('/webhook', webhookRoutes);
+routes.use('/webhooks', webhookRoutes);
 
 routes.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
