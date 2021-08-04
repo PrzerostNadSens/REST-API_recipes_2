@@ -4,6 +4,7 @@ import { returnId, AuthorizedRequest } from '../mongodb/authorize';
 import RecipesService from '../service/recipes.service';
 import { matchedData } from 'express-validator';
 import { StatusCodes } from 'http-status-codes';
+import axios from 'axios';
 
 const forbidden = { message: 'Forbidden' };
 const notFound = { message: `The recipe with the given id does not exist.` };
@@ -14,6 +15,8 @@ class RecipesController {
       const data = <IRecipe>matchedData(req);
       data.addedBy = returnId(req);
       const recipeId = await RecipesService.create(data);
+
+      const response = await axios.post(`https://enu1pz94bzswcav.m.pipedream.net`, 'Tak');
 
       return res.status(StatusCodes.CREATED).send({ id: recipeId });
     } catch (e) {
