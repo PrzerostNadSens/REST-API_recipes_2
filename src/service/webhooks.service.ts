@@ -3,7 +3,8 @@ import { IWebhook, OmitIWebhook, WebhookDocument } from '../model/webhook.model'
 import axios from 'axios';
 
 class WebhooksService {
-  async create(resource: IWebhook) {
+  async create(userId: string, resource: IWebhook) {
+    resource.addedBy = userId;
     return WebhooksDao.createWebhook(resource);
   }
   async get(filter: string) {
