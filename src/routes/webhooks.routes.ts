@@ -122,10 +122,7 @@ router.put(
  *
  *     responses:
  *       204:
- *         description: Webhooks
- *         properties:
- *           id:
- *             type: string
+ *         description: Removed.
  *       400:
  *         description: Bad Request. For example, giving an id of wrong origin.
  *       401:
