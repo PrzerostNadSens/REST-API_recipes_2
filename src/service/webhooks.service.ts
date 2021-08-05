@@ -35,6 +35,13 @@ class WebhooksService {
 
     return WebhooksDao.getUserWebhooks(fulFilter);
   }
+  async update(id: string, resource: IWebhook) {
+    return WebhooksDao.updateWebhook(id, resource);
+  }
+
+  async remove(id: string) {
+    return WebhooksDao.removeByIdWebhook(id);
+  }
 
   async sendEvent(filter: string, webhookEvent: WebhookEvent, id: string): Promise<void> {
     const webhooks = await this.getWebhook(filter);

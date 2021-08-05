@@ -14,7 +14,26 @@ class WebhooksDao {
   }
 
   async getUserWebhooks(filter: OmitIWebhook): Promise<WebhookDocument[]> {
-    return Webhook.find(filter);
+    const webhooks = await Webhook.find(filter);
+
+    return webhooks;
+  }
+
+  async updateWebhook(id: string, updateWebhookBody: IWebhook): Promise<WebhookDocument> {
+    const url = updateWebhookBody.url;
+    const webhookToUpdate = await Webhook.findByIdAndUpdate(
+      id,
+      {
+        url,
+      },
+      { omitUndefined: true, new: true },
+    );
+
+    return webhookToUpdate!;
+  }
+
+  async removeByIdWebhook(id: string) {
+    return Webhook.findByIdAndRemove(id);
   }
 }
 
