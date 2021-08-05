@@ -4,14 +4,12 @@ class WebhooksDao {
   async createWebhook(createWebhookBody: IWebhook): Promise<string> {
     const webhookToSave = new Webhook(createWebhookBody);
     await webhookToSave.save();
-
+    const id = webhookToSave.id;
     return webhookToSave.id;
   }
 
   async getUserWebhooks(filter: OmitIWebhook): Promise<WebhookDocument[]> {
-    const webhooks = await Webhook.find(filter);
-
-    return webhooks;
+    return Webhook.find(filter);
   }
 }
 
