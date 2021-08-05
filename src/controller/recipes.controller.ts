@@ -2,6 +2,7 @@ import { IRecipe, Recipe, OmitIRecipe } from '../model/recipe.model';
 import { Request, Response } from 'express';
 import { returnId, AuthorizedRequest } from '../mongodb/authorize';
 import RecipesService from '../service/recipes.service';
+import WebhooksService, { WebhookEvent } from '../service/webhooks.service';
 import { matchedData } from 'express-validator';
 import { StatusCodes } from 'http-status-codes';
 
@@ -14,6 +15,8 @@ class RecipesController {
       const data = <IRecipe>matchedData(req);
       data.addedBy = returnId(req);
       const recipeId = await RecipesService.create(data);
+
+      WebhooksService.sendEvent(data.addedBy!, WebhookEvent.CreateRecipe, recipeId);
 
       return res.status(StatusCodes.CREATED).send({ id: recipeId });
     } catch (e) {

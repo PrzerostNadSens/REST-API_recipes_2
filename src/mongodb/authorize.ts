@@ -14,6 +14,10 @@ export function returnId(req: AuthorizedRequest) {
   jwt({ secret, algorithms: HS256 });
   return req.user.id;
 }
+export function returnRole(req: AuthorizedRequest) {
+  jwt({ secret, algorithms: HS256 });
+  return req.user.role;
+}
 
 export function authorize(roles: string[] = []) {
   if (typeof roles === 'string') {
