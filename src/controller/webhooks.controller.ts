@@ -1,6 +1,6 @@
 import { IWebhook } from '../model/webhook.model';
 import { Request, Response } from 'express';
-import { returnId } from '../mongodb/authorize';
+import { returnId, returnRole } from '../mongodb/authorize';
 import WebhooksService from '../service/webhooks.service';
 import { matchedData } from 'express-validator';
 import responses from '../exceptions/exceptions';
@@ -10,7 +10,9 @@ class WebhooksController {
     try {
       const data = <IWebhook>matchedData(req);
       const userId = returnId(req);
-      const webhookId = await WebhooksService.create(userId, data);
+      const userRole = returnRole(req);
+
+      const webhookId = await WebhooksService.create(userId, userRole, data);
 
       return responses.sendCreatedWithId(res, webhookId);
     } catch (e) {
