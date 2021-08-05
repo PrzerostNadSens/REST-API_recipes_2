@@ -7,7 +7,7 @@ const swaggerDefinition: SwaggerDefinition = {
     title: 'REST-API_RECIPES',
     description:
       "Handling of cooking recipes Rafał Chmielewski.\n\nUsers who are not logged in can create an account themselves assigning themselves roles.\nThere are two types of users 'User' and 'Admin' in the application.\n'User' can only view, edit and delete his own recipes and create a new recipe.\n'Admin' can additionally display all recipes.\n\nJSON Web Token is used for authentication in the application.",
-    version: '3.1.0',
+    version: '3.2.0',
   },
   host: 'localhost:8080',
   basePath: '/',
