@@ -12,7 +12,7 @@ class WebhooksController {
       const userId = returnId(req);
       const userRole = returnRole(req);
 
-      const webhookId = await WebhooksService.create(userId, userRole, data);
+      const webhookId = await WebhooksService.createWebhook(userId, userRole, data);
 
       return responses.sendCreatedWithId(res, webhookId);
     } catch (e) {
@@ -23,7 +23,7 @@ class WebhooksController {
   async getUserWebhooks(req: Request, res: Response): Promise<Response> {
     try {
       const userId = returnId(req);
-      const webhook = await WebhooksService.get(userId);
+      const webhook = await WebhooksService.getWebhook(userId);
 
       return responses.sendOkWithWebhook(res, webhook);
     } catch (e) {

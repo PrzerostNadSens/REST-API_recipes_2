@@ -10,8 +10,9 @@ class responses {
   sendCreatedWithId(res: Response, id: string) {
     return res.status(StatusCodes.CREATED).send({ id: id });
   }
-  sendOkWithWebhook(res: Response, object: WebhookDocument[]) {
-    return res.status(StatusCodes.OK).send(object);
+
+  sendOkWithWebhook(res: Response, webhook: WebhookDocument[]) {
+    return res.status(StatusCodes.OK).send(webhook);
   }
 }
 
