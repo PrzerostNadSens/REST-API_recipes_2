@@ -13,7 +13,9 @@ class WebhooksController {
       const userRole = returnRole(req);
 
       const webhookId = await WebhooksService.createWebhook(userId, userRole, data);
-
+      if (webhookId === '') {
+        return responses.notUniqueUrl(res);
+      }
       return responses.sendCreatedWithId(res, webhookId);
     } catch (e) {
       return responses.sendInternalServerErrorResponse(res);

@@ -14,6 +14,14 @@ class responses {
   sendOkWithWebhook(res: Response, webhook: WebhookDocument[]) {
     return res.status(StatusCodes.OK).send(webhook);
   }
+
+  notUniqueLogin(res: Response) {
+    return res.status(StatusCodes.BAD_REQUEST).send({ message: 'User with the given login already exists.' });
+  }
+
+  notUniqueUrl(res: Response) {
+    return res.status(StatusCodes.BAD_REQUEST).send({ message: 'Webhook with the given url already exists.' });
+  }
 }
 
 export default new responses();
