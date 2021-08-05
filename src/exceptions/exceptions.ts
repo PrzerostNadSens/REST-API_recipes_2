@@ -11,16 +11,28 @@ class responses {
     return res.status(StatusCodes.CREATED).send({ id: id });
   }
 
-  sendOkWithWebhook(res: Response, webhook: WebhookDocument[]) {
+  sendNoContent(res: Response) {
+    return res.status(StatusCodes.NO_CONTENT).send();
+  }
+
+  sendOkWithWebhook(res: Response, webhook: WebhookDocument) {
     return res.status(StatusCodes.OK).send(webhook);
   }
 
-  notUniqueLogin(res: Response) {
-    return res.status(StatusCodes.BAD_REQUEST).send({ message: 'User with the given login already exists.' });
+  sendOkWithWebhooks(res: Response, webhook: WebhookDocument[]) {
+    return res.status(StatusCodes.OK).send(webhook);
   }
 
-  notUniqueUrl(res: Response) {
-    return res.status(StatusCodes.BAD_REQUEST).send({ message: 'Webhook with the given url already exists.' });
+  forbidden(res: Response) {
+    return res.status(StatusCodes.FORBIDDEN).send({ message: 'Forbidden' });
+  }
+
+  notFound(res: Response) {
+    return res.status(StatusCodes.NOT_FOUND).send({ message: `The recipe with the given id does not exist.` });
+  }
+
+  notUnique(res: Response, source: string) {
+    return res.status(StatusCodes.BAD_REQUEST).send({ message: ` ${source} with the given url already exists.` });
   }
 }
 
