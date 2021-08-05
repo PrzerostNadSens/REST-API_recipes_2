@@ -1,11 +1,11 @@
 import { Webhook, IWebhook, OmitIWebhook, WebhookDocument } from '../model/webhook.model';
 
 class WebhooksDao {
-  async createWebhook(createWebhookBody: IWebhook): Promise<string | null> {
+  async createWebhook(createWebhookBody: IWebhook): Promise<string> {
     const webhookToSave = new Webhook(createWebhookBody);
 
     if (Webhook.findOne(createWebhookBody)) {
-      return null;
+      return '';
     }
 
     const { id } = await webhookToSave.save();
