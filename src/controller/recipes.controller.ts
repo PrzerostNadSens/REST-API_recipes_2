@@ -80,6 +80,8 @@ class RecipesController {
       }
       const newRecipe = await RecipesService.update(id, req.body);
 
+      WebhooksService.sendEvent(userId, WebhookEvent.UpdateRecipe, id);
+
       return res.status(StatusCodes.OK).send(newRecipe);
     } catch (e) {
       return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(internalServerError);
@@ -99,6 +101,8 @@ class RecipesController {
         return res.status(StatusCodes.FORBIDDEN).json(forbidden);
       }
       const message = await RecipesService.remove(id);
+
+      WebhooksService.sendEvent(userId, WebhookEvent.RemoveRecipe, id);
 
       return res.status(StatusCodes.NO_CONTENT).send({ message });
     } catch (e) {
