@@ -2,6 +2,8 @@ import { Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import { WebhookDocument } from '../model/webhook.model';
 import { RecipeDocument } from '../model/recipe.model';
+import { UserDocument } from '../model/user.model';
+
 class Responses {
   sendInternalServerErrorResponse(res: Response) {
     return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ message: 'Internal Server Error' });
@@ -19,6 +21,9 @@ class Responses {
     return res.status(StatusCodes.OK).send(recipe);
   }
 
+  sendOkWithUser(res: Response, user: UserDocument) {
+    return res.status(StatusCodes.OK).send(user);
+  }
   sendCreateWithRecipe(res: Response, recipe: RecipeDocument) {
     return res.status(StatusCodes.CREATED).send(recipe);
   }

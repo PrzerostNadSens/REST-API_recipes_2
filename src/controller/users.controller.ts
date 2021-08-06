@@ -4,6 +4,7 @@ import { IUser, UserDocument } from '../model/user.model';
 import usersService, { UsersService } from '../service/users.service';
 import webhooksService, { WebhookEvent, WebhooksService } from '../service/webhooks.service';
 import responses from '../exceptions/exceptions';
+import { returnId } from '../mongodb/authorize';
 
 class UsersController {
   constructor(private readonly usersService: UsersService, private readonly webhooksService: WebhooksService) {}
@@ -19,6 +20,17 @@ class UsersController {
       if (e.code == 11000) {
         return responses.notUnique(res, 'User');
       }
+      return responses.sendInternalServerErrorResponse(res);
+    }
+  }
+
+  async getUserProfile(req: Request, res: Response): Promise<Response> {
+    try {
+      const userId = returnId(req);
+      const user = await this.usersService.get(userId);
+
+      return responses.sendOkWithUser(res, user);
+    } catch (e) {
       return responses.sendInternalServerErrorResponse(res);
     }
   }

@@ -12,6 +12,10 @@ export class UsersService {
     return id;
   }
 
+  async get(userId: string): Promise<UserDocument> {
+    return UsersDao.getUser(userId);
+  }
+
   async generateToken(user: UserDocument): Promise<object> {
     return UsersDao.generateToken(user);
   }

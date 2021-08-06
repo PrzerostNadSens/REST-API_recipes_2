@@ -9,6 +9,28 @@ const router = express.Router();
 /**
  * @swagger
  * /users/:
+ *   get:
+ *     tags:
+ *       - user
+ *     description: Displays user profile.
+ *     produces:
+ *       - application/json
+ *
+ *     responses:
+ *       200:
+ *         description: User profile.
+ *         properties:
+ *           id:
+ *             type: string
+ *       401:
+ *         description: Unauthorized. When the user is not logged in.
+ */
+
+router.get('/', auth.authenticate([StrategyOptions.Bearer]), (req, res) => usersController.getUserProfile(req, res));
+
+/**
+ * @swagger
+ * /users/:
  *   post:
  *     tags:
  *       - user
