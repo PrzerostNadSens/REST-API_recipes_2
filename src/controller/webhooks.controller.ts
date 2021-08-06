@@ -14,11 +14,12 @@ class WebhooksController {
       const userId = returnId(req);
       const userRole = returnRole(req);
 
-      const webhookId = await this.webhooksService.createWebhook(userId, userRole, data);
-      if (webhookId === '') {
+      const webhook = await this.webhooksService.createWebhook(userId, userRole, data);
+      if (webhook === null) {
         return responses.notUnique(res, 'Webhook');
       }
-      return responses.sendCreatedWithId(res, webhookId);
+
+      return responses.sendCreateWithWebhook(res, webhook);
     } catch (e) {
       return responses.sendInternalServerErrorResponse(res);
     }
@@ -48,6 +49,9 @@ class WebhooksController {
         return responses.forbidden(res);
       }
       const newWebhook = await this.webhooksService.update(id, req.body);
+      if (newWebhook === null) {
+        return responses.notUnique(res, 'Webhook');
+      }
 
       return responses.sendOkWithWebhook(res, newWebhook);
     } catch (e) {
