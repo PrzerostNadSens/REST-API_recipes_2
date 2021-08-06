@@ -11,8 +11,8 @@ class UsersController {
     try {
       const data = <IUser>matchedData(req);
 
-      const userId = await usersService.create(data);
-      webhooksService.sendEvent('Admin', WebhookEvent.CreateUser, userId);
+      const userId = await this.usersService.create(data);
+      this.webhooksService.sendEvent('Admin', WebhookEvent.CreateUser, userId);
 
       return responses.sendCreatedWithId(res, userId);
     } catch (e) {

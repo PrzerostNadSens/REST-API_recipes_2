@@ -13,9 +13,9 @@ class RecipesController {
     try {
       const data = <IRecipe>matchedData(req);
       data.addedBy = returnId(req);
-      const recipeId = await recipesService.create(data);
+      const recipeId = await this.recipesService.create(data);
 
-      webhooksService.sendEvent(data.addedBy!, WebhookEvent.CreateRecipe, recipeId);
+      this.webhooksService.sendEvent(data.addedBy!, WebhookEvent.CreateRecipe, recipeId);
 
       return responses.sendCreatedWithId(res, recipeId);
     } catch (e) {
@@ -27,7 +27,7 @@ class RecipesController {
     try {
       const userId = returnId(req);
       const filter: OmitIRecipe = req.query;
-      const recipes = await recipesService.get(userId, filter);
+      const recipes = await this.recipesService.get(userId, filter);
 
       return responses.sendOkWithRecipes(res, recipes);
     } catch (e) {
@@ -38,7 +38,7 @@ class RecipesController {
   async getAllRecipe(req: AuthorizedRequest, res: Response): Promise<Response> {
     try {
       const filter: OmitIRecipe = req.query;
-      const recipes = await recipesService.getAll(filter);
+      const recipes = await this.recipesService.getAll(filter);
 
       return res.send(recipes);
     } catch (e) {
@@ -50,7 +50,7 @@ class RecipesController {
     try {
       const id = req.params.recipeId;
       const userId = returnId(req);
-      const recipe = await recipesService.findById(id);
+      const recipe = await this.recipesService.findById(id);
 
       if (!recipe) {
         return responses.notFound(res, 'recipe');
@@ -77,9 +77,9 @@ class RecipesController {
       if (recipe.addedBy !== userId) {
         return responses.forbidden(res);
       }
-      const newRecipe = await recipesService.update(id, req.body);
+      const newRecipe = await this.recipesService.update(id, req.body);
 
-      webhooksService.sendEvent(userId, WebhookEvent.UpdateRecipe, id);
+      this.webhooksService.sendEvent(userId, WebhookEvent.UpdateRecipe, id);
 
       return responses.sendOkWithRecipe(res, newRecipe);
     } catch (e) {
@@ -99,9 +99,9 @@ class RecipesController {
       if (recipe.addedBy !== userId) {
         return responses.forbidden(res);
       }
-      const message = await recipesService.remove(id);
+      const message = await this.recipesService.remove(id);
 
-      webhooksService.sendEvent(userId, WebhookEvent.RemoveRecipe, id);
+      this.webhooksService.sendEvent(userId, WebhookEvent.RemoveRecipe, id);
 
       return responses.sendNoContent(res);
     } catch (e) {

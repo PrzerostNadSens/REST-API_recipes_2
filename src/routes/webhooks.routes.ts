@@ -1,5 +1,5 @@
 import express, { NextFunction, Request, Response } from 'express';
-import WebhooksController from '../controller/webhooks.controller';
+import webhooksController from '../controller/webhooks.controller';
 import { validateWebhook, validateMongoId } from '../validators/webhook.validate';
 import { validate } from '../middleware/validate.middleware';
 import { StrategyOptions, auth } from '../middleware/auth.middleware';
@@ -24,8 +24,9 @@ const router = express.Router();
  *         description: Unauthorized. When the user is not logged in.
  */
 
-router.get('/', auth.authenticate([StrategyOptions.Bearer]), WebhooksController.getUserWebhooks);
-
+router.get('/', auth.authenticate([StrategyOptions.Bearer]), (req, res) =>
+  webhooksController.getUserWebhooks(req, res),
+);
 /**
  * @swagger
  * /webhooks/:
@@ -52,11 +53,8 @@ router.get('/', auth.authenticate([StrategyOptions.Bearer]), WebhooksController.
  *
  */
 
-router.post(
-  '/',
-  auth.authenticate([StrategyOptions.Bearer]),
-  validate(validateWebhook),
-  WebhooksController.createWebhook,
+router.post('/', auth.authenticate([StrategyOptions.Bearer]), validate(validateWebhook), (req, res) =>
+  webhooksController.createWebhook(req, res),
 );
 
 /**
@@ -101,7 +99,7 @@ router.put(
   auth.authenticate([StrategyOptions.Bearer]),
   validate(validateWebhook),
   validate(validateMongoId),
-  WebhooksController.updateWebhook,
+  (req, res) => webhooksController.updateWebhook(req, res),
 );
 
 /**
@@ -133,11 +131,8 @@ router.put(
  *         description: The webhook with the given id does not exist.
  */
 
-router.delete(
-  '/:webhookId',
-  auth.authenticate([StrategyOptions.Bearer]),
-  validate(validateMongoId),
-  WebhooksController.removeByIdWebhook,
+router.delete('/:webhookId', auth.authenticate([StrategyOptions.Bearer]), validate(validateMongoId), (req, res) =>
+  webhooksController.removeByIdWebhook(req, res),
 );
 
 router.use('/', (req: Request, res: Response, next: NextFunction) => {

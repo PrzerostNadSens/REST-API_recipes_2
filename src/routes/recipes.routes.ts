@@ -1,7 +1,7 @@
 import express, { NextFunction, Request, Response } from 'express';
 import Role from '../mongodb/role';
 import { authorize } from '../mongodb/authorize';
-import RecipesController from '../controller/recipes.controller';
+import recipesController from '../controller/recipes.controller';
 import { validateCreateRecipe, validateUpdateRecipe, validateMongoId } from '../validators/recipe.validate';
 import { validate } from '../middleware/validate.middleware';
 import { StrategyOptions, auth } from '../middleware/auth.middleware';
@@ -29,7 +29,7 @@ const router = express.Router();
  *         description: Unauthorized. When the user is not logged in.
  */
 
-router.get('/', auth.authenticate([StrategyOptions.Bearer]), RecipesController.getUserRecipes);
+router.get('/', auth.authenticate([StrategyOptions.Bearer]), (req, res) => recipesController.getUserRecipes(req, res));
 
 /**
  * @swagger
@@ -60,11 +60,8 @@ router.get('/', auth.authenticate([StrategyOptions.Bearer]), RecipesController.g
  *
  */
 
-router.post(
-  '/',
-  auth.authenticate([StrategyOptions.Bearer]),
-  validate(validateCreateRecipe),
-  RecipesController.createRecipe,
+router.post('/', auth.authenticate([StrategyOptions.Bearer]), validate(validateCreateRecipe), (req, res) =>
+  recipesController.createRecipe(req, res),
 );
 
 /**
@@ -89,16 +86,13 @@ router.post(
  *         description: When a user without administrator rights tries to use this endpoint.
  */
 
-router.get(
-  '/all',
-  auth.authenticate([StrategyOptions.Bearer]),
-  authorize(Role.Admin as any),
-  RecipesController.getAllRecipe,
+router.get('/all', auth.authenticate([StrategyOptions.Bearer]), authorize(Role.Admin as any), (req, res) =>
+  recipesController.getAllRecipe(req, res),
 );
 
 /**
  * @swagger
- * /recipes/{recipeId}:
+ * /recipes/:recipeId:
  *   get:
  *     tags:
  *       - recipe
@@ -128,16 +122,13 @@ router.get(
  *         description: The recipe with the given id does not exist.
  */
 
-router.get(
-  '/:recipeId',
-  auth.authenticate([StrategyOptions.Bearer]),
-  validate(validateMongoId),
-  RecipesController.findByIdRecipe,
+router.get('/:recipeId', auth.authenticate([StrategyOptions.Bearer]), validate(validateMongoId), (req, res) =>
+  recipesController.findByIdRecipe(req, res),
 );
 
 /**
  * @swagger
- * /recipes/{recipeId}:
+ * /recipes/:recipeId:
  *   put:
  *     tags:
  *       - recipe
@@ -177,12 +168,12 @@ router.put(
   auth.authenticate([StrategyOptions.Bearer]),
   validate(validateUpdateRecipe),
   validate(validateMongoId),
-  RecipesController.updateRecipe,
+  (req, res) => recipesController.updateRecipe(req, res),
 );
 
 /**
  * @swagger
- * /recipes/{recipeId}:
+ * /recipes/:recipeId:
  *   delete:
  *     tags:
  *       - recipe
@@ -212,11 +203,8 @@ router.put(
  *         description: The recipe with the given id does not exist.
  */
 
-router.delete(
-  '/:recipeId',
-  auth.authenticate([StrategyOptions.Bearer]),
-  validate(validateMongoId),
-  RecipesController.removeByIdRecipe,
+router.delete('/:recipeId', auth.authenticate([StrategyOptions.Bearer]), validate(validateMongoId), (req, res) =>
+  recipesController.removeByIdRecipe(req, res),
 );
 
 router.use('/', (req: Request, res: Response, next: NextFunction) => {

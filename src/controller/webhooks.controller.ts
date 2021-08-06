@@ -6,7 +6,7 @@ import { matchedData } from 'express-validator';
 import responses from '../exceptions/exceptions';
 
 class WebhooksController {
-  constructor(public readonly webhooksService: WebhooksService) {}
+  constructor(private webhooksService: WebhooksService) {}
 
   async createWebhook(req: Request, res: Response): Promise<Response> {
     try {
@@ -14,7 +14,7 @@ class WebhooksController {
       const userId = returnId(req);
       const userRole = returnRole(req);
 
-      const webhookId = await webhooksService.createWebhook(userId, userRole, data);
+      const webhookId = await this.webhooksService.createWebhook(userId, userRole, data);
       if (webhookId === '') {
         return responses.notUnique(res, 'Webhook');
       }
@@ -27,7 +27,7 @@ class WebhooksController {
   async getUserWebhooks(req: Request, res: Response): Promise<Response> {
     try {
       const userId = returnId(req);
-      const webhook = await webhooksService.getWebhook(userId);
+      const webhook = await this.webhooksService.getWebhook(userId);
 
       return responses.sendOkWithWebhooks(res, webhook);
     } catch (e) {
@@ -47,7 +47,7 @@ class WebhooksController {
       if (webhook.addedBy !== userId) {
         return responses.forbidden(res);
       }
-      const newWebhook = await webhooksService.update(id, req.body);
+      const newWebhook = await this.webhooksService.update(id, req.body);
 
       return responses.sendOkWithWebhook(res, newWebhook);
     } catch (e) {
@@ -68,7 +68,7 @@ class WebhooksController {
         return responses.forbidden(res);
       }
 
-      const message = await webhooksService.remove(id);
+      const message = await this.webhooksService.remove(id);
 
       return responses.sendNoContent(res);
     } catch (e) {
