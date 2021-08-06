@@ -68,7 +68,7 @@ describe('Recipe', function () {
     it('should put recipe by id', async function () {
       const response = await chai
         .request(app)
-        .get('/recipes/' + id)
+        .put('/recipes/' + id)
         .set('Authorization', token)
         .send(createRecipePayload);
 
@@ -82,10 +82,10 @@ describe('Recipe', function () {
     it('should delete recipe by id', async function () {
       const response = await chai
         .request(app)
-        .get('/recipes/' + id)
+        .delete('/recipes/' + id)
         .set('Authorization', token);
 
-      expect(response).to.have.status(StatusCodes.OK);
+      expect(response).to.have.status(StatusCodes.NO_CONTENT);
       expect(response.error).to.be.false;
       expect(response.body).to.not.be.null;
     });
