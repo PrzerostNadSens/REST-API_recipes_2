@@ -1,26 +1,25 @@
 import { IRecipe, Recipe, OmitIRecipe } from '../model/recipe.model';
 import { Request, Response } from 'express';
 import { returnId, AuthorizedRequest } from '../mongodb/authorize';
-import RecipesService from '../service/recipes.service';
-import WebhooksService, { WebhookEvent } from '../service/webhooks.service';
+import recipesService, { RecipesService } from '../service/recipes.service';
+import webhooksService, { WebhookEvent, WebhooksService } from '../service/webhooks.service';
 import { matchedData } from 'express-validator';
-import { StatusCodes } from 'http-status-codes';
+import responses from '../exceptions/exceptions';
 
-const forbidden = { message: 'Forbidden' };
-const notFound = { message: `The recipe with the given id does not exist.` };
-const internalServerError = { message: 'Internal Server Error' };
 class RecipesController {
+  constructor(private readonly recipesService: RecipesService, private readonly webhooksService: WebhooksService) {}
+
   async createRecipe(req: Request, res: Response): Promise<Response> {
     try {
       const data = <IRecipe>matchedData(req);
       data.addedBy = returnId(req);
-      const recipeId = await RecipesService.create(data);
+      const recipe = await this.recipesService.create(data);
 
-      WebhooksService.sendEvent(data.addedBy!, WebhookEvent.CreateRecipe, recipeId);
+      this.webhooksService.sendEvent(data.addedBy!, WebhookEvent.CreateRecipe, recipe);
 
-      return res.status(StatusCodes.CREATED).send({ id: recipeId });
+      return responses.sendCreateWithRecipe(res, recipe);
     } catch (e) {
-      return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(internalServerError);
+      return responses.sendInternalServerErrorResponse(res);
     }
   }
 
@@ -28,22 +27,22 @@ class RecipesController {
     try {
       const userId = returnId(req);
       const filter: OmitIRecipe = req.query;
-      const recipe = await RecipesService.get(userId, filter);
+      const recipes = await this.recipesService.get(userId, filter);
 
-      return res.status(StatusCodes.OK).send(recipe);
+      return responses.sendOkWithRecipes(res, recipes);
     } catch (e) {
-      return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(internalServerError);
+      return responses.sendInternalServerErrorResponse(res);
     }
   }
 
   async getAllRecipe(req: AuthorizedRequest, res: Response): Promise<Response> {
     try {
       const filter: OmitIRecipe = req.query;
-      const recipes = await RecipesService.getAll(filter);
+      const recipes = await this.recipesService.getAll(filter);
 
       return res.send(recipes);
     } catch (e) {
-      return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(internalServerError);
+      return responses.sendInternalServerErrorResponse(res);
     }
   }
 
@@ -51,18 +50,18 @@ class RecipesController {
     try {
       const id = req.params.recipeId;
       const userId = returnId(req);
-      const recipe = await RecipesService.findById(id);
+      const recipe = await this.recipesService.findById(id);
 
       if (!recipe) {
-        return res.status(StatusCodes.NOT_FOUND).json(notFound);
+        return responses.notFound(res, 'recipe');
       }
       if (recipe.addedBy !== userId) {
-        return res.status(StatusCodes.FORBIDDEN).json(forbidden);
+        return responses.forbidden(res);
       }
 
-      return res.status(StatusCodes.OK).send(recipe);
+      return responses.sendOkWithRecipe(res, recipe);
     } catch (e) {
-      return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(internalServerError);
+      return responses.sendInternalServerErrorResponse(res);
     }
   }
 
@@ -73,16 +72,18 @@ class RecipesController {
       const recipe = await Recipe.findById(id);
 
       if (!recipe) {
-        return res.status(StatusCodes.NOT_FOUND).json(notFound);
+        return responses.notFound(res, 'recipe');
       }
       if (recipe.addedBy !== userId) {
-        return res.status(StatusCodes.FORBIDDEN).json(forbidden);
+        return responses.forbidden(res);
       }
-      const newRecipe = await RecipesService.update(id, req.body);
+      const newRecipe = await this.recipesService.update(id, req.body);
 
-      return res.status(StatusCodes.OK).send(newRecipe);
+      this.webhooksService.sendEvent(userId, WebhookEvent.UpdateRecipe, newRecipe);
+
+      return responses.sendOkWithRecipe(res, newRecipe);
     } catch (e) {
-      return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(internalServerError);
+      return responses.sendInternalServerErrorResponse(res);
     }
   }
 
@@ -93,17 +94,20 @@ class RecipesController {
       const recipe = await Recipe.findById(id);
 
       if (!recipe) {
-        return res.status(StatusCodes.NOT_FOUND).json(notFound);
+        return responses.notFound(res, 'recipe');
       }
       if (recipe.addedBy !== userId) {
-        return res.status(StatusCodes.FORBIDDEN).json(forbidden);
+        return responses.forbidden(res);
       }
-      const message = await RecipesService.remove(id);
+      const message = await this.recipesService.remove(id);
 
-      return res.status(StatusCodes.NO_CONTENT).send({ message });
+      this.webhooksService.sendEvent(userId, WebhookEvent.RemoveRecipe, id);
+
+      return responses.sendNoContent(res);
     } catch (e) {
-      return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(internalServerError);
+      return responses.sendInternalServerErrorResponse(res);
     }
   }
 }
-export default new RecipesController();
+
+export default new RecipesController(recipesService, webhooksService);

@@ -1,9 +1,8 @@
-import express, { NextFunction, Request, Response } from 'express';
-import WebhooksController from '../controller/webhooks.controller';
-import { validateWebhook } from '../validators/webhook.validate';
+import express from 'express';
+import webhooksController from '../controller/webhooks.controller';
+import { validateWebhook, validateMongoId } from '../validators/webhook.validate';
 import { validate } from '../middleware/validate.middleware';
 import { StrategyOptions, auth } from '../middleware/auth.middleware';
-import { StatusCodes } from 'http-status-codes';
 
 const router = express.Router();
 
@@ -24,8 +23,9 @@ const router = express.Router();
  *         description: Unauthorized. When the user is not logged in.
  */
 
-router.get('/', auth.authenticate([StrategyOptions.Bearer]), WebhooksController.getUserWebhooks);
-
+router.get('/', auth.authenticate([StrategyOptions.Bearer]), (req, res) =>
+  webhooksController.getUserWebhooks(req, res),
+);
 /**
  * @swagger
  * /webhooks/:
@@ -44,7 +44,7 @@ router.get('/', auth.authenticate([StrategyOptions.Bearer]), WebhooksController.
  *
  *     responses:
  *       201:
- *         description: Webhook id.
+ *         description: Webhook.
  *       400:
  *         description: Bad Request. For example, validation errors.
  *       401:
@@ -52,19 +52,87 @@ router.get('/', auth.authenticate([StrategyOptions.Bearer]), WebhooksController.
  *
  */
 
-router.post(
-  '/',
-  auth.authenticate([StrategyOptions.Bearer]),
-  validate(validateWebhook),
-  WebhooksController.createWebhook,
+router.post('/', auth.authenticate([StrategyOptions.Bearer]), validate(validateWebhook), (req, res) =>
+  webhooksController.createWebhook(req, res),
 );
 
-router.use('/', (req: Request, res: Response, next: NextFunction) => {
-  if (!'GET'.includes(req.method)) {
-    return res.status(StatusCodes.NOT_FOUND).json();
-  }
-  return next();
-});
+/**
+ * @swagger
+ * /webhooks/:webhookId:
+ *   put:
+ *     tags:
+ *       - webhook
+ *     description: update webhook belonging to the user
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *       - in: body
+ *         name: webhook
+ *         description: Required URL in url.
+ *         schema:
+ *           $ref: '#/definitions/Webhook'
+ *
+ *     responses:
+ *       200:
+ *         description: Webhooks
+ *         properties:
+ *           id:
+ *             type: string
+ *       400:
+ *         description: Validation error. See response body for details.
+ *       401:
+ *         description: Unauthorized. When the user is not logged in.
+ *       403:
+ *         description: Access forbidden. User is not authorized to access this resource.
+ *       404:
+ *         description: The webhook with the given id does not exist.
+ */
+
+router.put(
+  '/:webhookId',
+  auth.authenticate([StrategyOptions.Bearer]),
+  validate(validateWebhook),
+  validate(validateMongoId),
+  (req, res) => webhooksController.updateWebhook(req, res),
+);
+
+/**
+ * @swagger
+ * /webhooks/:webhookId:
+ *   delete:
+ *     tags:
+ *       - webhook
+ *     description: removes webhook belonging to the user
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *
+ *     responses:
+ *       204:
+ *         description: Webhook successfully removed.
+ *       400:
+ *         description: Validation error. See response body for details.
+ *       401:
+ *         description: Unauthorized. When the user is not logged in.
+ *       403:
+ *         description: Access forbidden. User is not authorized to access this resource.
+ *       404:
+ *         description: The webhook with the given id does not exist.
+ */
+
+router.delete('/:webhookId', auth.authenticate([StrategyOptions.Bearer]), validate(validateMongoId), (req, res) =>
+  webhooksController.removeByIdWebhook(req, res),
+);
 
 export default router;
 
