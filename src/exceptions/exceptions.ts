@@ -35,8 +35,8 @@ class Responses {
     return res.status(StatusCodes.FORBIDDEN).send({ message: 'Forbidden' });
   }
 
-  notFound(res: Response) {
-    return res.status(StatusCodes.NOT_FOUND).send({ message: `The recipe with the given id does not exist.` });
+  notFound(res: Response, source: string) {
+    return res.status(StatusCodes.NOT_FOUND).send({ message: ` The ${source} with the given id does not exist.` });
   }
 
   notUnique(res: Response, source: string) {

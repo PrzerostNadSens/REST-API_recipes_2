@@ -98,7 +98,7 @@ router.get(
 
 /**
  * @swagger
- * /recipes/{id}:
+ * /recipes/{recipeId}:
  *   get:
  *     tags:
  *       - recipe
@@ -137,7 +137,7 @@ router.get(
 
 /**
  * @swagger
- * /recipes/{id}:
+ * /recipes/{recipeId}:
  *   put:
  *     tags:
  *       - recipe
@@ -182,7 +182,7 @@ router.put(
 
 /**
  * @swagger
- * /recipes/{id}:
+ * /recipes/{recipeId}:
  *   delete:
  *     tags:
  *       - recipe

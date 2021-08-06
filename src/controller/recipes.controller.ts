@@ -53,7 +53,7 @@ class RecipesController {
       const recipe = await recipesService.findById(id);
 
       if (!recipe) {
-        return responses.notFound(res);
+        return responses.notFound(res, 'recipe');
       }
       if (recipe.addedBy !== userId) {
         return responses.forbidden(res);
@@ -72,7 +72,7 @@ class RecipesController {
       const recipe = await Recipe.findById(id);
 
       if (!recipe) {
-        return responses.notFound(res);
+        return responses.notFound(res, 'recipe');
       }
       if (recipe.addedBy !== userId) {
         return responses.forbidden(res);
@@ -94,7 +94,7 @@ class RecipesController {
       const recipe = await Recipe.findById(id);
 
       if (!recipe) {
-        return responses.notFound(res);
+        return responses.notFound(res, 'recipe');
       }
       if (recipe.addedBy !== userId) {
         return responses.forbidden(res);

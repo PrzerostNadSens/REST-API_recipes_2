@@ -42,7 +42,7 @@ class WebhooksController {
       const webhook = await Webhook.findById(id);
 
       if (!webhook) {
-        return responses.notFound(res);
+        return responses.notFound(res, 'webhook');
       }
       if (webhook.addedBy !== userId) {
         return responses.forbidden(res);
@@ -62,7 +62,7 @@ class WebhooksController {
       const webhook = await Webhook.findById(id);
 
       if (!webhook) {
-        return responses.notFound(res);
+        return responses.notFound(res, 'webhook');
       }
       if (webhook.addedBy !== userId) {
         return responses.forbidden(res);

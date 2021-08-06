@@ -61,7 +61,7 @@ router.post(
 
 /**
  * @swagger
- * /webhooks/{id}:
+ * /webhooks/:webhookId:
  *   put:
  *     tags:
  *       - webhook
@@ -106,7 +106,7 @@ router.put(
 
 /**
  * @swagger
- * /webhooks/{id}:
+ * /webhooks/:webhookId:
  *   delete:
  *     tags:
  *       - webhook
