@@ -117,7 +117,7 @@ router.get('/all', auth.authenticate([StrategyOptions.Bearer]), authorize(Role.A
  *       401:
  *         description: Unauthorized. When the user is not logged in.
  *       403:
- *         description: Forbidden.
+ *         description: Access forbidden. User is not authorized to access this resource.
  *       404:
  *         description: The recipe with the given id does not exist.
  */
@@ -158,7 +158,7 @@ router.get('/:recipeId', auth.authenticate([StrategyOptions.Bearer]), validate(v
  *       401:
  *         description: Unauthorized. When the user is not logged in.
  *       403:
- *         description: Forbidden.
+ *         description: Access forbidden. User is not authorized to access this resource.
  *       404:
  *         description: The recipe with the given id does not exist.
  */
@@ -198,7 +198,7 @@ router.put(
  *       401:
  *         description: Unauthorized. When the user is not logged in.
  *       403:
- *         description: Forbidden.
+ *         description: Access forbidden. User is not authorized to access this resource.
  *       404:
  *         description: The recipe with the given id does not exist.
  */

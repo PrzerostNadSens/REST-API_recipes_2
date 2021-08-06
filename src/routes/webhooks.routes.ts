@@ -89,7 +89,7 @@ router.post('/', auth.authenticate([StrategyOptions.Bearer]), validate(validateW
  *       401:
  *         description: Unauthorized. When the user is not logged in.
  *       403:
- *         description: Forbidden.
+ *         description: Access forbidden. User is not authorized to access this resource.
  *       404:
  *         description: The webhook with the given id does not exist.
  */
@@ -126,7 +126,7 @@ router.put(
  *       401:
  *         description: Unauthorized. When the user is not logged in.
  *       403:
- *         description: Forbidden.
+ *         description: Access forbidden. User is not authorized to access this resource.
  *       404:
  *         description: The webhook with the given id does not exist.
  */
