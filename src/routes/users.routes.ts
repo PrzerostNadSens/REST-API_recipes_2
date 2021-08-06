@@ -1,18 +1,10 @@
-import express, { NextFunction, Request, Response } from 'express';
+import express from 'express';
 import UsersController from '../controller/users.controller';
 import { validateUserRegister } from '../validators/user.validate';
 import { validate } from '../middleware/validate.middleware';
 import { StrategyOptions, auth } from '../middleware/auth.middleware';
-import { StatusCodes } from 'http-status-codes';
 
 const router = express.Router();
-
-router.use((req: Request, res: Response, next: NextFunction) => {
-  if (!'POST'.includes(req.method)) {
-    return res.status(StatusCodes.NOT_FOUND).json();
-  }
-  return next();
-});
 
 /**
  * @swagger

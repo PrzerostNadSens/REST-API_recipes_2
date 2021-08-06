@@ -1,9 +1,8 @@
-import express, { NextFunction, Request, Response } from 'express';
+import express from 'express';
 import webhooksController from '../controller/webhooks.controller';
 import { validateWebhook, validateMongoId } from '../validators/webhook.validate';
 import { validate } from '../middleware/validate.middleware';
 import { StrategyOptions, auth } from '../middleware/auth.middleware';
-import { StatusCodes } from 'http-status-codes';
 
 const router = express.Router();
 
@@ -85,7 +84,7 @@ router.post('/', auth.authenticate([StrategyOptions.Bearer]), validate(validateW
  *           id:
  *             type: string
  *       400:
- *         description: Bad Request. For example, giving an id of wrong origin or validation errors.
+ *         description: Validation error. See response body for details.
  *       401:
  *         description: Unauthorized. When the user is not logged in.
  *       403:
@@ -120,9 +119,9 @@ router.put(
  *
  *     responses:
  *       204:
- *         description: Removed.
+ *         description: Webhook successfully removed.
  *       400:
- *         description: Bad Request. For example, giving an id of wrong origin.
+ *         description: Validation error. See response body for details.
  *       401:
  *         description: Unauthorized. When the user is not logged in.
  *       403:
@@ -134,13 +133,6 @@ router.put(
 router.delete('/:webhookId', auth.authenticate([StrategyOptions.Bearer]), validate(validateMongoId), (req, res) =>
   webhooksController.removeByIdWebhook(req, res),
 );
-
-router.use('/', (req: Request, res: Response, next: NextFunction) => {
-  if (!'GET'.includes(req.method)) {
-    return res.status(StatusCodes.NOT_FOUND).json();
-  }
-  return next();
-});
 
 export default router;
 
