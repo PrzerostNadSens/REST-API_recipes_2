@@ -13,11 +13,11 @@ class RecipesController {
     try {
       const data = <IRecipe>matchedData(req);
       data.addedBy = returnId(req);
-      const recipeId = await this.recipesService.create(data);
+      const recipe = await this.recipesService.create(data);
 
-      this.webhooksService.sendEvent(data.addedBy!, WebhookEvent.CreateRecipe, recipeId);
+      this.webhooksService.sendEvent(data.addedBy!, WebhookEvent.CreateRecipe, recipe);
 
-      return responses.sendCreatedWithId(res, recipeId);
+      return responses.sendCreateWithRecipe(res, recipe);
     } catch (e) {
       return responses.sendInternalServerErrorResponse(res);
     }
@@ -79,7 +79,7 @@ class RecipesController {
       }
       const newRecipe = await this.recipesService.update(id, req.body);
 
-      this.webhooksService.sendEvent(userId, WebhookEvent.UpdateRecipe, id);
+      this.webhooksService.sendEvent(userId, WebhookEvent.UpdateRecipe, newRecipe);
 
       return responses.sendOkWithRecipe(res, newRecipe);
     } catch (e) {

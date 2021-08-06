@@ -2,7 +2,7 @@ import RecipesDao from '../daos/recipes.dao';
 import { IRecipe, PartialIRecipe, OmitIRecipe, RecipeDocument } from '../model/recipe.model';
 
 export class RecipesService {
-  async create(resource: IRecipe): Promise<string> {
+  async create(resource: IRecipe): Promise<RecipeDocument> {
     return RecipesDao.createRecipe(resource);
   }
   async get(userId: string, filter: OmitIRecipe): Promise<RecipeDocument[]> {

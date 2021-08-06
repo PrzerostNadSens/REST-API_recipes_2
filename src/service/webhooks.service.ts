@@ -1,18 +1,18 @@
 import WebhooksDao from '../daos/webhooks.dao';
 import { IWebhook, OmitIWebhook, WebhookDocument } from '../model/webhook.model';
+import { RecipeDocument } from '../model/recipe.model';
 import axios from 'axios';
+import { UserDocument } from '../model/user.model';
 
 export enum WebhookEvent {
-  CreateRecipe = '`Created new recipe.',
+  CreateRecipe = 'Created new recipe.',
   UpdateRecipe = 'Updated recipe.',
   RemoveRecipe = 'Removed recipe.',
-  CreateUser = '`Created new user.',
+  CreateUser = 'Created new user.',
 }
 export enum WebhookMessage {
-  CreateRecipe = '`Created new recipe with id:',
-  UpdateRecipe = 'Updated recipe with id:',
   RemoveRecipe = 'Removed recipe with id:',
-  CreateUser = '`Created new user with id:',
+  CreateUser = 'Created new user with id:',
 }
 
 interface WebhookEventPayload {
@@ -43,20 +43,24 @@ export class WebhooksService {
     return WebhooksDao.removeByIdWebhook(id);
   }
 
-  async sendEvent(filter: string, webhookEvent: WebhookEvent, id: string): Promise<void> {
+  async sendEvent(
+    filter: string,
+    webhookEvent: WebhookEvent,
+    resource: RecipeDocument | UserDocument | string,
+  ): Promise<void> {
     const webhooks = await this.getWebhook(filter);
     const event: WebhookEventPayload = { event: webhookEvent };
     if (webhookEvent == WebhookEvent.CreateRecipe) {
-      event.message = `${WebhookMessage.CreateRecipe} ${id}`;
+      event.recipe = resource;
     }
     if (webhookEvent == WebhookEvent.UpdateRecipe) {
-      event.message = `${WebhookMessage.UpdateRecipe} ${id}`;
+      event.recipe = resource;
     }
     if (webhookEvent == WebhookEvent.RemoveRecipe) {
-      event.message = `${WebhookMessage.RemoveRecipe} ${id}`;
+      event.message = `${WebhookMessage.RemoveRecipe} ${resource}`;
     }
     if (webhookEvent == WebhookEvent.CreateUser) {
-      event.message = `${WebhookMessage.CreateUser} ${id}`;
+      event.message = `${WebhookMessage.CreateUser} ${resource}`;
     }
 
     if (webhooks) {

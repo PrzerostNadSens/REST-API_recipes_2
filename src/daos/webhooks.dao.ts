@@ -4,7 +4,7 @@ class WebhooksDao {
   async createWebhook(createWebhookBody: IWebhook): Promise<string> {
     const webhookToSave = new Webhook(createWebhookBody);
 
-    if (Webhook.findOne(createWebhookBody)) {
+    if (await Webhook.findOne(createWebhookBody)) {
       return '';
     }
 

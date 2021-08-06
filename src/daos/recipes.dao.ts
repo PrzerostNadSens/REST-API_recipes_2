@@ -1,11 +1,10 @@
 import { Recipe, IRecipe, OmitIRecipe, RecipeDocument } from '../model/recipe.model';
 
 class RecipesDao {
-  async createRecipe(createRecipeBody: IRecipe): Promise<string> {
+  async createRecipe(createRecipeBody: IRecipe): Promise<RecipeDocument> {
     const recipeToSave = new Recipe(createRecipeBody);
-    await recipeToSave.save();
 
-    return recipeToSave.id;
+    return await recipeToSave.save();
   }
 
   async getUserRecipes(filter: OmitIRecipe): Promise<RecipeDocument[]> {

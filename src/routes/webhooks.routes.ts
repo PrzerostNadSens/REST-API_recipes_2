@@ -44,7 +44,7 @@ router.get('/', auth.authenticate([StrategyOptions.Bearer]), (req, res) =>
  *
  *     responses:
  *       201:
- *         description: Webhook id.
+ *         description: Webhook.
  *       400:
  *         description: Bad Request. For example, validation errors.
  *       401:

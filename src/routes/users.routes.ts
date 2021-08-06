@@ -1,5 +1,5 @@
 import express from 'express';
-import UsersController from '../controller/users.controller';
+import usersController from '../controller/users.controller';
 import { validateUserRegister } from '../validators/user.validate';
 import { validate } from '../middleware/validate.middleware';
 import { StrategyOptions, auth } from '../middleware/auth.middleware';
@@ -32,8 +32,7 @@ const router = express.Router();
  *         description: Bad Request. When validation errors.
  */
 
-router.post('/', validate(validateUserRegister), UsersController.createUser);
-
+router.post('/', validate(validateUserRegister), (req, res) => usersController.createUser(req, res));
 /**
  * @swagger
  * /users/login:
@@ -66,7 +65,9 @@ router.post('/', validate(validateUserRegister), UsersController.createUser);
  *         description: Unauthorized. When the user provides incorrect login details.
  */
 
-router.post('/login', auth.authenticate([StrategyOptions.Basic]), UsersController.generateToken);
+router.post('/login', auth.authenticate([StrategyOptions.Basic]), (req, res, next) =>
+  usersController.generateToken(req, res, next),
+);
 
 export default router;
 

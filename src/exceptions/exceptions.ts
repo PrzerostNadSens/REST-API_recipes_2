@@ -19,6 +19,14 @@ class Responses {
     return res.status(StatusCodes.OK).send(recipe);
   }
 
+  sendCreateWithRecipe(res: Response, recipe: RecipeDocument) {
+    return res.status(StatusCodes.CREATED).send(recipe);
+  }
+
+  sendCreateWithWebhook(res: Response, webhook: WebhookDocument) {
+    return res.status(StatusCodes.CREATED).send(webhook);
+  }
+
   sendOkWithRecipes(res: Response, recipes: RecipeDocument[]) {
     return res.status(StatusCodes.OK).send(recipes);
   }
