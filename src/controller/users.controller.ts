@@ -3,10 +3,7 @@ import { matchedData } from 'express-validator';
 import { IUser, UserDocument } from '../model/user.model';
 import usersService, { UsersService } from '../service/users.service';
 import webhooksService, { WebhookEvent, WebhooksService } from '../service/webhooks.service';
-import { StatusCodes } from 'http-status-codes';
-
-const internalServerError = { message: 'Internal Server Error' };
-const notUniqueLogin = { message: 'User with the given login already exists.' };
+import responses from '../exceptions/exceptions';
 
 class UsersController {
   constructor(private readonly usersService: UsersService, private readonly webhooksService: WebhooksService) {}
@@ -17,12 +14,12 @@ class UsersController {
       const userId = await usersService.create(data);
       webhooksService.sendEvent('Admin', WebhookEvent.CreateUser, userId);
 
-      return res.status(StatusCodes.CREATED).send({ id: userId });
+      return responses.sendCreatedWithId(res, userId);
     } catch (e) {
       if (e.code == 11000) {
-        return res.status(StatusCodes.BAD_REQUEST).json(notUniqueLogin);
+        return responses.notUnique(res, 'User');
       }
-      return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(internalServerError);
+      return responses.sendInternalServerErrorResponse(res);
     }
   }
 

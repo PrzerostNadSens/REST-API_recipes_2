@@ -1,8 +1,8 @@
 import { Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import { WebhookDocument } from '../model/webhook.model';
-
-class responses {
+import { RecipeDocument } from '../model/recipe.model';
+class Responses {
   sendInternalServerErrorResponse(res: Response) {
     return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ message: 'Internal Server Error' });
   }
@@ -13,6 +13,14 @@ class responses {
 
   sendNoContent(res: Response) {
     return res.status(StatusCodes.NO_CONTENT).send();
+  }
+
+  sendOkWithRecipe(res: Response, recipe: RecipeDocument) {
+    return res.status(StatusCodes.OK).send(recipe);
+  }
+
+  sendOkWithRecipes(res: Response, recipes: RecipeDocument[]) {
+    return res.status(StatusCodes.OK).send(recipes);
   }
 
   sendOkWithWebhook(res: Response, webhook: WebhookDocument) {
@@ -36,4 +44,4 @@ class responses {
   }
 }
 
-export default new responses();
+export default new Responses();

@@ -4,11 +4,7 @@ import { returnId, AuthorizedRequest } from '../mongodb/authorize';
 import recipesService, { RecipesService } from '../service/recipes.service';
 import webhooksService, { WebhookEvent, WebhooksService } from '../service/webhooks.service';
 import { matchedData } from 'express-validator';
-import { StatusCodes } from 'http-status-codes';
-
-const forbidden = { message: 'Forbidden' };
-const notFound = { message: `The recipe with the given id does not exist.` };
-const internalServerError = { message: 'Internal Server Error' };
+import responses from '../exceptions/exceptions';
 
 class RecipesController {
   constructor(private readonly recipesService: RecipesService, private readonly webhooksService: WebhooksService) {}
@@ -21,9 +17,9 @@ class RecipesController {
 
       webhooksService.sendEvent(data.addedBy!, WebhookEvent.CreateRecipe, recipeId);
 
-      return res.status(StatusCodes.CREATED).send({ id: recipeId });
+      return responses.sendCreatedWithId(res, recipeId);
     } catch (e) {
-      return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(internalServerError);
+      return responses.sendInternalServerErrorResponse(res);
     }
   }
 
@@ -31,11 +27,11 @@ class RecipesController {
     try {
       const userId = returnId(req);
       const filter: OmitIRecipe = req.query;
-      const recipe = await recipesService.get(userId, filter);
+      const recipes = await recipesService.get(userId, filter);
 
-      return res.status(StatusCodes.OK).send(recipe);
+      return responses.sendOkWithRecipes(res, recipes);
     } catch (e) {
-      return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(internalServerError);
+      return responses.sendInternalServerErrorResponse(res);
     }
   }
 
@@ -46,7 +42,7 @@ class RecipesController {
 
       return res.send(recipes);
     } catch (e) {
-      return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(internalServerError);
+      return responses.sendInternalServerErrorResponse(res);
     }
   }
 
@@ -57,15 +53,15 @@ class RecipesController {
       const recipe = await recipesService.findById(id);
 
       if (!recipe) {
-        return res.status(StatusCodes.NOT_FOUND).json(notFound);
+        return responses.notFound(res);
       }
       if (recipe.addedBy !== userId) {
-        return res.status(StatusCodes.FORBIDDEN).json(forbidden);
+        return responses.forbidden(res);
       }
 
-      return res.status(StatusCodes.OK).send(recipe);
+      return responses.sendOkWithRecipe(res, recipe);
     } catch (e) {
-      return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(internalServerError);
+      return responses.sendInternalServerErrorResponse(res);
     }
   }
 
@@ -76,18 +72,18 @@ class RecipesController {
       const recipe = await Recipe.findById(id);
 
       if (!recipe) {
-        return res.status(StatusCodes.NOT_FOUND).json(notFound);
+        return responses.notFound(res);
       }
       if (recipe.addedBy !== userId) {
-        return res.status(StatusCodes.FORBIDDEN).json(forbidden);
+        return responses.forbidden(res);
       }
       const newRecipe = await recipesService.update(id, req.body);
 
       webhooksService.sendEvent(userId, WebhookEvent.UpdateRecipe, id);
 
-      return res.status(StatusCodes.OK).send(newRecipe);
+      return responses.sendOkWithRecipe(res, newRecipe);
     } catch (e) {
-      return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(internalServerError);
+      return responses.sendInternalServerErrorResponse(res);
     }
   }
 
@@ -98,18 +94,18 @@ class RecipesController {
       const recipe = await Recipe.findById(id);
 
       if (!recipe) {
-        return res.status(StatusCodes.NOT_FOUND).json(notFound);
+        return responses.notFound(res);
       }
       if (recipe.addedBy !== userId) {
-        return res.status(StatusCodes.FORBIDDEN).json(forbidden);
+        return responses.forbidden(res);
       }
       const message = await recipesService.remove(id);
 
       webhooksService.sendEvent(userId, WebhookEvent.RemoveRecipe, id);
 
-      return res.status(StatusCodes.NO_CONTENT).send({ message });
+      return responses.sendNoContent(res);
     } catch (e) {
-      return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(internalServerError);
+      return responses.sendInternalServerErrorResponse(res);
     }
   }
 }
