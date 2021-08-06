@@ -1,14 +1,14 @@
 import { chai, expect, app } from '../test.config';
-import { createUserPayload, createUserTest, loginTest, passwordTest, deleteAllUsers } from '../mocks/user.mocks';
+import { createUserPayload, loginTest, passwordTest, deleteAllUsers } from '../mocks/user.mocks';
 import { StatusCodes } from 'http-status-codes';
 
 beforeEach(async function () {
-  await deleteAllUsers();
-  await createUserTest();
+  //await deleteAllUsers();
+  //await createUserTest();
 });
 
 afterEach(async function () {
-  await deleteAllUsers();
+  //await deleteAllUsers();
 });
 
 describe('User', function () {

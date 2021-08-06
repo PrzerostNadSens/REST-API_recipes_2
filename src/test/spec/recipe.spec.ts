@@ -8,12 +8,12 @@ const authorization = 'Authorization';
 
 beforeEach(async function () {
   await deleteAllRecipes();
-  await deleteAllUsers();
+  //await deleteAllUsers();
 });
 
 afterEach(async function () {
   await deleteAllRecipes();
-  await deleteAllUsers();
+  //await deleteAllUsers();
 });
 
 describe('Recipe', function () {

@@ -2,7 +2,7 @@ import { faker } from '../test.config';
 import jwt from 'jsonwebtoken';
 import { User, UserDocument } from '../../model/user.model';
 
-const loginTest = 'dotcecdstów';
+const loginTest = 'tdfgdfgsgdfsdA.11';
 const passwordTest = 'tdfgdfgsgdfsdA.11';
 
 const createUserPayload = {
@@ -10,7 +10,7 @@ const createUserPayload = {
   lastName: faker.name.lastName(),
   login: faker.internet.userName(),
   email: faker.internet.email(),
-  password: 'Trudne.haslo12',
+  password: 'tdfgdfgsgdfsdA.11',
   role: 'Admin',
 };
 
@@ -19,13 +19,13 @@ const testUser = {
   lastName: faker.name.lastName(),
   login: loginTest,
   email: faker.internet.email(),
-  password: '$2a$10$KrUPzb1p6PPBylea/JrGIe/0shAQmlcFppB9w8Ydzw2irEPTsjOfq',
+  password: '$2a$10$iwpVFn5v1gX5gXARfNNMte1jrM65tA8nQTRVybJ0INthn0/FBH11i',
   role: 'Admin',
 };
 
 const generateToken = async function (_id: any) {
   const tokenActivityTime = '2h';
-  const token = jwt.sign({ sub: _id, id: _id }, process.env.JWT_SECRET!, {
+  const token = jwt.sign({ sub: _id, id: _id, role: 'Admin' }, process.env.JWT_SECRET!, {
     expiresIn: tokenActivityTime,
   });
   return token;
@@ -47,4 +47,4 @@ const deleteAllUsers = function () {
   return User.deleteMany();
 };
 
-export { createUserPayload, bearerToken, id, loginTest, passwordTest, createUserTest, deleteAllUsers };
+export { createUserPayload, testUser, bearerToken, id, loginTest, passwordTest, createUserTest, deleteAllUsers };
