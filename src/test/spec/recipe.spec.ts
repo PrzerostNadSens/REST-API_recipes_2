@@ -7,7 +7,7 @@ import { generateToken, deleteAllUsers } from '../mocks/user.mocks';
 let token = '';
 let id = '';
 
-beforeEach('Add new user and return token', async function () {
+beforeEach('Add new user and return token-Recipe', async function () {
   await deleteAllRecipes();
   await deleteAllUsers();
   const data = await generateToken();
@@ -18,7 +18,7 @@ beforeEach('Add new user and return token', async function () {
 
 afterEach('Delete all recipes and all users', async function () {
   await deleteAllRecipes();
-  await deleteAllUsers();
+  //await deleteAllUsers();
 });
 
 describe('Recipe', function () {
