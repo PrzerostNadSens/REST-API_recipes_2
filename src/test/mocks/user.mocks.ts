@@ -1,8 +1,9 @@
 import { faker } from '../test.config';
 import jwt from 'jsonwebtoken';
-import { User, UserDocument } from '../../model/user.model';
 
-const loginTest = 'tdfgdfgsgdfsdA.11';
+import { User } from '../../model/user.model';
+
+const loginTest = 'dotcecdstów';
 const passwordTest = 'tdfgdfgsgdfsdA.11';
 
 const createUserPayload = {
@@ -10,41 +11,35 @@ const createUserPayload = {
   lastName: faker.name.lastName(),
   login: faker.internet.userName(),
   email: faker.internet.email(),
-  password: 'tdfgdfgsgdfsdA.11',
+  password: 'Trudne.haslo12',
   role: 'Admin',
 };
 
-const testUser = {
+const createUserPayloadTest = {
   firstName: faker.name.firstName(),
   lastName: faker.name.lastName(),
   login: loginTest,
   email: faker.internet.email(),
-  password: '$2a$10$iwpVFn5v1gX5gXARfNNMte1jrM65tA8nQTRVybJ0INthn0/FBH11i',
+  password: '$2a$10$KrUPzb1p6PPBylea/JrGIe/0shAQmlcFppB9w8Ydzw2irEPTsjOfq',
   role: 'Admin',
 };
 
-const generateToken = async function (_id: any) {
+const generateToken = async function () {
+  const user = await createUserTest();
+  const { _id } = user;
   const tokenActivityTime = '2h';
-  const token = jwt.sign({ sub: _id, id: _id, role: 'Admin' }, process.env.JWT_SECRET!, {
+  const Token = jwt.sign({ sub: _id, id: _id }, process.env.JWT_SECRET!, {
     expiresIn: tokenActivityTime,
   });
-  return token;
-};
-
-const generateId = async function () {
-  const { _id } = await createUserTest();
-  return _id;
+  return { Token, _id };
 };
 
 const createUserTest = function () {
-  return new User(testUser).save();
+  return new User(createUserPayloadTest).save();
 };
-const id = generateId();
-const token = generateToken(id);
-const bearerToken = `Bearer ${token}`;
 
 const deleteAllUsers = function () {
   return User.deleteMany();
 };
 
-export { createUserPayload, testUser, bearerToken, id, loginTest, passwordTest, createUserTest, deleteAllUsers };
+export { createUserPayload, generateToken, loginTest, passwordTest, createUserTest, deleteAllUsers };

@@ -2,28 +2,29 @@ import { chai, expect, app } from '../test.config';
 import { createRecipePayload, createRecipeTest, deleteAllRecipes } from '../mocks/recipe.mocks';
 import { StatusCodes } from 'http-status-codes';
 
-import { bearerToken, id, deleteAllUsers } from '../mocks/user.mocks';
+import { generateToken, deleteAllUsers } from '../mocks/user.mocks';
 
-const authorization = 'Authorization';
+let token = '';
+let id = '';
 
-beforeEach(async function () {
+beforeEach('Add new user and return token', async function () {
   await deleteAllRecipes();
-  //await deleteAllUsers();
+  await deleteAllUsers();
+  const data = await generateToken();
+  const _id = data._id;
+  id = await createRecipeTest(_id);
+  token = `Bearer ${data.Token}`;
 });
 
-afterEach(async function () {
+afterEach('Delete all recipes and all users', async function () {
   await deleteAllRecipes();
-  //await deleteAllUsers();
+  await deleteAllUsers();
 });
 
 describe('Recipe', function () {
   describe('POST /recipes/', function () {
     it('should create recipe', async function () {
-      const response = await chai
-        .request(app)
-        .post('/recipes')
-        .set(authorization, bearerToken)
-        .send(createRecipePayload);
+      const response = await chai.request(app).post('/recipes').set('Authorization', token).send(createRecipePayload);
 
       expect(response).to.have.status(StatusCodes.CREATED);
       expect(response.error).to.be.false;
@@ -33,7 +34,7 @@ describe('Recipe', function () {
 
   describe('GET /recipes/', function () {
     it('should get recipes', async function () {
-      const response = await chai.request(app).get('/recipes').set(authorization, bearerToken);
+      const response = await chai.request(app).get('/recipes').set('Authorization', token);
 
       expect(response).to.have.status(StatusCodes.OK);
       expect(response.error).to.be.false;
@@ -43,19 +44,19 @@ describe('Recipe', function () {
 
   describe('GET /recipes/all', function () {
     it('should get all recipes', async function () {
-      const response = await chai.request(app).get('/recipes/all').set(authorization, bearerToken);
+      const response = await chai.request(app).get('/recipes/all').set('Authorization', token);
 
       expect(response).to.have.status(StatusCodes.OK);
       expect(response.error).to.be.false;
       expect(response.body).to.not.be.null;
     });
   });
-  describe('GET /recipes/:recipeId', function () {
+  describe('GET /recipes/', function () {
     it('should get recipe by id', async function () {
       const response = await chai
         .request(app)
         .get('/recipes/' + id)
-        .set(authorization, bearerToken);
+        .set('Authorization', token);
 
       expect(response).to.have.status(StatusCodes.OK);
       expect(response.error).to.be.false;
@@ -63,12 +64,12 @@ describe('Recipe', function () {
     });
   });
 
-  describe('PUT /recipes/:recipeId', function () {
+  describe('PUT/recipes/', function () {
     it('should put recipe by id', async function () {
       const response = await chai
         .request(app)
         .get('/recipes/' + id)
-        .set(authorization, bearerToken)
+        .set('Authorization', token)
         .send(createRecipePayload);
 
       expect(response).to.have.status(StatusCodes.OK);
@@ -77,12 +78,12 @@ describe('Recipe', function () {
     });
   });
 
-  describe('DELETE /recipes/:recipeId', function () {
+  describe('DELETE/recipes/', function () {
     it('should delete recipe by id', async function () {
       const response = await chai
         .request(app)
         .get('/recipes/' + id)
-        .set(authorization, bearerToken);
+        .set('Authorization', token);
 
       expect(response).to.have.status(StatusCodes.OK);
       expect(response.error).to.be.false;

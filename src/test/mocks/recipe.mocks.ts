@@ -1,5 +1,5 @@
 import { faker } from '../test.config';
-import { Recipe, RecipeDocument } from '../../model/recipe.model';
+import { Recipe } from '../../model/recipe.model';
 
 const createRecipePayload = {
   name: faker.name.title(),
@@ -16,9 +16,9 @@ const testRecipe = {
   addedBy: '',
 };
 
-const createRecipeTest = async function (id: string): Promise<string> {
+const createRecipeTest = async function (id: string) {
+  testRecipe.addedBy = id;
   const recipeToSave = new Recipe(testRecipe);
-  recipeToSave.addedBy = id;
   await recipeToSave.save();
 
   return recipeToSave.id;
