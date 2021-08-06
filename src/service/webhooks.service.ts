@@ -21,13 +21,13 @@ interface WebhookEventPayload {
   [param: string]: unknown;
 }
 
-class WebhooksService {
-  async createWebhook(userId: string, userRole: string, resource: IWebhook) {
+export class WebhooksService {
+  async createWebhook(userId: string, userRole: string, resource: IWebhook): Promise<string> {
     resource.addedBy = userId;
     resource.role = userRole;
     return WebhooksDao.createWebhook(resource);
   }
-  async getWebhook(filter: string) {
+  async getWebhook(filter: string): Promise<WebhookDocument[]> {
     let fulFilter: OmitIWebhook = { addedBy: filter };
     if (filter === 'Admin') {
       fulFilter = { role: filter };
@@ -35,11 +35,11 @@ class WebhooksService {
 
     return WebhooksDao.getUserWebhooks(fulFilter);
   }
-  async update(id: string, resource: IWebhook) {
+  async update(id: string, resource: IWebhook): Promise<WebhookDocument> {
     return WebhooksDao.updateWebhook(id, resource);
   }
 
-  async remove(id: string) {
+  async remove(id: string): Promise<WebhookDocument | null> {
     return WebhooksDao.removeByIdWebhook(id);
   }
 

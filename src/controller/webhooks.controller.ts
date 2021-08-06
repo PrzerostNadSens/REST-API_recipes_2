@@ -1,18 +1,20 @@
 import { IWebhook, Webhook } from '../model/webhook.model';
 import { Request, Response } from 'express';
 import { returnId, returnRole } from '../mongodb/authorize';
-import WebhooksService from '../service/webhooks.service';
+import webhooksService, { WebhooksService } from '../service/webhooks.service';
 import { matchedData } from 'express-validator';
 import responses from '../exceptions/exceptions';
 
 class WebhooksController {
+  constructor(public readonly webhooksService: WebhooksService) {}
+
   async createWebhook(req: Request, res: Response): Promise<Response> {
     try {
       const data = <IWebhook>matchedData(req);
       const userId = returnId(req);
       const userRole = returnRole(req);
 
-      const webhookId = await WebhooksService.createWebhook(userId, userRole, data);
+      const webhookId = await webhooksService.createWebhook(userId, userRole, data);
       if (webhookId === '') {
         return responses.notUnique(res, 'Webhook');
       }
@@ -25,7 +27,7 @@ class WebhooksController {
   async getUserWebhooks(req: Request, res: Response): Promise<Response> {
     try {
       const userId = returnId(req);
-      const webhook = await WebhooksService.getWebhook(userId);
+      const webhook = await webhooksService.getWebhook(userId);
 
       return responses.sendOkWithWebhooks(res, webhook);
     } catch (e) {
@@ -45,7 +47,7 @@ class WebhooksController {
       if (webhook.addedBy !== userId) {
         return responses.forbidden(res);
       }
-      const newWebhook = await WebhooksService.update(id, req.body);
+      const newWebhook = await webhooksService.update(id, req.body);
 
       return responses.sendOkWithWebhook(res, newWebhook);
     } catch (e) {
@@ -66,7 +68,7 @@ class WebhooksController {
         return responses.forbidden(res);
       }
 
-      const message = await WebhooksService.remove(id);
+      const message = await webhooksService.remove(id);
 
       return responses.sendNoContent(res);
     } catch (e) {
@@ -74,4 +76,4 @@ class WebhooksController {
     }
   }
 }
-export default new WebhooksController();
+export default new WebhooksController(webhooksService);

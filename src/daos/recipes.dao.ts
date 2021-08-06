@@ -43,7 +43,7 @@ class RecipesDao {
     return recipeToUpdate!;
   }
 
-  async removeByIdRecipe(id: string) {
+  async removeByIdRecipe(id: string): Promise<RecipeDocument | null> {
     return Recipe.findByIdAndRemove(id);
   }
 }

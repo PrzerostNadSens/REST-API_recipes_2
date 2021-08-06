@@ -24,7 +24,7 @@ class WebhooksDao {
     return webhookToUpdate!;
   }
 
-  async removeByIdWebhook(id: string) {
+  async removeByIdWebhook(id: string): Promise<WebhookDocument | null> {
     return Webhook.findByIdAndRemove(id);
   }
 }

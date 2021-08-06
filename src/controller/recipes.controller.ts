@@ -1,22 +1,25 @@
 import { IRecipe, Recipe, OmitIRecipe } from '../model/recipe.model';
 import { Request, Response } from 'express';
 import { returnId, AuthorizedRequest } from '../mongodb/authorize';
-import RecipesService from '../service/recipes.service';
-import WebhooksService, { WebhookEvent } from '../service/webhooks.service';
+import recipesService, { RecipesService } from '../service/recipes.service';
+import webhooksService, { WebhookEvent, WebhooksService } from '../service/webhooks.service';
 import { matchedData } from 'express-validator';
 import { StatusCodes } from 'http-status-codes';
 
 const forbidden = { message: 'Forbidden' };
 const notFound = { message: `The recipe with the given id does not exist.` };
 const internalServerError = { message: 'Internal Server Error' };
+
 class RecipesController {
+  constructor(private readonly recipesService: RecipesService, private readonly webhooksService: WebhooksService) {}
+
   async createRecipe(req: Request, res: Response): Promise<Response> {
     try {
       const data = <IRecipe>matchedData(req);
       data.addedBy = returnId(req);
-      const recipeId = await RecipesService.create(data);
+      const recipeId = await recipesService.create(data);
 
-      WebhooksService.sendEvent(data.addedBy!, WebhookEvent.CreateRecipe, recipeId);
+      webhooksService.sendEvent(data.addedBy!, WebhookEvent.CreateRecipe, recipeId);
 
       return res.status(StatusCodes.CREATED).send({ id: recipeId });
     } catch (e) {
@@ -28,7 +31,7 @@ class RecipesController {
     try {
       const userId = returnId(req);
       const filter: OmitIRecipe = req.query;
-      const recipe = await RecipesService.get(userId, filter);
+      const recipe = await recipesService.get(userId, filter);
 
       return res.status(StatusCodes.OK).send(recipe);
     } catch (e) {
@@ -39,7 +42,7 @@ class RecipesController {
   async getAllRecipe(req: AuthorizedRequest, res: Response): Promise<Response> {
     try {
       const filter: OmitIRecipe = req.query;
-      const recipes = await RecipesService.getAll(filter);
+      const recipes = await recipesService.getAll(filter);
 
       return res.send(recipes);
     } catch (e) {
@@ -51,7 +54,7 @@ class RecipesController {
     try {
       const id = req.params.recipeId;
       const userId = returnId(req);
-      const recipe = await RecipesService.findById(id);
+      const recipe = await recipesService.findById(id);
 
       if (!recipe) {
         return res.status(StatusCodes.NOT_FOUND).json(notFound);
@@ -78,9 +81,9 @@ class RecipesController {
       if (recipe.addedBy !== userId) {
         return res.status(StatusCodes.FORBIDDEN).json(forbidden);
       }
-      const newRecipe = await RecipesService.update(id, req.body);
+      const newRecipe = await recipesService.update(id, req.body);
 
-      WebhooksService.sendEvent(userId, WebhookEvent.UpdateRecipe, id);
+      webhooksService.sendEvent(userId, WebhookEvent.UpdateRecipe, id);
 
       return res.status(StatusCodes.OK).send(newRecipe);
     } catch (e) {
@@ -100,9 +103,9 @@ class RecipesController {
       if (recipe.addedBy !== userId) {
         return res.status(StatusCodes.FORBIDDEN).json(forbidden);
       }
-      const message = await RecipesService.remove(id);
+      const message = await recipesService.remove(id);
 
-      WebhooksService.sendEvent(userId, WebhookEvent.RemoveRecipe, id);
+      webhooksService.sendEvent(userId, WebhookEvent.RemoveRecipe, id);
 
       return res.status(StatusCodes.NO_CONTENT).send({ message });
     } catch (e) {
@@ -110,4 +113,5 @@ class RecipesController {
     }
   }
 }
-export default new RecipesController();
+
+export default new RecipesController(recipesService, webhooksService);
