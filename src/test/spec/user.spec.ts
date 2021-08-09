@@ -1,15 +1,6 @@
 import { chai, expect, app } from '../test.config';
-import { createUserPayload, createUserTest, loginTest, passwordTest, deleteAllUsers } from '../mocks/user.mocks';
+import { createUserPayload, loginTest, passwordTest } from '../mocks/user.mocks';
 import { StatusCodes } from 'http-status-codes';
-
-beforeEach('Add user and get token', async function () {
-  await deleteAllUsers();
-  await createUserTest();
-});
-
-afterEach('Delete all users', async function () {
-  await deleteAllUsers();
-});
 
 describe('User', function () {
   describe('POST /users/', function () {

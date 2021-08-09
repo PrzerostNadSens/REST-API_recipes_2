@@ -17,8 +17,8 @@ const testRecipe = {
 };
 
 const createRecipeTest = async function (userId: string): Promise<string> {
-  testRecipe.addedBy = userId;
-  const { id } = await new Recipe(testRecipe).save();
+  const fakeRecipe = Object.assign({}, testRecipe, { addedBy: userId });
+  const { id } = await new Recipe(fakeRecipe).save();
 
   return id;
 };
