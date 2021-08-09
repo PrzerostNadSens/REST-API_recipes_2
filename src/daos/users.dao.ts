@@ -6,6 +6,12 @@ class UsersDao {
     return new User(createUserBody).save();
   }
 
+  async getUser(userId: string): Promise<UserDocument> {
+    const user = await User.findById(userId);
+
+    return user!;
+  }
+
   async generateToken(user: UserDocument): Promise<object> {
     const tokenActivityTime = '2h';
     const token = jwt.sign({ sub: user.id, id: user.id, role: user.role }, process.env.JWT_SECRET!, {
