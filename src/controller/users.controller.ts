@@ -12,7 +12,7 @@ class UsersController {
     try {
       const data = <IUser>matchedData(req);
 
-      const userId = await this.usersService.create(data);
+      const userId = await this.usersService.createUser(data);
       this.webhooksService.sendEvent('Admin', WebhookEvent.CreateUser, userId);
 
       return responses.sendCreatedWithId(res, userId);
@@ -27,7 +27,7 @@ class UsersController {
   async getUserProfile(req: Request, res: Response): Promise<Response> {
     try {
       const userId = returnId(req);
-      const user = await this.usersService.get(userId);
+      const user = await this.usersService.getUser(userId);
 
       return responses.sendOkWithUser(res, user);
     } catch (e) {

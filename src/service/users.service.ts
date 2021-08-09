@@ -3,7 +3,7 @@ import { IUser, UserDocument } from '../model/user.model';
 import bcrypt from 'bcryptjs';
 
 export class UsersService {
-  async create(resource: IUser): Promise<string> {
+  async createUser(resource: IUser): Promise<string> {
     const newUser: IUser = resource;
     const newPassword = await bcrypt.hash(resource.password!, 10);
     newUser.password = newPassword;
@@ -12,7 +12,7 @@ export class UsersService {
     return id;
   }
 
-  async get(userId: string): Promise<UserDocument> {
+  async getUser(userId: string): Promise<UserDocument> {
     return UsersDao.getUser(userId);
   }
 
