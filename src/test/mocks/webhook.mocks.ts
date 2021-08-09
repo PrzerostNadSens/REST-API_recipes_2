@@ -11,13 +11,12 @@ const testWebhook = {
   role: '',
 };
 
-const createWebhookTest = async function (id: string) {
-  testWebhook.addedBy = id;
+const createWebhookTest = async function (userId: string): Promise<string> {
+  testWebhook.addedBy = userId;
   testWebhook.role = 'Admin';
-  const webhookToSave = new Webhook(testWebhook);
-  await webhookToSave.save();
+  const { id } = await new Webhook(testWebhook).save();
 
-  return webhookToSave.id;
+  return id;
 };
 
 const deleteAllWebhooks = function () {

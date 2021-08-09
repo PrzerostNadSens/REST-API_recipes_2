@@ -7,13 +7,13 @@ import { generateToken, deleteAllUsers } from '../mocks/user.mocks';
 let token = '';
 let id = '';
 
-beforeEach('Add new user and return token', async function () {
+beforeEach('Return token', async function () {
   await deleteAllWebhooks();
   await deleteAllUsers();
   const data = await generateToken();
   const _id = data._id;
   id = await createWebhookTest(_id);
-  token = `Bearer ${data.Token}`;
+  token = `Bearer ${data.token}`;
 });
 
 afterEach('Delete all webhooks and all users', async function () {

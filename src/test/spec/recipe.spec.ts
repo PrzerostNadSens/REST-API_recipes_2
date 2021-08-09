@@ -13,12 +13,11 @@ beforeEach('Add new user and return token-Recipe', async function () {
   const data = await generateToken();
   const _id = data._id;
   id = await createRecipeTest(_id);
-  token = `Bearer ${data.Token}`;
+  token = `Bearer ${data.token}`;
 });
 
 afterEach('Delete all recipes and all users', async function () {
   await deleteAllRecipes();
-  //await deleteAllUsers();
 });
 
 describe('Recipe', function () {

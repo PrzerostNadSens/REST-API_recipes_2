@@ -16,12 +16,11 @@ const testRecipe = {
   addedBy: '',
 };
 
-const createRecipeTest = async function (id: string) {
-  testRecipe.addedBy = id;
-  const recipeToSave = new Recipe(testRecipe);
-  await recipeToSave.save();
+const createRecipeTest = async function (userId: string): Promise<string> {
+  testRecipe.addedBy = userId;
+  const { id } = await new Recipe(testRecipe).save();
 
-  return recipeToSave.id;
+  return id;
 };
 
 const deleteAllRecipes = function () {
