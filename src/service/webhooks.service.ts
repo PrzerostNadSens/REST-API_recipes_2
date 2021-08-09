@@ -22,7 +22,7 @@ interface WebhookEventPayload {
 }
 
 export class WebhooksService {
-  async createWebhook(userId: string, userRole: string, resource: IWebhook): Promise<string> {
+  async createWebhook(userId: string, userRole: string, resource: IWebhook): Promise<WebhookDocument | null> {
     resource.addedBy = userId;
     resource.role = userRole;
     return WebhooksDao.createWebhook(resource);
@@ -35,7 +35,7 @@ export class WebhooksService {
 
     return WebhooksDao.getUserWebhooks(fulFilter);
   }
-  async update(id: string, resource: IWebhook): Promise<WebhookDocument> {
+  async update(id: string, resource: IWebhook): Promise<WebhookDocument | null> {
     return WebhooksDao.updateWebhook(id, resource);
   }
 
