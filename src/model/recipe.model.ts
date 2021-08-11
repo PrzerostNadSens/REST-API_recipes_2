@@ -9,7 +9,9 @@ export interface IRecipe {
 
 export interface RecipeDocument extends IRecipe, Document {}
 
-export type OmitIRecipe = Omit<IRecipe, 'name' | 'type' | 'photo' | 'recipe'>;
+export type OmitIRecipe = Omit<IRecipe, 'name' | 'type' | 'photo' | 'recipe' | 'currentPage' | 'pageSize'>;
+
+export type ExcludeIRecipe = Exclude<OmitIRecipe, 'currentPage' | 'pageSize'>;
 
 export function PartialIRecipe(recipe: OmitIRecipe, fieldsToUpdate: Partial<OmitIRecipe>) {
   return { ...recipe, ...fieldsToUpdate };

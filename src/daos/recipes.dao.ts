@@ -8,15 +8,11 @@ class RecipesDao {
   }
 
   async getUserRecipes(filter: OmitIRecipe): Promise<RecipeDocument[]> {
-    const recipes = await Recipe.find(filter);
-
-    return recipes;
+    return await Recipe.find(filter);
   }
 
-  async getAllUserRecipes(filter: OmitIRecipe): Promise<RecipeDocument[]> {
-    const recipes = await Recipe.find(filter);
-
-    return recipes;
+  async getAllUserRecipes(filter: any, limit: any, offset: any): Promise<RecipeDocument[]> {
+    return await Recipe.find(filter).limit(limit).skip(offset);
   }
 
   async findByIdRecipe(id: string): Promise<RecipeDocument> {

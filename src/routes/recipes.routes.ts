@@ -17,6 +17,19 @@ const router = express.Router();
  *     description: displays recipes belonging to the user
  *     produces:
  *       - application/json
+ *     parameters:
+ *       - in: query
+ *         name: name
+ *         schema:
+ *           type: string
+ *         description: Filter by name.
+ *         example: "CIASTECZKA Z NUTELLĄ"
+ *       - in: query
+ *         name: type
+ *         schema:
+ *           type: string
+ *         description: Filter by type.
+ *         example: "Obiad"
  *
  *     responses:
  *       200:
@@ -72,6 +85,30 @@ router.post('/', auth.authenticate([StrategyOptions.Bearer]), validate(validateC
  *     description: displaying all recipes available only for logged in administrator
  *     produces:
  *       - application/jsons
+ *     parameters:
+ *       - in: query
+ *         name: name
+ *         schema:
+ *           type: string
+ *         description: Filter by name.
+ *         example: "CIASTECZKA Z NUTELLĄ"
+ *       - in: query
+ *         name: type
+ *         schema:
+ *           type: string
+ *         description: Filter by type.
+ *         example: "Obiad"
+ *       - in: query
+ *         name: currentPage
+ *         schema:
+ *           type: int
+ *         description: Page counting starts with 1.
+ *       - in: query
+ *         name: pageSize
+ *         schema:
+ *           type: int
+ *         description: How many recipes to display.
+ *         example: 5
  *
  *     responses:
  *       200:

@@ -1,5 +1,5 @@
 import RecipesDao from '../daos/recipes.dao';
-import { IRecipe, PartialIRecipe, OmitIRecipe, RecipeDocument } from '../model/recipe.model';
+import { IRecipe, PartialIRecipe, OmitIRecipe, ExcludeIRecipe, RecipeDocument } from '../model/recipe.model';
 
 export class RecipesService {
   async create(resource: IRecipe): Promise<RecipeDocument> {
@@ -10,8 +10,9 @@ export class RecipesService {
 
     return RecipesDao.getUserRecipes(fulFilter);
   }
-  async getAll(filter: OmitIRecipe): Promise<RecipeDocument[]> {
-    return RecipesDao.getAllUserRecipes(filter);
+  async getAll(filter: OmitIRecipe, limit: any, offset: any): Promise<RecipeDocument[]> {
+    const newFilter: ExcludeIRecipe = filter;
+    return RecipesDao.getAllUserRecipes(newFilter, limit, offset);
   }
 
   async findById(id: string): Promise<RecipeDocument> {
